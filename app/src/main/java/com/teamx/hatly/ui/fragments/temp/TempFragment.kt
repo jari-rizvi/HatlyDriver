@@ -13,11 +13,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.teamx.hatly.R
+import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.databinding.FragmentTempBinding
 import com.teamx.hatly.BR
 import com.teamx.hatly.baseclasses.BaseActivity
-import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.constants.NetworkCallPoints.Companion.TOKENER
-import com.teamx.hatly.databinding.FragmentTempBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,45 +49,45 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (isAdded) {
 
-           /*     dataStoreProvider.token.asLiveData().observe(
-                    requireActivity()
-                ) {
-                    val token = it
-                    Log.d("Databsae Token ", token.toString())
-                    Log.d("Databsae Token ", token.toString())
-                    *//*NetworkCallPointsNest.*//*TOKENER = token.toString()
+//                dataStoreProvider.token.asLiveData().observe(
+//                    requireActivity()
+//                ) {
+//                    val token = it
+//                    Log.d("Databsae Token ", token.toString())
+//                    Log.d("Databsae Token ", token.toString())
+//                    /*NetworkCallPointsNest.*/TOKENER = token.toString()
+//
+//                    if (token == null) {
+//                        navController =
+//                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+//                        navController.navigate(R.id.introFragment, null, options)
+//
+//
+//                    } else {
+//                        if (isAdded) {
+//
+//                            if (ActivityCompat.checkSelfPermission(
+//                                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+//                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+//                                ) != PackageManager.PERMISSION_GRANTED
+//                            ) {
+//                                navController = Navigation.findNavController(
+//                                    requireActivity(), R.id.nav_host_fragment
+//                                )
+//                                navController.navigate(R.id.allowLocationFragment, null, options)
+//                            } else {
+//                                navController = Navigation.findNavController(
+//                                    requireActivity(), R.id.nav_host_fragment
+//                                )
+//                                navController.navigate(R.id.dashboard, null, options)
+//                            }
+//
+//
+//                        }
+//                    }
+//                }
 
-                    if (token == null) {
-                        navController =
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.introFragment, null, options)
-
-
-                    } else {
-                        if (isAdded) {
-
-                            if (ActivityCompat.checkSelfPermission(
-                                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-                                navController = Navigation.findNavController(
-                                    requireActivity(), R.id.nav_host_fragment
-                                )
-                                navController.navigate(R.id.allowLocationFragment, null, options)
-                            } else {
-                                navController = Navigation.findNavController(
-                                    requireActivity(), R.id.nav_host_fragment
-                                )
-                                navController.navigate(R.id.dashboard, null, options)
-                            }
-
-
-                        }
-                    }
-                }
-*/
             }
 
         }, 2000)

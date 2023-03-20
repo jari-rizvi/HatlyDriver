@@ -1,6 +1,5 @@
 package com.teamx.hatly.ui.fragments.temp
 
-
 import com.teamx.hatly.baseclasses.BaseViewModel
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
