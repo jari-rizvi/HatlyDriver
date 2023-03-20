@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name" translatable="false">Zeus</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="search_artist">Search artist</string>
+
+    <string name="login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="something_wrong">Something went wrong</string>
+
+
+
+</resources>
