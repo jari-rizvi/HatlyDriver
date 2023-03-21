@@ -7,7 +7,20 @@
     <string name="login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="something_wrong">Something went wrong</string>
-
+    <string name="already_have_account">Already have account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="enter_your_credentials">Enter your credentials</string>
+    <string name="term_conditions"><![CDATA[Term & Conditions]]></string>
+    <string name="enter_your_mobile_to_retrieve_your_password">Enter your mobile to retrieve your password.</string>
+    <string name="resend">Resend</string>
+    <string name="didn_t_receive_code">Didn’t receive code?</string>
+    <string name="create_a_new_password">Create a New Password</string>
+    <string name="verify">Verify</string>
+    <string name="save">Save</string>
+    <string name="your_new_password_must_be_diffrent_from_npreviously_used_password">Your new password must be diffrent from \npreviously used password.</string>
 
 
 </resources>

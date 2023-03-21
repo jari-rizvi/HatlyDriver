@@ -45,6 +45,10 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
             }
         }
 
+       mViewDataBinding.btnBack.setOnClickListener {
+           popUpStack()
+       }
+
 
     }
 

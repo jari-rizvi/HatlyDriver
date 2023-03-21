@@ -35,7 +35,6 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mViewDataBinding.lifecycleOwner = viewLifecycleOwner
 
         options = navOptions {
             anim {
@@ -46,67 +45,29 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
             }
         }
 
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (isAdded) {
+        mViewDataBinding.login.setOnClickListener {
+            loginListener()
+        }
+         mViewDataBinding.register.setOnClickListener {
+            registerListener()
+        }
 
-//                dataStoreProvider.token.asLiveData().observe(
-//                    requireActivity()
-//                ) {
-//                    val token = it
-//                    Log.d("Databsae Token ", token.toString())
-//                    Log.d("Databsae Token ", token.toString())
-//                    /*NetworkCallPointsNest.*/TOKENER = token.toString()
-//
-//                    if (token == null) {
-//                        navController =
-//                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-//                        navController.navigate(R.id.introFragment, null, options)
-//
-//
-//                    } else {
-//                        if (isAdded) {
-//
-//                            if (ActivityCompat.checkSelfPermission(
-//                                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-//                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-//                                ) != PackageManager.PERMISSION_GRANTED
-//                            ) {
-//                                navController = Navigation.findNavController(
-//                                    requireActivity(), R.id.nav_host_fragment
-//                                )
-//                                navController.navigate(R.id.allowLocationFragment, null, options)
-//                            } else {
-//                                navController = Navigation.findNavController(
-//                                    requireActivity(), R.id.nav_host_fragment
-//                                )
-//                                navController.navigate(R.id.dashboard, null, options)
-//                            }
-//
-//
-//                        }
-//                    }
-//                }
 
-            }
-
-        }, 2000)
-
-//
 //        Handler(Looper.getMainLooper()).postDelayed({
 //            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-//            navController.navigate(R.id.introFragment, null,options)
+//            navController.navigate(R.id.logInFragment, null, options)
 //
 //        }, 2000)
 
 
-        clickListener()
     }
 
-    var allowPermissionListener: BaseActivity.OnAllowPermissionListener? = null
-    private val SOME_PERMISSION = 0
-    private fun clickListener() {
-
+    private fun loginListener() {
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.logInFragment, null, options)
     }
-
+    private fun registerListener() {
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.signupFragment, null, options)
+    }
 }
