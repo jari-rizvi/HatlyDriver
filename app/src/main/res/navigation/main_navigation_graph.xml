@@ -49,6 +49,10 @@
             android:id="@+id/action_otpFragment_to_createNewPassFragment"
             app:destination="@id/createNewPassFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.teamx.hatly.ui.fragments.home.HomeFragment"
+        android:label="HomeFragment" />
 
 
 </navigation>

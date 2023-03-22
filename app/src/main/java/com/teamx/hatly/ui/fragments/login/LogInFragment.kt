@@ -1,9 +1,7 @@
 package com.teamx.hatly.ui.fragments.login
 
-
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
@@ -11,7 +9,6 @@ import com.teamx.hatly.R
 import com.teamx.hatly.BR
 import com.teamx.hatly.baseclasses.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class LogInFragment :
@@ -42,7 +39,8 @@ class LogInFragment :
         }
 
         mViewDataBinding.btnLogin.setOnClickListener {
-            Toast.makeText(requireContext(), "Login", Toast.LENGTH_SHORT).show()
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
         }
         mViewDataBinding.btnSingup.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
