@@ -14,6 +14,7 @@
             android:id="@+id/action_tempFragment_to_logInFragment"
             app:destination="@id/logInFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/logInFragment"
         android:name="com.teamx.hatly.ui.fragments.Auth.login.LogInFragment"
