@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="NoAppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -214,6 +214,18 @@
     </style>
 
     <style name="open_sans_bold_medium" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/_10ssp</item>
+        <item name="android:textColor">@color/textPrimaryColor</item>
+        <item name="android:fontFamily">@font/open_sans_bold</item>
+    </style>
+
+    <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
+        <item name="tabBackground">@drawable/tab_background</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabTextColor">#8A8A8A</item>
+    </style>
+
+    <style name="tabTextColor" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/_10ssp</item>
         <item name="android:textColor">@color/textPrimaryColor</item>
         <item name="android:fontFamily">@font/open_sans_bold</item>

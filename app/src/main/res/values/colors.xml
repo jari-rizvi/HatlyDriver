@@ -9,6 +9,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="tab_color">#EA1B25</color>
     <color name="colorPrimary">#f6f6f6</color>
     <color name="colorPrimaryDark">#515c6f</color>
     <color name="colorPrimaryDarkLight">#727c8e</color>
