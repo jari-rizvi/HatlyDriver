@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tempFragment"
-        android:name="com.teamx.hatly.ui.fragments.temp.TempFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.temp.TempFragment"
         android:label="TempFragment"
         tools:layout="@layout/fragment_temp">
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/logInFragment"
-        android:name="com.teamx.hatly.ui.fragments.login.LogInFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.login.LogInFragment"
         android:label="LogInFragment">
         <action
             android:id="@+id/action_logInFragment_to_signupFragment"
@@ -27,15 +27,15 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.teamx.hatly.ui.fragments.singup.SignupFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.singup.SignupFragment"
         android:label="SignupFragment" />
     <fragment
         android:id="@+id/createNewPassFragment"
-        android:name="com.teamx.hatly.ui.fragments.newPassword.CreateNewPassFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.newPassword.CreateNewPassFragment"
         android:label="CreateNewPassFragment" />
     <fragment
         android:id="@+id/forgotFragment"
-        android:name="com.teamx.hatly.ui.fragments.forgot.ForgotFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.forgot.ForgotFragment"
         android:label="ForgotFragment" >
         <action
             android:id="@+id/action_forgotFragment_to_otpFragment"
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/otpFragment"
-        android:name="com.teamx.hatly.ui.fragments.otp.OtpFragment"
+        android:name="com.teamx.hatly.ui.fragments.Auth.otp.OtpFragment"
         android:label="OtpFragment" >
         <action
             android:id="@+id/action_otpFragment_to_createNewPassFragment"
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.teamx.hatly.ui.fragments.home.HomeFragment"
+        android:name="com.teamx.hatly.ui.fragments.Dashboard.home.HomeFragment"
         android:label="HomeFragment" />
 
 
