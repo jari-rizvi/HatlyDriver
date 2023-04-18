@@ -17,6 +17,7 @@ import com.teamx.hatly.R
 import com.teamx.hatly.BR
 import com.teamx.hatly.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
@@ -40,14 +41,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 //    }
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        Log.d("321321", "onRestoreInstanceState: ")
+     Timber.tag("321321").d( "onRestoreInstanceState: ")
     }
 
     override fun onRestoreInstanceState(
         savedInstanceState: Bundle?, persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
-        Log.d("321321", "onRestoreInstanceState: ")
+       Timber.tag("321321",).d( "onRestoreInstanceState: ")
     }
 
     override fun onStateNotSaved() {

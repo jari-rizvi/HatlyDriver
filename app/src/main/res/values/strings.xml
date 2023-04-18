@@ -41,4 +41,17 @@
     <string name="notifications">Notifications</string>
 
 
+    <string name="enter_name">Enter name</string>
+    <string name="name_must_have_atleast_3_character_long">Name must have atleast 3 character long</string>
+    <string name="name_maximum">Name should not exceed 15 character</string>
+    <string name="invalid_email">Invalid Email</string>
+    <string name="enter_Number_with_Country_Code">Enter Number with Country Code (e.g +92)</string>
+    <string name="enter_Password">Enter Password</string>
+    <string name="password_does_not_match">Password does not match</string>
+    <string name="enter_your_password">xxxxxxxxx</string>
+    <string name="password_8_character">Password must have atleast 8 character</string>
+    <string name="enter_email">Enter email</string>
+
+
+
 </resources>

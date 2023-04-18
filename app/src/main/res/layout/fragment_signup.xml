@@ -226,6 +226,7 @@
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="@dimen/_5sdp"
                 android:textColor="@color/black"
+                android:inputType="textPassword"
                 android:textColorHint="@color/black" />
 
 

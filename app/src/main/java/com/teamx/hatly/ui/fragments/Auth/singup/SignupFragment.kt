@@ -30,6 +30,11 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
 
 
     private lateinit var options: NavOptions
+    private var userEmail: String? = null
+    private var password: String? = null
+    private var name: String? = null
+    private var userNumber: String? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +64,123 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
         }
 
 
+
+
     }
 
+    private fun initialization() {
+        name = mViewDataBinding.etName.text.toString().trim()
+        userEmail = mViewDataBinding.etEmail.text.toString().trim()
+        password = mViewDataBinding.etPass.text.toString().trim()
+        userNumber = mViewDataBinding.etPhone.text.toString().trim()
+
+    }
+
+    fun signup() {
+
+        initialization()
+
+        if (userNumber!!.isNotEmpty() || password!!.isNotEmpty() || name!!.isNotEmpty() || userEmail!!.isEmpty()) {
+
+            val params = JsonObject()
+            try {
+                params.addProperty("name", name.toString())
+                params.addProperty("contact", userNumber.toString())
+                params.addProperty("password", password.toString())
+                params.addProperty("email", userEmail.toString())
+                params.addProperty("carPlate", "")
+                Log.e("UserData", params.toString())
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            mViewModel.signup(params)
+
+            mViewModel.signupResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+
+                            val bundle = Bundle()
+                            bundle.putString("phone", data.phone_number)
+                            bundle.putString("Sid", data.twilio.sid)
+                            bundle.putString("otpid", data.id)
+
+                            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            navController.navigate(R.id.logInFragment, null, options)
+
+
+                        }
+                    }
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.signupResponse.removeObservers(viewLifecycleOwner)
+                }
+            }
+        }
+    }
+
+    private fun isValidate(): Boolean {
+
+        if (mViewDataBinding.etName.text.toString().trim().isEmpty()) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_name))
+            return false
+        }
+        if (mViewDataBinding.etName.text.toString().trim().length < 3) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.name_must_have_atleast_3_character_long))
+            return false
+        }
+
+        if (mViewDataBinding.etName.text.toString().trim().length > 15) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.name_maximum))
+            return false
+        }
+        if (mViewDataBinding.etEmail.text.toString().trim().isEmpty()) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_email))
+            return false
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(mViewDataBinding.etEmail.text.toString().trim())
+                .matches()
+        ) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.invalid_email))
+            return false
+        }
+        if (mViewDataBinding.etPhone.text.toString().trim().isEmpty()) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_your_password))
+            return false
+        }
+        if (mViewDataBinding.etPhone.text.toString().trim().startsWith("0")) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_Number_with_Country_Code))
+            return false
+        }
+        if (mViewDataBinding.etPass.text.toString().trim().isEmpty()) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_your_password))
+            return false
+        }
+        if (mViewDataBinding.etPass.text.toString().trim().length < 8) {
+            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.password_8_character))
+            return false
+        }
+
+        signup()
+
+//        if (mViewDataBinding.cbPolicy.isChecked) {
+//            signup()
+//        } else {
+//            mViewDataBinding.root.snackbar("Please Agree to continue")
+//        }
+
+
+
+
+        return true
+    }
 }
