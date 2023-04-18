@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import com.teamx.hatly.utils.localization.LocaleManager
-import com.teamx.hatly.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 

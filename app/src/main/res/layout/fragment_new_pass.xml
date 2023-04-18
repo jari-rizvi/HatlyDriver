@@ -126,10 +126,13 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="@dimen/_5sdp"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
 
@@ -154,11 +157,14 @@
             app:layout_constraintVertical_bias="0.05">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etNewPass"
+                android:id="@+id/etCnfrmPass"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="@dimen/_5sdp"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
 

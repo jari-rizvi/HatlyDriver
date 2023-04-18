@@ -51,6 +51,7 @@
     <string name="enter_your_password">xxxxxxxxx</string>
     <string name="password_8_character">Password must have atleast 8 character</string>
     <string name="enter_email">Enter email</string>
+    <string name="enter_phone">Enter phone number</string>
 
 
 

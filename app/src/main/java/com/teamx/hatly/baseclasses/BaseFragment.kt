@@ -1,18 +1,16 @@
 package com.teamx.hatly.baseclasses
 
 import android.app.Dialog
-import android.app.Fragment
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
@@ -21,9 +19,12 @@ import com.teamx.hatly.SharedViewModel
 import com.teamx.hatly.data.local.datastore.DataStoreProvider
 import com.teamx.hatly.ui.activity.mainActivity.MainActivity
 import com.teamx.hatly.utils.DialogHelperClass
+import com.teamx.hatly.utils.UnAuthorizedCallback
+import kotlinx.coroutines.launch
 
 abstract class
-BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fragment() {
+BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fragment(),
+    UnAuthorizedCallback {
 
     lateinit var sharedViewModel: SharedViewModel
     lateinit var navController: NavController
@@ -135,6 +136,14 @@ BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fra
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
         navController.popBackStack()
 
+    }
+    override fun onToSignUpPage() {
+        mViewModel.viewModelScope.launch {
+            dataStoreProvider.saveUserToken("")
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.logInFragment, null)
+
+        }
     }
 
 

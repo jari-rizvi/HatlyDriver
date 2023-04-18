@@ -54,8 +54,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
         }
 
         mViewDataBinding.btnSignup.setOnClickListener {
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.otpFragment, null, options)
+            isValidate()
         }
 
         mViewDataBinding.btnLogin.setOnClickListener {
@@ -111,7 +110,7 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
                             bundle.putString("otpid", data.id)
 
                             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                            navController.navigate(R.id.logInFragment, null, options)
+                            navController.navigate(R.id.otpFragment, bundle, options)
 
 
                         }
