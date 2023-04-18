@@ -40,11 +40,11 @@ class LogInFragment :
 
         mViewDataBinding.btnLogin.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, null, options)
+            navController.navigate(R.id.action_logInFragment_to_homeFragment, null, options)
         }
         mViewDataBinding.btnSingup.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.signupFragment, null, options)
+            navController.navigate(R.id.action_logInFragment_to_signupFragment, null, options)
         }
 
          mViewDataBinding.forgetPass.setOnClickListener {

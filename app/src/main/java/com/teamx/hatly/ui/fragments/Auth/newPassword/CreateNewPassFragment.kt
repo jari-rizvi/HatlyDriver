@@ -36,8 +36,9 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
             }
         }
 
-        mViewDataBinding.btnBack.setOnClickListener {
-            popUpStack()
+
+        mViewDataBinding.btnSave.setOnClickListener {
+         naviagteFragment(R.id.action_createNewPassFragment_to_homeFragment,true)
         }
 
     }

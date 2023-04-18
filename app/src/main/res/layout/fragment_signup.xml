@@ -279,7 +279,7 @@
 
 
         <TextView
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
@@ -305,11 +305,11 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+                    app:layout_constraintTop_toBottomOf="@+id/btnSignup"
                     app:layout_constraintVertical_bias="0.15" />
 
                 <TextView
-                    android:id="@+id/btnSingup"
+                    android:id="@+id/btnLogin"
                     style="@style/open_sans_secondary_regular_large_red"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

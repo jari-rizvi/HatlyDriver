@@ -17,6 +17,7 @@ import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
+
 @AndroidEntryPoint
 class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
 
@@ -28,11 +29,9 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
         get() = BR.viewModel
 
 
-
-
     private lateinit var options: NavOptions
 
-   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.lifecycleOwner = viewLifecycleOwner
 
@@ -45,9 +44,19 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
             }
         }
 
-       mViewDataBinding.btnBack.setOnClickListener {
-           popUpStack()
-       }
+        mViewDataBinding.btnBack.setOnClickListener {
+            popUpStack()
+        }
+
+        mViewDataBinding.btnSignup.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.otpFragment, null, options)
+        }
+
+        mViewDataBinding.btnLogin.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.logInFragment, null, options)
+        }
 
 
     }

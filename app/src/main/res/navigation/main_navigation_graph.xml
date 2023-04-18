@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation_graph"
-    app:startDestination="@id/orderFragment">
+    app:startDestination="@id/tempFragment">
 
     <fragment
         android:id="@+id/tempFragment"
@@ -23,17 +23,25 @@
             android:id="@+id/action_logInFragment_to_signupFragment"
             app:destination="@id/signupFragment" />
         <action
-            android:id="@+id/action_logInFragment_to_forgotFragment"
-            app:destination="@id/forgotFragment" />
+            android:id="@+id/action_logInFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.teamx.hatly.ui.fragments.Auth.singup.SignupFragment"
-        android:label="SignupFragment" />
+        android:label="SignupFragment" >
+        <action
+            android:id="@+id/action_signupFragment_to_forgotFragment"
+            app:destination="@id/forgotFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createNewPassFragment"
         android:name="com.teamx.hatly.ui.fragments.Auth.newPassword.CreateNewPassFragment"
-        android:label="CreateNewPassFragment" />
+        android:label="CreateNewPassFragment" >
+        <action
+            android:id="@+id/action_createNewPassFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/forgotFragment"
         android:name="com.teamx.hatly.ui.fragments.Auth.forgot.ForgotFragment"
@@ -53,7 +61,11 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.teamx.hatly.ui.fragments.Dashboard.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_orderFragment"
+            app:destination="@id/orderFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/orderFragment"
