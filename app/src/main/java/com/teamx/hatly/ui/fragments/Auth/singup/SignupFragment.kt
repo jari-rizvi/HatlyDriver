@@ -8,8 +8,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
-import com.teamx.hatly.R
 import com.teamx.hatly.BR
+import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentSignupBinding
@@ -87,7 +87,6 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
                 params.addProperty("contact", userNumber.toString())
                 params.addProperty("password", password.toString())
                 params.addProperty("email", userEmail.toString())
-                params.addProperty("carPlate", "")
                 Log.e("UserData", params.toString())
             } catch (e: JSONException) {
                 e.printStackTrace()

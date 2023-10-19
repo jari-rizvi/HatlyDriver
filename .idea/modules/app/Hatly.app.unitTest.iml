@@ -3,6 +3,7 @@
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="5" platform="JVM 1.8" allPlatforms="JVM [1.8]" useProjectSettings="false">
+        <additionalVisibleModuleNames>:app:main</additionalVisibleModuleNames>
         <compilerSettings>
           <option name="additionalArguments" value="-Xallow-no-source-files" />
         </compilerSettings>
@@ -98,6 +99,8 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/349fe72b80f472b4a33b6fa176acddb5/transformed/jetified-retrofit-2.9.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/98c47497f652210cd7b2c7b091234975/transformed/jetified-picasso-2.71828-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/13921750bc31721ac434d1c3fcc86613/transformed/jetified-paypal-android-sdk-2.16.0-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/f90f7345fa2a7896a40b3f191254c6b1/transformed/jetified-socket.io-client-2.0.0.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/3d9169f2425f228734c99e3017705609/transformed/jetified-engine.io-client-2.0.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/4ab4d9bda239b41625ccd916959122ba/transformed/jetified-okhttp-4.9.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/fa4bab2f4d709f6ef83cec6de6b7ca6d/transformed/jetified-okio-jvm-3.1.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/e0d3027a427f455b0ed5eed0d660860a/transformed/jetified-kotlin-stdlib-jdk8-1.7.10.jar</arg>
@@ -241,8 +244,8 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
-        <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/main/res;file://$MODULE_DIR$/../../../app/src/local/res;file://$MODULE_DIR$/../../../app/src/debug/res;file://$MODULE_DIR$/../../../app/src/localDebug/res;file://$MODULE_DIR$/../../../app/build/generated/res/rs/local/debug;file://$MODULE_DIR$/../../../app/build/generated/res/resValues/local/debug" />
-        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/../../../app/src/androidTest/res;file://$MODULE_DIR$/../../../app/src/androidTestLocal/res;file://$MODULE_DIR$/../../../app/src/androidTestDebug/res;file://$MODULE_DIR$/../../../app/src/androidTestLocalDebug/res;file://$MODULE_DIR$/../../../app/build/generated/res/rs/androidTest/local/debug;file://$MODULE_DIR$/../../../app/build/generated/res/resValues/androidTest/local/debug" />
+        <option name="RES_FOLDERS_RELATIVE_PATH" value="" />
+        <option name="TEST_RES_FOLDERS_RELATIVE_PATH" value="" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
       </configuration>
     </facet>
@@ -309,6 +312,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.datastore:datastore-preferences-core-jvm:1.1.0-alpha01" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.commons:commons-lang3:3.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.auto.value:auto-value-annotations:1.6.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.socket:socket.io-client:2.0.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.socket:engine.io-client:2.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-parcelize-runtime:1.7.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.7.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.13.2" level="project" />

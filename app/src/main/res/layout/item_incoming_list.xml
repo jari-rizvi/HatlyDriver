@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/card_background_green"
         android:elevation="@dimen/_3sdp"
-        android:layout_marginVertical="@dimen/_10sdp"
-        android:layout_marginHorizontal="@dimen/_20sdp"
+       android:layout_margin="@dimen/_5sdp"
         android:backgroundTint="@color/white"
         android:orientation="vertical">
 

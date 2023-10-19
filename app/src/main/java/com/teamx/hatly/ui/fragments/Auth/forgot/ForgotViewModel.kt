@@ -24,7 +24,6 @@ class ForgotViewModel @Inject constructor(
     private val _forgotPassPhoneResponse = MutableLiveData<Resource<forgotPassPhoneData>>()
     val forgotPassPhoneResponse: LiveData<Resource<forgotPassPhoneData>>
         get() = _forgotPassPhoneResponse
-
     fun forgotPassPhone(param : JsonObject) {
         viewModelScope.launch {
             _forgotPassPhoneResponse.postValue(Resource.loading(null))

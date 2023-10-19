@@ -304,11 +304,11 @@
             android:layout_height="wrap_content"
             android:text="@string/past_orders"
             android:textColor="@color/black"
-            android:textSize="@dimen/_11ssp"
+            android:textSize="@dimen/_13ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/constraintEarnings"
             app:layout_constraintTop_toBottomOf="@+id/constraintEarnings"
-            app:layout_constraintVertical_bias="0.02" />
+            app:layout_constraintVertical_bias="0.015" />
 
         <TextView
             android:id="@+id/textView18"
@@ -327,7 +327,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPastOrder"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_100sdp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/constraintOrders"
@@ -344,11 +344,11 @@
             android:layout_height="wrap_content"
             android:text="@string/incoming_orders"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12ssp"
+            android:textSize="@dimen/_13ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/recyclerViewPastOrder"
             app:layout_constraintTop_toBottomOf="@+id/recyclerViewPastOrder"
-            app:layout_constraintVertical_bias="0.03" />
+            app:layout_constraintVertical_bias="0.01" />
 
         <TextView
             android:id="@+id/textView20"
@@ -377,27 +377,45 @@
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_incoming_order" />
 
-        <ImageView
-            android:id="@+id/imageView7"
+
+        <com.teamx.hatly.utils.SlideToUnlock
+            android:id="@+id/slideToUnlock"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            app:cancelOnYExit="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/recyclerView2"
             app:layout_constraintStart_toStartOf="@+id/recyclerView2"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
-            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintVertical_bias="0.2"
+            app:slideToUnlockBackgroundColor="#1ED860"
+            app:slideToUnlockText="Go Offline"
+            app:slideToUnlockTextColor="@color/white"
+            app:sliderColor="@color/white" />
+
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/slideToUnlock"
+            app:layout_constraintEnd_toEndOf="@+id/slideToUnlock"
+            app:layout_constraintStart_toStartOf="@+id/slideToUnlock"
+            app:layout_constraintTop_toBottomOf="@+id/slideToUnlock"
+            app:layout_constraintVertical_bias="0.2"
+            android:layout_marginTop="@dimen/_10sdp"
             app:srcCompat="@drawable/go_offline" />
 
         <ImageView
             android:id="@+id/btnOnline"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/slideToUnlock"
             app:layout_constraintEnd_toEndOf="@+id/recyclerViewPastOrder"
             app:layout_constraintStart_toStartOf="@+id/recyclerViewPastOrder"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewPastOrder"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
             app:srcCompat="@drawable/go_online" />
 
 

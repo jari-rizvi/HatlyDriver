@@ -231,10 +231,19 @@
         <item name="android:fontFamily">@font/open_sans_bold</item>
     </style>
 
-
     <style name="open_sans_secondary_regular_large_red" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">@dimen/_16ssp</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:fontFamily">@font/open_sans_regular</item>
     </style>
+
+    <declare-styleable name="SlideToUnlock">
+        <attr name="sliderColor" format="color"/>
+        <attr name="cancelOnYExit" format="boolean"/>
+        <attr name="slideToUnlockText" format="string"/>
+        <attr name="slideToUnlockTextColor" format="color"/>
+        <attr name="slideToUnlockBackgroundColor" format="color"/>
+        <attr name="cornerRadiusX" format="dimension"/>
+        <attr name="cornerRadiusY" format="dimension"/>
+    </declare-styleable>
 </resources>
