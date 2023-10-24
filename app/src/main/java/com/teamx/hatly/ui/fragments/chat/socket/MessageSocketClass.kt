@@ -42,7 +42,7 @@ object MessageSocketClass {
         Timber.tag("MessageSocketClass").d("EVENT_CONNECT: ${userMessageSocket?.connected()}")
 
         userMessageSocket?.on(Socket.EVENT_CONNECT) {
-            onListenerEverything()
+            onListenerEverything(callback,callback1)
             Timber.tag("MessageSocketClass").d("EVENT_CONNECT1: ${userMessageSocket?.connected()}")
             initiateChat(orderId = orderId)
             getAllMessage(5,5, callback)
@@ -87,7 +87,7 @@ object MessageSocketClass {
 //
 //    }
 
-    private fun onListenerEverything() {
+    private fun onListenerEverything(callback: GetAllMessageCallBack, callback2: ReceiveSendMessageCallback) {
         userMessageSocket?.on("exception") { args ->
 
             try {
@@ -108,18 +108,34 @@ object MessageSocketClass {
         }
         userMessageSocket?.on("RECEIVE_MESSAGE") { args ->
             Timber.tag("MessageSocketClass").d("RECEIVE_MESSAGE: }${args.get(0)}")
+            try {
+                val receiveMessage = gson.fromJson(args[0].toString(), RecieveMessage::class.java)
+                Timber.tag("MessageSocketClass").d("RECIEVED_MESSAGE1212: ${args[0].toString()} message12312312321 ${receiveMessage.message}"
+                )
+                callback2.onGetReceiveMessage(receiveMessage)
+            } catch (e: java.lang.Exception) {
+                Timber.tag("MessageSocketClass").d("RECIEVED_MESSAGE: ${args[0]}")
+            }
+
+
+
+
         }
         userMessageSocket?.on("CHAT_HISTORY") { args ->
             Timber.tag("MessageSocketClass").d("CHAT_HISTORY: }${args.get(0)}")
+
         }
         userMessageSocket?.on("CHAT_LEVED") { args ->
             Timber.tag("MessageSocketClass").d("CHAT_LEVED: }${args.get(0)}")
+
         }
         userMessageSocket?.on("ALL_CHATS_READED") { args ->
             Timber.tag("MessageSocketClass").d("ALL_CHATS_READED: }${args.get(0)}")
+
         }
         userMessageSocket?.on("READED_SUCCESSFULLY") { args ->
             Timber.tag("MessageSocketClass").d("READED_SUCCESSFULLY: }${args.get(0)}")
+
         }
     }
 

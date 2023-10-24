@@ -4,7 +4,7 @@ data class RecieveMessage(
     val _id: String,
     val createdAt: String,
     val entityId: String,
-    val `file`: Any,
+    val file: Any,
     val from: String,
     val isRead: Boolean,
     val message: String,

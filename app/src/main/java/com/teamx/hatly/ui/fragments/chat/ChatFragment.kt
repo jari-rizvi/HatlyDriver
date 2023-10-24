@@ -5,7 +5,6 @@ import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +13,10 @@ import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.dataclasses.recievemessage.RecieveMessage
-import com.teamx.hatly.data.models.riderMessage.RiderMessage
 import com.teamx.hatly.databinding.FragmentChatBinding
+import com.teamx.hatly.ui.fragments.chat.adapter.MessageAdapter
 import com.teamx.hatly.ui.fragments.chat.socket.MessageSocketClass
 import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.GetAllMessageData
-import com.teamx.hatlyUser.ui.fragments.chat.adapter.ChatAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -34,7 +32,8 @@ import java.util.regex.Pattern
 
 
 @AndroidEntryPoint
-class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), MessageSocketClass.ReceiveSendMessageCallback, MessageSocketClass.GetAllMessageCallBack {
+class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
+    MessageSocketClass.ReceiveSendMessageCallback, MessageSocketClass.GetAllMessageCallBack {
 
     override val layoutId: Int
         get() = R.layout.fragment_chat
@@ -43,22 +42,16 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    //    lateinit var itemClasses : ArrayList<Boolean>
-//    lateinit var layoutManager2 : LinearLayoutManager
-//    lateinit var chatAdapter : ChatAdapter
-    lateinit var spin_kit: ProgressBar
+
     private lateinit var options: NavOptions
 
-    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
+//    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
+    private lateinit var messagesUserArrayList: ArrayList<RecieveMessage>
 
-    private lateinit var messagesUserAdapter: ChatAdapter
+//    private lateinit var messagesUserAdapter: ChatAdapter
+    private lateinit var messagesUserAdapter: MessageAdapter
 
     var userId = ""
-
-    var isScrolling = false
-    var currentItems = 0
-    var totalItems = 0
-    var scrollOutItems = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,8 +69,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
 //        MessageSocketClass.connect("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI4MDBmYjA4ODFjNGUzYTBiNjdkZmNmMmZhYWRkY2YiLCJpYXQiOjE2OTc0NTQxMzIsImV4cCI6MTAzMzc0NTQxMzJ9.ADKHPgvmRMsAu6EiNZHsLYLAVbhQokpgnhG335SsJ0s","6511befda128e070ad313243")
         MessageSocketClass.connect2(
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-            "6511befda128e070ad313243"
-        ,this,this)
+            "6511befda128e070ad313243", this, this
+        )
         mViewDataBinding.imgSend.setOnClickListener {
             val text: String = mViewDataBinding.inpChat.text.toString()
             if (text.isNotEmpty()) {
@@ -88,67 +81,24 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
 //                MessageSocketClass.sendMessageTo(strImg, " $text ", this)
 
             }
-//            mViewDataBinding.imgToSend.visibility = View.INVISIBLE
-//            strImg = ""
+
             mViewDataBinding.inpChat.setText("")
         }
 
 
-        MessageSocketClass.getAllMessage(5,5, this)
+        MessageSocketClass.getAllMessage(5, 5, this)
 
 
-//        val recChat = view.findViewById<RecyclerView>(R.id.recChat)
-
-//        spin_kit = view.findViewById(R.id.spin_kit)
-//
-//        var layoutManager2 = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-//
-//        recChat.layoutManager = layoutManager2
-//
-//        var itemClasses : ArrayList<Boolean> = ArrayList()
-        /*
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(true)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(false)
-        itemClasses.add(false)
-        itemClasses.add(false)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(true)
-        itemClasses.add(true)
-        itemClasses.add(false)
-        itemClasses.add(true)
-        itemClasses.add(true)*/
-
-//        var chatAdapter = ChatAdapter(itemClasses)
-//        recChat.adapter = chatAdapter
         initializeAdapter()
     }
 
 
     private fun initializeAdapter() {
-        /*     GlobalScope.launch(Dispatchers.Main) {
-            delay(1500)
-            mViewDataBinding.shimmerLayout.visibility = View.GONE
-            mViewDataBinding.recyclerView.visibility = View.VISIBLE
-        }*/
+
         messagesUserArrayList = ArrayList()
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.recChat.layoutManager = linearLayoutManager
-        messagesUserAdapter = ChatAdapter(messagesUserArrayList)
+        messagesUserAdapter = MessageAdapter(messagesUserArrayList)
         mViewDataBinding.recChat.adapter = messagesUserAdapter
 
     }
@@ -188,23 +138,24 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
 
         val dateAndTime = timeAgo(timeFormater(getAllChatsData.createdAt ?: "")!!)
 
-
-        var str = ""
-
-        val pattern: Pattern =
-            Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-        val matcher: Matcher = pattern.matcher(timestamp)
-        if (matcher.matches()) {
-            val date: String = matcher.group(1)
-            val time: String = matcher.group(2)
-            println("Date: $date")
-            println("Time: $time")
-            str = time
-        }
+        val str = getTimeInString(timestamp)
 
         GlobalScope.launch(Dispatchers.Main) {
             messagesUserArrayList.add(
-                RiderMessage("2", "", "", "", "", false, "fdfdf", false, "", "", "")
+                getAllChatsData
+//                RiderMessage(
+//                    "2",
+//                    str,
+//                    "",
+//                    "",
+//                    "",
+//                    false,
+//                    getAllChatsData.message,
+//                    true,
+//                    "",
+//                    "",
+//                    ""
+//                )
             )
             Log.d("TAG", "messageaaya: ${messagesUserArrayList.size}")
             messagesUserAdapter.notifyDataSetChanged()
@@ -213,42 +164,32 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
         }
     }
 
-        override fun responseMessage2(str: String) {
-            Timber.tag("MessageUserFragment").d("responseMessage2: ")
+    override fun responseMessage2(str: String) {
+        Timber.tag("MessageUserFragment").d("responseMessage2: ")
 
-            GlobalScope.launch(Dispatchers.Main) {
-
-                var timestamp = ""
-                timestamp = "it.createdAt"
-                var str2 = ""
-                val pattern: Pattern =
-                    Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-                val matcher: Matcher = pattern.matcher(timestamp)
-                if (matcher.matches()) {
-                    val date: String = matcher.group(1)
-                    val time: String = matcher.group(2)
-                    println("Date: $date")
-                    println("Time: $time")
-                    str2 = time
-                }
-                messagesUserArrayList.add(
-                    RiderMessage("2", "", "", "", "", false, "fdfddfd", false, "", "", "")
-                )
-                Log.d("TAG", "messageaaya: $str")
-                messagesUserAdapter.notifyDataSetChanged()
-                mViewDataBinding.recChat.scrollToPosition(messagesUserArrayList.size - 1)
-            }
-        }
-
-    override fun onGetAllMessage(getAllChatsData: GetAllMessageData) {
-        Timber.tag("MessageUserFragment").d("onGetAllMessage: ${getAllChatsData.docs.size}")
         GlobalScope.launch(Dispatchers.Main) {
-            Timber.tag("MessageUserFragment").d("Dispatchers: ${getAllChatsData.docs.size}")
+
+            var timestamp = ""
+            timestamp = "it.createdAt"
+            val str2 = getTimeInString(timestamp)
+            messagesUserArrayList.add(
+                RecieveMessage("2", str2, "", "", "", false, str, "false", "", "")
+            )
+            Log.d("TAG", "messageaaya: $str")
+            messagesUserAdapter.notifyDataSetChanged()
+            mViewDataBinding.recChat.scrollToPosition(messagesUserArrayList.size - 1)
+        }
+    }
+
+    override fun onGetAllMessage(getAllMessageData: GetAllMessageData) {
+        Timber.tag("MessageUserFragment").d("onGetAllMessage: ${getAllMessageData.docs.size}")
+        GlobalScope.launch(Dispatchers.Main) {
+            Timber.tag("MessageUserFragment").d("Dispatchers: ${getAllMessageData.docs.size}")
 
             messagesUserArrayList.clear()
 
 
-            getAllChatsData.docs.forEachIndexed { i, it ->
+            getAllMessageData.docs.forEachIndexed { i, it ->
 
 
                 var timestamp = ""
@@ -273,31 +214,23 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
                 }
 
 
-                var str = ""
-
-                val pattern: Pattern =
-                    Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-                val matcher: Matcher = pattern.matcher(timestamp)
-                if (matcher.matches()) {
-                    val date: String = matcher.group(1)
-                    val time: String = matcher.group(2)
-                    println("Date: $date")
-                    println("Time: $time")
-                    str = time
-                }
+                val str = getTimeInString(timestamp)
 
                 Timber.tag("MessageUserFragment").d("timeFormatter: ${it.message}")
-
-                if (userId == it.from) {
-                    messagesUserArrayList.add(
-                            RiderMessage("2", "", "", "", "", false, "fdfddfd", true, "", "", "")
-                    )
-                } else {
-                    messagesUserArrayList.add(
-                        RiderMessage("1", "", "", "", "", false, "fdfddfd", true, "", "", "")
-
-                    )
+                if (userId.isEmpty()) {
+                    userId = it.from
                 }
+//                if (userId == it.from) {
+//                    messagesUserArrayList.add(
+////                        RiderMessage("2", str, "", "", "", false, it.message, true, "", "", "")
+//                    )
+//                } else {
+//                    messagesUserArrayList.add(
+////                        RiderMessage("1", str, "", "", "", false, it.message, true, "", "", "")
+//
+//                    )
+//                }
+//                userId = it.from
 
             }
 
@@ -309,30 +242,21 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(), Message
         Timber.tag("MessageUserFragment").d("responseMessage: ")
     }
 
-//    override fun responseMessage2(str: String, strImg: String) {
-//        Timber.tag("MessageUserFragment").d("responseMessage2: ")
-//        GlobalScope.launch(Dispatchers.Main) {
-//
-//            var timestamp = ""
-//
-//            timestamp = "it.createdAt"
-//            val pattern: Pattern =
-//                Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-//            val matcher: Matcher = pattern.matcher(timestamp)
-//            if (matcher.matches()) {
-//                val date: String = matcher.group(1)
-//                val time: String = matcher.group(2)
-//                println("Date: $date")
-//                println("Time: $time")
-////                str2 = time
-//            }
-//            messagesUserArrayList.add(
-//                RiderMessage("2",timeAgo(System.currentTimeMillis()),"","","",false,str,false,"","",""))
-//            messagesUserAdapter.notifyDataSetChanged()
-//            mViewDataBinding.recChat.scrollToPosition(messagesUserArrayList.size - 1)
-//        }
-//    }
 
+    private fun getTimeInString(timestamp: String): String {
+        var str = ""
 
+        val pattern: Pattern =
+            Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
+        val matcher: Matcher = pattern.matcher(timestamp)
+        if (matcher.matches()) {
+            val date: String = matcher.group(1)
+            val time: String = matcher.group(2)
+            println("Date: $date")
+            println("Time: $time")
+            str = time
+        }
+        return str
+    }
 
 }

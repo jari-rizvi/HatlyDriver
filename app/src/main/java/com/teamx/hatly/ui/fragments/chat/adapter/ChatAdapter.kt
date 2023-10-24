@@ -1,4 +1,4 @@
-package com.teamx.hatlyUser.ui.fragments.chat.adapter
+package com.teamx.hatly.ui.fragments.chat.adapter
 
 import android.view.LayoutInflater
 import android.view.View
