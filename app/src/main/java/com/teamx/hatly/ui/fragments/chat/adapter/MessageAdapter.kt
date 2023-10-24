@@ -1,5 +1,6 @@
 package com.teamx.hatly.ui.fragments.chat.adapter
 
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,12 @@ import com.teamx.hatly.data.dataclasses.recievemessage.RecieveMessage
 import com.teamx.hatly.databinding.ItemChatRiderBinding
 import com.teamx.hatly.databinding.ItemChatUserBinding
 import timber.log.Timber
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.TimeZone
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class MessageAdapter(
     private val messageArrayList: ArrayList<RecieveMessage>
@@ -26,9 +33,9 @@ class MessageAdapter(
                 MessageGenericViewHolder2(
                     ItemChatRiderBinding.inflate(
                         LayoutInflater.from(viewGroup.context), viewGroup, false
-                    ) ,ItemChatUserBinding.inflate(
+                    ), ItemChatUserBinding.inflate(
                         LayoutInflater.from(viewGroup.context), viewGroup, false
-                    ),true
+                    ), true
                 )
             }
 
@@ -36,9 +43,9 @@ class MessageAdapter(
                 MessageGenericViewHolder2(
                     ItemChatRiderBinding.inflate(
                         LayoutInflater.from(viewGroup.context), viewGroup, false
-                    ) ,ItemChatUserBinding.inflate(
+                    ), ItemChatUserBinding.inflate(
                         LayoutInflater.from(viewGroup.context), viewGroup, false
-                    ),false
+                    ), false
                 )
             }
 
@@ -105,7 +112,7 @@ class MessageAdapter(
 //                    (holder as MessageGenericViewHolder2).bind!!.imgUser.visibility = View.VISIBLE
 //                }
 
-                (holder as MessageGenericViewHolder2).bind!!.todayTime.text = messagesUser.createdAt
+                (holder as MessageGenericViewHolder2).bind!!.todayTime.text =  getTimeInString(messagesUser.createdAt)
 
                 Timber.tag("TAG").d("onBindViewHolder: true")
 
@@ -135,7 +142,8 @@ class MessageAdapter(
                 if (messagesUser.createdAt == todayTimeString) {
                     (holder as MessageGenericViewHolder2).bind1!!.todayTime.visibility = View.GONE
                 } else {
-                    (holder as MessageGenericViewHolder2).bind1!!.todayTime.visibility = View.VISIBLE
+                    (holder as MessageGenericViewHolder2).bind1!!.todayTime.visibility =
+                        View.VISIBLE
                 }
 
 
@@ -143,7 +151,8 @@ class MessageAdapter(
                 (holder as MessageGenericViewHolder2).bind1!!.txtMessage.text = messagesUser.message
 
 
-                (holder as MessageGenericViewHolder2).bind1!!.todayTime.text = messagesUser.createdAt
+                (holder as MessageGenericViewHolder2).bind1!!.todayTime.text =
+                    getTimeInString(messagesUser.createdAt)
 //                (holder as MessageGenericViewHolder2).bind1!!.txtMessageTime.text = messagesUser.timeAndDate
 //                if (messagesUser.profileImg.isNullOrBlank()) {
 //
@@ -174,15 +183,58 @@ class MessageAdapter(
 }
 
 
-class MessageGenericViewHolder2(binding: ItemChatRiderBinding?, binding1: ItemChatUserBinding?, istrue : Boolean) :
-    RecyclerView.ViewHolder(if(istrue){
-        binding!!.root
-    }
-    else{
-        binding1!!.root
-    }) {
+class MessageGenericViewHolder2(
+    binding: ItemChatRiderBinding?,
+    binding1: ItemChatUserBinding?,
+    istrue: Boolean
+) :
+    RecyclerView.ViewHolder(
+        if (istrue) {
+            binding!!.root
+        } else {
+            binding1!!.root
+        }
+    ) {
 
     val bind = binding
     val bind1 = binding1
 
+}
+
+private fun getTimeInString(timestamp: String): String {
+    var str = ""
+
+    val pattern: Pattern =
+        Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
+    val matcher: Matcher = pattern.matcher(timestamp)
+    if (matcher.matches()) {
+        val date: String = matcher.group(1)
+        val time: String = matcher.group(2)
+        println("Date: $date")
+        println("Time: $time")
+        str = time
+    }
+    return str
+}
+
+private fun timeAgo(timeMili: Long): String {
+
+    return DateUtils.getRelativeTimeSpanString(
+        timeMili!!, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS
+    ).toString()
+}
+
+fun timeFormater(timeMili: String): Long? {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    var milliseconds: Long? = null
+    dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Set the time zone to UTC
+
+    try {
+        val date: Date = dateFormat.parse(timeMili)
+        return date.time
+        println("Timestamp in milliseconds: $milliseconds")
+    } catch (e: ParseException) {
+        e.printStackTrace()
+    }
+    return milliseconds
 }

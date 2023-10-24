@@ -35,8 +35,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="fa6109" />
-                            <entry key="outputName" value="successful" />
-                            <entry key="sourceFile" value="D:\Hatly Driver Assets\Vectors\successful.svg" />
+                            <entry key="outputName" value="send_msg" />
+                            <entry key="sourceFile" value="D:\send_msg.svg" />
                           </map>
                         </option>
                       </PersistentState>
