@@ -4,6 +4,7 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.constants.NetworkCallPoints
 import com.teamx.hatly.data.dataclasses.ResetPass.ResetPassPhoneData
 import com.teamx.hatly.data.dataclasses.forgotPass.forgotPassPhoneData
+import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
 import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.models.SignUp.RegisterData
 import com.teamx.hatly.data.models.otpVerify.OtpVerifyData
@@ -36,5 +37,13 @@ interface ApiService {
 
     @POST(NetworkCallPoints.RESET_PASS_PHONE)
     suspend fun resetPassPhone(@Body params: JsonObject?): Response<ResetPassPhoneData>
+
+    @GET(NetworkCallPoints.GET_ORDERS)
+    suspend fun getOrders(
+        @Query("limit") limit: String,
+        @Query("page") page: String,
+        @Query("orderType") orderType: String,
+        @Header("Authorization") basicCredentials: String = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiJhMGIxYTZjMWM1ZmE0NTRlNjRiYzE0MTgzZDFlN2QiLCJpYXQiOjE2OTgxNjMyNzcsImV4cCI6MTAzMzgxNjMyNzd9.H6vgV2O9WTcDDyWtaCwioJS5L9TlCIifhT1WnQKl3zg"
+        ): Response<GetAllOrdersData>
 
 }

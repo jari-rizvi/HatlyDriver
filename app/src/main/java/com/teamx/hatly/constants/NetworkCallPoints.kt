@@ -21,6 +21,10 @@ class NetworkCallPoints {
         const val FORGOT_PASS_PHONE = "forget-password-phone";
 
 
+
+        const val GET_ORDERS = "order/all";
+
+
         var TOKENER = ""
     }
 }

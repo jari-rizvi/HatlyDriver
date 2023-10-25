@@ -15,7 +15,7 @@
         android:backgroundTint="@color/white"
         android:orientation="vertical">
 
-        <include layout="@layout/item_incoming_detail" />
+        <include android:id="@+id/pickup" layout="@layout/item_incoming_detail" />
 
         <include layout="@layout/item_incoming_btn_list" />
 

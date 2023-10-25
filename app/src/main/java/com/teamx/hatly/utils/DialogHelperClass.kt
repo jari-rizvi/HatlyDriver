@@ -66,6 +66,29 @@ class DialogHelperClass {
             dialog.show()
         }
 
+        interface ConfirmLocationDialog {
+            fun onConfirmLocation()
+        }
+
+        fun confirmLocation(context: Context, dialogCallBack: ConfirmLocationDialog, boo: Boolean) {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_allow_location)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+            val btnallow = dialog.findViewById<TextView>(R.id.btnAllowLocation)
+            btnallow.setOnClickListener {
+                dialogCallBack.onConfirmLocation()
+                dialog.dismiss()
+            }
+
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+
 
     }
 }
