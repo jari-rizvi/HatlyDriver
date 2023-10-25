@@ -2,9 +2,12 @@ package com.teamx.hatly.ui.fragments.Dashboard.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
@@ -20,6 +23,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
@@ -75,6 +79,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
                 popExit = com.teamx.hatly.R.anim.nav_default_pop_exit_anim
             }
         }
+
+
+        getDeviceLocation()
 
 
 //        mViewModel.getOrders("1000", "1", "CASH_ON_DELIVERY")
@@ -148,7 +155,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 // Check if the SeekBar is fully swiped
                 if (progress == seekBar.max) {
-                    if (ActivityCompat.checkSelfPermission(
+
+                    DialogHelperClass.confirmLocation(
+                        requireContext(), this@HomeFragment, true)
+
+
+
+                  /*  if (ActivityCompat.checkSelfPermission(
                             requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                             requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
@@ -160,7 +173,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
                     } else {
 
-                    }
+                    }*/
+
+
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
                     statusText.text = "Go Offline"
 
@@ -188,17 +203,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
 
     private fun getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
+
+//         * Request location Manifest.permission, so that we can get the location of the
+//         * device. The result of the Manifest.permission request is handled by a callback,
+//         * onRequestPermissionsResult.
+
+        Log.d("TAG", "getLocationPermission1: ")
         if (ContextCompat.checkSelfPermission(
                 requireActivity().applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            Log.d("TAG", "getLocationPermission2: ")
+            RiderSocketClass.connectRider(
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                originLatitude,
+                originLongitude
+            )
             locationPermissionGranted = true
         } else {
+            Log.d("TAG", "getLocationPermission3: ")
+
+
+
             ActivityCompat.requestPermissions(
                 requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 111
             )
@@ -245,25 +271,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
                             Timber.tag("lastKnownLocation").d(
                                 "Current location is . Using defaults. ${lastKnownLocation.latitude}  ${lastKnownLocation.longitude}"
                             )
-                       /*     mapFragment!!.getMapAsync {
-                                mMap = it
-                                it!!.addMarker(
-                                    MarkerOptions().position(
-                                        LatLng(
-                                            originLatitude, originLongitude
-                                        )
-                                    )
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_png_pin)) // Specifies the anchor to be at a particular point in the marker image.
-                                        .anchor(0.5f, 1f)
-                                )
-                                it?.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                        LatLng(
-                                            lastKnownLocation.latitude, lastKnownLocation.longitude
-                                        ), 1.toFloat()
-                                    )
-                                )
-                            }*/
+//                            mapFragment!!.getMapAsync {
+//                                mMap = it
+//                                it!!.addMarker(
+//                                    MarkerOptions().position(
+//                                        LatLng(
+//                                            originLatitude, originLongitude
+//                                        )
+//                                    )
+//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_png_pin)) // Specifies the anchor to be at a particular point in the marker image.
+//                                        .anchor(0.5f, 1f)
+//                                )
+//                                it?.moveCamera(
+//                                    CameraUpdateFactory.newLatLngZoom(
+//                                        LatLng(
+//                                            lastKnownLocation.latitude, lastKnownLocation.longitude
+//                                        ), 1.toFloat()
+//                                    )
+//                                )
+//                            }
 
                         }
                     } else {
@@ -312,13 +338,97 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
     }
 
     override fun onConfirmLocation() {
+        requestPermission()
         Log.d("121212121", "Click Chala: ")
-        RiderSocketClass.connectRider(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-            originLatitude,
-            originLongitude
-        )
+
     }
+
+
+
+
+
+
+    private val PERMISSION_REQUEST_CODE = 123
+
+    private fun requestPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+           /* RiderSocketClass.connectRider(
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                originLatitude,
+                originLongitude
+            )*/
+
+                // Show an explanation to the user *asynchronously*
+                // why the permission is needed and why the user should grant it
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // Permission has already been granted
+
+            RiderSocketClass.connectRider(
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                originLatitude,
+                originLongitude
+            )
+
+            /*DialogHelperClass.confirmLocation(
+                requireContext(), this@HomeFragment, true*/
+
+
+//            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+//            navController.navigate(R.id.dashboard, null, options)
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          /*  navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.dashboard, null, options)*/
+
+            RiderSocketClass.connectRider(
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                originLatitude,
+                originLongitude
+            )
+        } else {
+            val snackbar = Snackbar.make(
+                mViewDataBinding.root, "Permission required to proceed..", Snackbar.LENGTH_SHORT
+            )
+            snackbar.setAction("Settings") {
+                //
+                Timber.tag("TAG").d("ScankonRequestPermissionsResult: ")/*        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri = Uri.fromParts("package", requireActivity().packageName, null)
+                        intent.data = uri
+                        requireActivity().startActivity(intent)*/
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", context?.packageName, null)
+                intent.data = uri
+                startActivity(intent)
+                //
+//                snackbar.dismiss()
+            }
+            snackbar.show()
+
+            // Permission was denied. Handle this however is appropriate for your app.
+        }
+    }
+
+
+
+
 
 
 }
