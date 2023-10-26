@@ -6,15 +6,15 @@ import android.view.View
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import com.google.android.material.tabs.TabLayoutMediator
-import com.teamx.hatly.R
 import com.teamx.hatly.BR
+import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.databinding.FragmentNewPassBinding
 import com.teamx.hatly.databinding.FragmentOrdersBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
+class
+OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
 
     override val layoutId: Int
         get() = R.layout.fragment_orders

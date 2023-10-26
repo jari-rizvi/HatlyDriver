@@ -3,8 +3,8 @@ package com.teamx.hatly.ui.fragments.Dashboard.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamx.hatly.data.dataclasses.getorders.Doc
 import com.teamx.hatly.databinding.ItemIncomingListBinding
+import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.Doc
 
 
 class AllOrdersAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter<AllOrdersAdapter.TopProductViewHolder>() {
@@ -22,10 +22,10 @@ class AllOrdersAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter<All
 
         val list: Doc = arrayList[position]
 
-        holder.binding.pickup.textView13.text = list.shop.address.googleMapAddress
+       /* holder.binding.pickup.textView13.text = list.shop.address.googleMapAddress
         holder.binding.pickup.address.text = list.shippingAddress.streat
 
-        holder.binding.pickup.price.text = list.total.toString()+"AED"
+        holder.binding.pickup.price.text = list.total.toString()+"AED"*/
 
 
         holder.itemView.setOnClickListener {}

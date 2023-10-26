@@ -3,6 +3,7 @@ package com.teamx.hatly.ui.fragments.Auth.login
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
@@ -14,6 +15,8 @@ import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 
 @AndroidEntryPoint
@@ -104,6 +107,10 @@ class LogInFragment :
                         Resource.Status.SUCCESS -> {
                             loadingDialog.dismiss()
                             it.data?.let { data ->
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    dataStoreProvider.saveUserToken(data.token)
+                                }
+
                                 navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                                 navController.navigate(R.id.action_logInFragment_to_homeFragment, null, options)
 

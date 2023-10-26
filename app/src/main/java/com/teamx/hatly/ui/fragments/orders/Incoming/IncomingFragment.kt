@@ -4,16 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayoutMediator
-import com.teamx.hatly.R
 import com.teamx.hatly.BR
+import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.databinding.FragmentIncomingBinding
-import com.teamx.hatly.databinding.FragmentOrdersBinding
-import com.teamx.hatly.ui.fragments.orders.ViewPagerAdapter
-import com.teamx.hatly.ui.fragments.orders.active.ActiveAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,9 +22,9 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
 
     private lateinit var options: NavOptions
 
-    lateinit var productAdapter: IncomingAdapter
+//    lateinit var productAdapter: IncomingAdapter
 
-    lateinit var productArrayList: ArrayList<String>
+//    lateinit var productArrayList: ArrayList<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,29 +39,31 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
             }
         }
 
+//        productArrayList = ArrayList()
+////        productRecyclerview()
+//
+//        productArrayList.add("")
+//        productArrayList.add("")
+//        productArrayList.add("")
+//        productArrayList.add("")
 
-        productRecyclerview()
-
-        productArrayList.add("")
-        productArrayList.add("")
-        productArrayList.add("")
-        productArrayList.add("")
-
-        productAdapter.notifyDataSetChanged()
+//        productAdapter.notifyDataSetChanged()
 
 
-    }
 
-    private fun productRecyclerview() {
-        productArrayList = ArrayList()
-
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
-
-        productAdapter = IncomingAdapter(productArrayList)
-        mViewDataBinding.activeRecyclerView.adapter = productAdapter
 
     }
+
+//    private fun productRecyclerview() {
+//        productArrayList = ArrayList()
+//
+//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+//        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
+//
+//        productAdapter = IncomingAdapter(productArrayList)
+//        mViewDataBinding.activeRecyclerView.adapter = productAdapter
+//
+//    }
 
 
 }

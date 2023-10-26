@@ -1,24 +1,20 @@
 package com.teamx.hatly.ui.fragments.Auth.temp
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.asLiveData
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
+import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.databinding.FragmentTempBinding
-import com.teamx.hatly.BR
-import com.teamx.hatly.baseclasses.BaseActivity
 import com.teamx.hatly.constants.NetworkCallPoints.Companion.TOKENER
+import com.teamx.hatly.databinding.FragmentTempBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
@@ -45,11 +41,31 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
             }
         }
 
-        mViewDataBinding.login.setOnClickListener {
-            loginListener()
-        }
-         mViewDataBinding.register.setOnClickListener {
-            registerListener()
+
+        CoroutineScope(Dispatchers.Main).launch {
+
+            dataStoreProvider.token.collect {
+                Timber.tag("TAG").d("CoroutineScope ${it}")
+
+                val token = it
+
+                TOKENER = token.toString()
+
+                if (token.isNullOrBlank()) {
+
+                    mViewDataBinding.login.setOnClickListener {
+                        loginListener()
+                    }
+                    mViewDataBinding.register.setOnClickListener {
+                        registerListener()
+                    }
+                } else {
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.action_tempFragment_to_homeFragment, null, options)
+                }
+            }
+
         }
 
 
@@ -64,10 +80,11 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 
     private fun loginListener() {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.logInFragment, null, options)
+        navController.navigate(R.id.logInFragment, null, options)
     }
+
     private fun registerListener() {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.signupFragment, null, options)
+        navController.navigate(R.id.signupFragment, null, options)
     }
 }

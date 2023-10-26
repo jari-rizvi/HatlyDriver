@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
@@ -27,10 +26,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getorders.Doc
+import com.teamx.hatly.data.dataclasses.getorders.IncomingRequest
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
+import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.Doc
 import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingAdapter
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +38,8 @@ import timber.log.Timber
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  DialogHelperClass.Companion.ConfirmLocationDialog {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
+    DialogHelperClass.Companion.ConfirmLocationDialog {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -48,7 +49,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
         get() = BR.viewModel
 
     private lateinit var options: NavOptions
-    lateinit var productAdapter: IncomingAdapter
 
     lateinit var productArrayList: ArrayList<String>
     lateinit var productArrayList1: ArrayList<String>
@@ -63,8 +63,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
     private var originLongitude: String = "0.0"
 
 
-    lateinit var orderAdapter: AllOrdersAdapter
+//    lateinit var orderAdapter: AllOrdersAdapter
     lateinit var orderArrayList: ArrayList<Doc>
+
+    lateinit var incomingOrderAdapter: IncomingAdapter
+    lateinit var incomingOrderArrayList: ArrayList<IncomingRequest>
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +87,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
         getDeviceLocation()
 
 
-//        mViewModel.getOrders("1000", "1", "CASH_ON_DELIVERY")
+        mViewModel.getOrders(/*"1000", "1", "CASH_ON_DELIVERY"*/)
 
         if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
             mViewModel.getOrdersResponse.observe(requireActivity()) {
@@ -96,11 +99,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            data.docs.forEach {
-                                orderArrayList.add(it)
+                            data.incomingRequests.forEach {
+                                incomingOrderArrayList.add(it)
                             }
 
-                            orderAdapter.notifyDataSetChanged()
+                            incomingOrderAdapter.notifyDataSetChanged()
 
 
                         }
@@ -125,7 +128,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
 //       mViewDataBinding.slideToUnlock.externalListener = this
         OrderRecyclerview()
-        productRecyclerview1()
+
 
         /*        productArrayList.add("")
                 productArrayList.add("")
@@ -149,32 +152,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
 
         seekBar.isClickable = false
-        seekBar.isFocusable = false
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                seekBar.isEnabled = true
                 // Check if the SeekBar is fully swiped
                 if (progress == seekBar.max) {
 
                     DialogHelperClass.confirmLocation(
-                        requireContext(), this@HomeFragment, true)
-
-
-
-                  /*  if (ActivityCompat.checkSelfPermission(
-                            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        DialogHelperClass.confirmLocation(
-                            requireContext(), this@HomeFragment, true
-                        )
-
-                    } else {
-
-                    }*/
-
+                        requireContext(), this@HomeFragment, true
+                    )
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
                     statusText.text = "Go Offline"
@@ -199,44 +186,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
 
     }
+
+
+    private fun OrderRecyclerview() {
+        incomingOrderArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
+
+        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList)
+        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
+
+    }
+
+
     var locationPermissionGranted = true
 
 
-    private fun getLocationPermission() {
-
-//         * Request location Manifest.permission, so that we can get the location of the
-//         * device. The result of the Manifest.permission request is handled by a callback,
-//         * onRequestPermissionsResult.
-
-        Log.d("TAG", "getLocationPermission1: ")
-        if (ContextCompat.checkSelfPermission(
-                requireActivity().applicationContext, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.d("TAG", "getLocationPermission2: ")
-            RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-                originLatitude,
-                originLongitude
-            )
-            locationPermissionGranted = true
-        } else {
-            Log.d("TAG", "getLocationPermission3: ")
-
-
-
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 111
-            )
-        }
-    }
     companion object {
         var mMap: GoogleMap? = null
     }
 
 
     private fun getDeviceLocation() {
-
         try {
             if (locationPermissionGranted) {
 
@@ -315,37 +287,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
 
 
 
-    private fun OrderRecyclerview() {
-        orderArrayList = ArrayList()
 
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        mViewDataBinding.recyclerViewPastOrder.layoutManager = linearLayoutManager
-
-        orderAdapter = AllOrdersAdapter(orderArrayList)
-        mViewDataBinding.recyclerViewPastOrder.adapter = orderAdapter
-
-    }
-
-    private fun productRecyclerview1() {
-        productArrayList1 = ArrayList()
-
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        mViewDataBinding.recyclerView2.layoutManager = linearLayoutManager
-
-        productAdapter = IncomingAdapter(productArrayList1)
-        mViewDataBinding.recyclerView2.adapter = productAdapter
-
-    }
+//    private fun productRecyclerview1() {
+//        productArrayList1 = ArrayList()
+//
+//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+//        mViewDataBinding.recyclerView2.layoutManager = linearLayoutManager
+//
+//        productAdapter = IncomingAdapter(productArrayList1)
+//        mViewDataBinding.recyclerView2.adapter = productAdapter
+//
+//    }
 
     override fun onConfirmLocation() {
         requestPermission()
         Log.d("121212121", "Click Chala: ")
 
     }
-
-
-
-
 
 
     private val PERMISSION_REQUEST_CODE = 123
@@ -357,14 +315,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-           /* RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-                originLatitude,
-                originLongitude
-            )*/
+            /* RiderSocketClass.connectRider(
+                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                 originLatitude,
+                 originLongitude
+             )*/
 
-                // Show an explanation to the user *asynchronously*
-                // why the permission is needed and why the user should grant it
+            // Show an explanation to the user *asynchronously*
+            // why the permission is needed and why the user should grant it
 
             requestPermissions(
                 arrayOf(
@@ -374,7 +332,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
             )
         } else {
             // Permission has already been granted
-
             RiderSocketClass.connectRider(
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
                 originLatitude,
@@ -395,8 +352,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-          /*  navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.dashboard, null, options)*/
+            /*  navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+              navController.navigate(R.id.dashboard, null, options)*/
 
             RiderSocketClass.connectRider(
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
@@ -425,10 +382,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),  Dialog
             // Permission was denied. Handle this however is appropriate for your app.
         }
     }
-
-
-
-
 
 
 }

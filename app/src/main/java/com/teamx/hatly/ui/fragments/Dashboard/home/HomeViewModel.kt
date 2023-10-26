@@ -27,14 +27,14 @@ class HomeViewModel @Inject constructor(
         get() = _getOrdersResponse
 
 
-    fun getOrders(limit: String, page: String, orderType: String) {
+    fun getOrders(/*limit: String, page: String, orderType: String*/) {
         viewModelScope.launch {
             _getOrdersResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getOrders(limit, page, orderType).let {
+                    mainRepository.getOrders(/*limit, page, orderType*/).let {
                         if (it.isSuccessful) {
                             _getOrdersResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())

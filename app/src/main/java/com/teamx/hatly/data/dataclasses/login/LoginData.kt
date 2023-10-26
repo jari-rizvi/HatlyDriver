@@ -1,11 +1,14 @@
 package com.teamx.hatly.data.dataclasses.login
 
-import androidx.annotation.Keep
-
-
-@Keep
 data class LoginData(
-    val permissions: List<String>,
+    val __v: Int,
+    val _id: String,
+    val contact: String,
+    val email: String,
+    val location: Location,
+    val name: String,
+    val role: String,
     val token: String,
-    val user: UserX
+    val verified: Boolean,
+    val wallet: Int
 )

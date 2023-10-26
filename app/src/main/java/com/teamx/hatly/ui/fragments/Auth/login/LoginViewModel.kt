@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.teamx.hatly.baseclasses.BaseViewModel
+import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
-import com.teamx.hatly.data.dataclasses.login.LoginData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

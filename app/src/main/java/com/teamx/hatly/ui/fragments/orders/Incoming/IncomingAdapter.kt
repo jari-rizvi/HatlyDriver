@@ -3,11 +3,12 @@ package com.teamx.hatly.ui.fragments.orders.Incoming
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.teamx.hatly.data.dataclasses.getorders.IncomingRequest
 import com.teamx.hatly.databinding.ItemIncomingListBinding
 
 
 class IncomingAdapter(
-    val arrayList: ArrayList<String>) : RecyclerView.Adapter<IncomingAdapter.TopProductViewHolder>() {
+    val arrayList: ArrayList<IncomingRequest>) : RecyclerView.Adapter<IncomingAdapter.TopProductViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopProductViewHolder {
@@ -20,6 +21,33 @@ class IncomingAdapter(
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
+        val list: IncomingRequest = arrayList[position]
+
+        holder.binding.pickup.address.text = list.dropOff.addressType
+
+        val inputString =  list.pickup.address
+
+        val streetAddressRegex = Regex("Street Address: (.*?),")
+        val localityRegex = Regex("Locality: (.*?),")
+
+        val streetAddressMatch = streetAddressRegex.find(inputString)
+        val localityMatch = localityRegex.find(inputString)
+
+        if (streetAddressMatch != null && localityMatch != null) {
+            val streetAddress = streetAddressMatch.groupValues[1]
+            val locality = localityMatch.groupValues[1]
+
+            // Combine street address and locality into a single string
+            val combinedAddress = "$streetAddress, $locality"
+            holder.binding.pickup.textView13.text = combinedAddress
+
+        } else {
+            println("Street address and/or locality not found in the input string.")
+        }
+
+
+
+        holder.binding.pickup.price.text = list.fare.toString()+"AED"
 
     }
 

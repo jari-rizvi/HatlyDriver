@@ -25,10 +25,13 @@ class MainRepository @Inject constructor(
     suspend fun resetPassPhone(@Body param: JsonObject) = apiService.resetPassPhone(param)
 
     suspend fun getOrders(
-        @Query("limit") limit: String,
+       /* @Query("limit") limit: String,
         @Query("page") page: String,
-        @Query("orderType") orderType: String
-    ) = apiService.getOrders(limit, page, orderType)
+        @Query("orderType") orderType: String*/
+    ) = apiService.getOrders(/*limit, page, orderType*/)
+  suspend fun getOrdersByStatus(
+        @Query("status") status: String
+    ) = apiService.getOrdersByStatus(status)
 
 
 }
