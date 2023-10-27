@@ -5,6 +5,7 @@ import com.teamx.hatly.data.local.db.AppDao
 import com.teamx.hatly.data.local.dbModel.CartDao
 import com.teamx.hatly.data.remote.ApiService
 import retrofit2.http.Body
+import retrofit2.http.Path
 import retrofit2.http.Query
 import javax.inject.Inject
 
@@ -25,13 +26,19 @@ class MainRepository @Inject constructor(
     suspend fun resetPassPhone(@Body param: JsonObject) = apiService.resetPassPhone(param)
 
     suspend fun getOrders(
-       /* @Query("limit") limit: String,
-        @Query("page") page: String,
-        @Query("orderType") orderType: String*/
+        /* @Query("limit") limit: String,
+         @Query("page") page: String,
+         @Query("orderType") orderType: String*/
     ) = apiService.getOrders(/*limit, page, orderType*/)
-  suspend fun getOrdersByStatus(
+
+    suspend fun getOrdersByStatus(
         @Query("status") status: String
     ) = apiService.getOrdersByStatus(status)
+
+
+    suspend fun acceptRejectOrder(
+        @Path("id") id: String, @Body param: JsonObject
+    ) = apiService.acceptRejectOrder(id, param)
 
 
 }

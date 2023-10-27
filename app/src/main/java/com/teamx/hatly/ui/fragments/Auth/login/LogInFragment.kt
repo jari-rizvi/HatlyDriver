@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
 import com.teamx.hatly.BR
@@ -111,9 +112,7 @@ class LogInFragment :
                                     dataStoreProvider.saveUserToken(data.token)
                                 }
 
-                                navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                navController.navigate(R.id.action_logInFragment_to_homeFragment, null, options)
-
+                                findNavController().navigate(R.id.action_logInFragment_to_homeFragment)
 
                             }
                         }

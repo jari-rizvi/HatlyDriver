@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.teamx.hatly.baseclasses.BaseViewModel
-import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
+import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -21,8 +21,8 @@ class CompletedViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val _getPastOrdersResponse = MutableLiveData<Resource<GetAllOrdersData>>()
-    val getOPastrdersResponse: LiveData<Resource<GetAllOrdersData>>
+    private val _getPastOrdersResponse = MutableLiveData<Resource<GetOrderStatus>>()
+    val getOPastrdersResponse: LiveData<Resource<GetOrderStatus>>
         get() = _getPastOrdersResponse
 
 

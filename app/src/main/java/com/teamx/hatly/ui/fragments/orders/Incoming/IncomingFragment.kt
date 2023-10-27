@@ -2,16 +2,26 @@ package com.teamx.hatly.ui.fragments.orders.Incoming
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
+import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentIncomingBinding
+import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
 
 @AndroidEntryPoint
-class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel>() {
+class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel>(),
+    DialogHelperClass.Companion.ReasonDialog,
+    onAcceptReject {
 
     override val layoutId: Int
         get() = R.layout.fragment_incoming
@@ -22,11 +32,14 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
 
     private lateinit var options: NavOptions
 
-//    lateinit var productAdapter: IncomingAdapter
+    lateinit var id: String
 
-//    lateinit var productArrayList: ArrayList<String>
+
+    lateinit var incomingOrderAdapter: IncomingAdapter
+    lateinit var incomingOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.lifecycleOwner = viewLifecycleOwner
 
@@ -39,31 +52,146 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
             }
         }
 
-//        productArrayList = ArrayList()
-////        productRecyclerview()
-//
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
 
-//        productAdapter.notifyDataSetChanged()
+        try {
+            mViewModel.getIncomingOrders("accepted")
+        } catch (e: Exception) {
+
+        }
+
+        if (!mViewModel.getOPastrdersResponse.hasActiveObservers()) {
+            mViewModel.getOPastrdersResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                incomingOrderArrayList.add(it)
+                            }
+
+                            incomingOrderAdapter.notifyDataSetChanged()
 
 
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.getOPastrdersResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
+            }
+        }
+
+        IncomingOrderRecyclerview()
+    }
+
+    private fun IncomingOrderRecyclerview() {
+        incomingOrderArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
+
+        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList, this)
+        mViewDataBinding.activeRecyclerView.adapter = incomingOrderAdapter
+
+    }
+
+    override fun onAcceptClick(position: Int) {
+        id = incomingOrderArrayList[position]._id
+
+        val params = JsonObject()
+        try {
+            params.addProperty("status", "accepted")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.acceptReject(id, params)
+
+        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        showToast(data.message)
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
 
 
     }
 
-//    private fun productRecyclerview() {
-//        productArrayList = ArrayList()
-//
-//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-//        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
-//
-//        productAdapter = IncomingAdapter(productArrayList)
-//        mViewDataBinding.activeRecyclerView.adapter = productAdapter
-//
-//    }
+    override fun onRejectClick(position: Int) {
+
+
+        DialogHelperClass.submitReason(
+            requireContext(), this, true, "", ""
+        )
+    }
+
+    override fun onSubmitClick(status: String, rejectionReason: String) {
+        val params = JsonObject()
+        try {
+            params.addProperty("status", "rejected")
+            params.addProperty("rejectionReason", rejectionReason)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.acceptReject(id, params)
+
+        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        showToast(data.message)
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
+    }
+
+
+    override fun onCancelClick() {
+        TODO("Not yet implemented")
+    }
 
 
 }

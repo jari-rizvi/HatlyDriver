@@ -14,9 +14,8 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -83,11 +82,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
+        mViewDataBinding.profilePicture.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.orderFragment, null, options)
+        }
+
 
         getDeviceLocation()
 
 
-        mViewModel.getOrders(/*"1000", "1", "CASH_ON_DELIVERY"*/)
+//        mViewModel.getOrders(/*"1000", "1", "CASH_ON_DELIVERY"*/)
 
         if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
             mViewModel.getOrdersResponse.observe(requireActivity()) {
@@ -127,8 +131,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
 //       mViewDataBinding.slideToUnlock.externalListener = this
-        OrderRecyclerview()
-
+//        OrderRecyclerview()
+        incomingOrderArrayList = ArrayList()
 
         /*        productArrayList.add("")
                 productArrayList.add("")
@@ -188,16 +192,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
-    private fun OrderRecyclerview() {
-        incomingOrderArrayList = ArrayList()
-
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
-
-        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList)
-        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
-
-    }
+//    private fun OrderRecyclerview() {
+//        incomingOrderArrayList = ArrayList()
+//
+//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+//        mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
+//
+//        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList,this)
+//        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
+//
+//    }
 
 
     var locationPermissionGranted = true

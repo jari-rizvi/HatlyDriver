@@ -13,7 +13,7 @@
         android:weightSum="2">
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/btnAccept"
             style="@style/open_sans_secondary_bold_medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:textSize="@dimen/_12ssp" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/btnReject"
             style="@style/open_sans_secondary_bold_medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

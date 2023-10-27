@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+
 import androidx.navigation.navOptions
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
@@ -60,9 +62,8 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
                         registerListener()
                     }
                 } else {
-                    navController =
-                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.action_tempFragment_to_homeFragment, null, options)
+                    findNavController().navigate(R.id.action_tempFragment_to_homeFragment)
+
                 }
             }
 

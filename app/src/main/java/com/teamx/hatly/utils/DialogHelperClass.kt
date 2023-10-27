@@ -6,7 +6,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.R
 
 class DialogHelperClass {
@@ -83,6 +85,57 @@ class DialogHelperClass {
                 dialog.dismiss()
             }
 
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+
+
+        interface ReasonDialog {
+            fun onSubmitClick(status:String, rejectionReason:String)
+            fun onCancelClick()
+        }
+
+
+        fun submitReason(
+            context: Context, reasonDialog: ReasonDialog, boo: Boolean, status: String,
+            rejectionReason: String
+        ) {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_reason)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
+
+
+            val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
+
+//            AddReviewBtn.text = context.getString(R.string.add_review)
+            AddReviewBtn.setOnClickListener {
+                val desc = tvTitleText.text
+                if (desc.isBlank()) {
+                    Snackbar.make(
+                        AddReviewBtn,
+                        "Please enter some text",
+                        Snackbar.LENGTH_LONG
+                    )
+                    return@setOnClickListener
+                }
+                if (boo) {
+                    reasonDialog.onSubmitClick(status, desc.toString())
+                } else {
+                    reasonDialog.onCancelClick()
+                }
+                dialog.dismiss()
+            }
+            val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
+
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
 
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()

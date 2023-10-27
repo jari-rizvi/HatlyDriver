@@ -5,8 +5,10 @@ import com.teamx.hatly.constants.NetworkCallPoints
 import com.teamx.hatly.constants.NetworkCallPoints.Companion.TOKENER
 import com.teamx.hatly.data.dataclasses.ResetPass.ResetPassPhoneData
 import com.teamx.hatly.data.dataclasses.forgotPass.forgotPassPhoneData
+import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
 import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
 import com.teamx.hatly.data.dataclasses.login.LoginData
+import com.teamx.hatly.data.dataclasses.sucess.SuccessData
 import com.teamx.hatly.data.models.SignUp.RegisterData
 import com.teamx.hatly.data.models.otpVerify.OtpVerifyData
 import com.teamx.hatly.data.models.otpVerifyForgot.OtpVerifyForgotData
@@ -51,6 +53,14 @@ interface ApiService {
     suspend fun getOrdersByStatus(
           @Query("status") status: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
-    ): Response<GetAllOrdersData>
+    ): Response<GetOrderStatus>
+
+
+    @POST(NetworkCallPoints.ACCEPT_REJECT_ORDER)
+    suspend fun acceptRejectOrder(
+        @Path("id") id: String,
+        @Body params: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
 
 }

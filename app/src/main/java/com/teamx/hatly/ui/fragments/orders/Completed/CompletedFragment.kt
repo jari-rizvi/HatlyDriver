@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getorders.PastDispatche
+import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentCompletedBinding
 import com.teamx.hatly.utils.DialogHelperClass
@@ -29,7 +29,7 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
 
 
     lateinit var pastOrderAdapter: PastOrderAdapter
-    lateinit var pastOrderArrayList: ArrayList<PastDispatche>
+    lateinit var pastOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +57,7 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            data.pastDispatches.forEach {
+                            data.docs.forEach {
                                 pastOrderArrayList.add(it)
                             }
 
@@ -89,7 +89,7 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
     private fun OrderRecyclerview() {
         pastOrderArrayList = ArrayList()
 
-        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.pastRecyclerView.layoutManager = linearLayoutManager
 
         pastOrderAdapter = PastOrderAdapter(pastOrderArrayList)

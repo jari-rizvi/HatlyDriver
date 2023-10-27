@@ -3,11 +3,11 @@ package com.teamx.hatly.ui.fragments.orders.Completed
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamx.hatly.data.dataclasses.getorders.PastDispatche
+import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatly.databinding.ItemPastOrderBinding
 
 
-class PastOrderAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.Adapter<PastOrderAdapter.TopProductViewHolder>() {
+class PastOrderAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter<PastOrderAdapter.TopProductViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopProductViewHolder {
@@ -20,35 +20,44 @@ class PastOrderAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.A
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
-        val list: PastDispatche = arrayList[position]
+        val list: Doc = arrayList[position]
 
 //        holder.binding.textView13.text = list.pickup.toString()
 //        holder.binding.address.text = list.dropOff.toString()
 
 
+        try {
 
-        val inputString =  list.pickup.address
 
-        val streetAddressRegex = Regex("Street Address: (.*?),")
-        val localityRegex = Regex("Locality: (.*?),")
+            holder.binding.textView13.text = list.dropOff.address
 
-        val streetAddressMatch = streetAddressRegex.find(inputString)
-        val localityMatch = localityRegex.find(inputString)
+            val inputString = list.pickup.address
 
-        if (streetAddressMatch != null && localityMatch != null) {
-            val streetAddress = streetAddressMatch.groupValues[1]
-            val locality = localityMatch.groupValues[1]
+            val streetAddressRegex = Regex("Street Address: (.*?),")
+            val localityRegex = Regex("Locality: (.*?),")
 
-            // Combine street address and locality into a single string
-            val combinedAddress = "$streetAddress, $locality"
-            holder.binding.textView13.text = combinedAddress
-            holder.binding.address.text = combinedAddress
+            val streetAddressMatch = streetAddressRegex.find(inputString)
+            val localityMatch = localityRegex.find(inputString)
 
-        } else {
-            println("Street address and/or locality not found in the input string.")
+            if (streetAddressMatch != null && localityMatch != null) {
+                val streetAddress = streetAddressMatch.groupValues[1]
+                val locality = localityMatch.groupValues[1]
+
+                // Combine street address and locality into a single string
+                val combinedAddress = "$streetAddress, $locality"
+                holder.binding.textView13.text = combinedAddress
+
+            } else {
+                println("Street address and/or locality not found in the input string.")
+            }
+
+
+
+            holder.binding.price.text = list.parcel.fare.toString() + "AED"
         }
+        catch (e:Exception){
 
-
+        }
 
 //        holder.binding.price.text = list.dropOff.toString()+"AED"
 
