@@ -6,7 +6,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.teamx.hatly.ui.fragments.orders.Completed.CompletedFragment
 import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingFragment
 import com.teamx.hatly.ui.fragments.orders.active.ActiveFragment
-import com.teamx.hatly.ui.fragments.orders.special.SpecialFragment
 
 class ViewPagerAdapter(fragmentActivity: FragmentActivity, private var totalCount: Int) :
     FragmentStateAdapter(fragmentActivity) {
@@ -19,8 +18,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity, private var totalCoun
         return when (position) {
             0 -> ActiveFragment()
             1 -> IncomingFragment()
-            2 -> SpecialFragment()
-            3 -> CompletedFragment()
+            2 -> CompletedFragment()
             else -> ActiveFragment()
         }
     }

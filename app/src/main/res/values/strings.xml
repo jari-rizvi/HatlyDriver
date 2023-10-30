@@ -52,7 +52,13 @@
     <string name="password_8_character">Password must have atleast 8 character</string>
     <string name="enter_email">Enter email</string>
     <string name="enter_phone">Enter phone number</string>
-
+    <string name="wallet">Wallet</string>
+    <string name="available_balance">Available Balance</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="account_setting">Account Setting</string>
+    <string name="change_password">Change Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
 
 
 </resources>

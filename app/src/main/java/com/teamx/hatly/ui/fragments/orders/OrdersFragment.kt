@@ -61,9 +61,6 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
                     tab.text = "Incoming"
                 }
                 2 -> {
-                    tab.text = "Special"
-                }
-                3 -> {
                     tab.text = "Completed"
                 }
             }
@@ -76,7 +73,7 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
     }
 
     private fun setupViewPager() {
-        val adapter = ViewPagerAdapter(requireActivity(), 4)
+        val adapter = ViewPagerAdapter(requireActivity(), 3)
         mViewDataBinding.viewPager.adapter = adapter
     }
 

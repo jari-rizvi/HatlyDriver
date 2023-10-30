@@ -131,8 +131,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
                     loadingDialog.dismiss()
                     it.data?.let { data ->
                         showToast(data.message)
-
-
+                        incomingOrderAdapter.notifyDataSetChanged()
                     }
                 }
 
