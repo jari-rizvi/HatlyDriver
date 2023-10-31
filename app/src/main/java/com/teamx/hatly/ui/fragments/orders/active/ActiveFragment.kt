@@ -6,14 +6,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayoutMediator
-import com.teamx.hatly.R
 import com.teamx.hatly.BR
+import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentActiveBinding
-import com.teamx.hatly.databinding.FragmentCompletedBinding
-import com.teamx.hatly.databinding.FragmentOrdersBinding
-import com.teamx.hatly.ui.fragments.orders.ViewPagerAdapter
+import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,9 +26,11 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
 
     private lateinit var options: NavOptions
 
-    lateinit var productAdapter: ActiveAdapter
+    //    lateinit var productAdapter: ActiveAdapter
+    lateinit var activeOrderAdapter: ActiveAdapter
 
-    lateinit var productArrayList: ArrayList<String>
+    //    lateinit var productArrayList: ArrayList<String>
+    lateinit var activeOrderArrayList: ArrayList<com.teamx.hatly.data.dataclasses.getActiveorder.Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,28 +45,82 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
             }
         }
 
-        productRecyclerview()
 
-        productArrayList.add("")
-        productArrayList.add("")
-        productArrayList.add("")
-        productArrayList.add("")
 
-        productAdapter.notifyDataSetChanged()
+        mViewModel.getActiveOrder("accepted", "order")
+
+        if (!mViewModel.getActiveOrderResponse.hasActiveObservers()) {
+            mViewModel.getActiveOrderResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                activeOrderArrayList.add(it)
+                            }
+
+                            activeOrderAdapter.notifyDataSetChanged()
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.getActiveOrderResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
+            }
+        }
+
+        ActiveOrderRecyclerview()
+
+
+//        productRecyclerview()
+//
+//        productArrayList.add("")
+//        productArrayList.add("")
+//        productArrayList.add("")
+//        productArrayList.add("")
+//
+//        productAdapter.notifyDataSetChanged()
 
     }
 
-
-    private fun productRecyclerview() {
-        productArrayList = ArrayList()
+    private fun ActiveOrderRecyclerview() {
+        activeOrderArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
 
-        productAdapter = ActiveAdapter(productArrayList)
-        mViewDataBinding.activeRecyclerView.adapter = productAdapter
+        activeOrderAdapter = ActiveAdapter(activeOrderArrayList)
+        mViewDataBinding.activeRecyclerView.adapter = activeOrderAdapter
 
     }
+
+
+//    private fun productRecyclerview() {
+//        productArrayList = ArrayList()
+//
+//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+//        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
+//
+//        productAdapter = ActiveAdapter(productArrayList)
+//        mViewDataBinding.activeRecyclerView.adapter = productAdapter
+//
+//    }
 
 
 }

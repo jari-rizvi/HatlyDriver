@@ -35,6 +35,11 @@ class MainRepository @Inject constructor(
         @Query("status") status: String
     ) = apiService.getOrdersByStatus(status)
 
+    suspend fun getActiveOrders(
+        @Query("status") status: String,
+        @Query("requestFor") requestFor: String
+    ) = apiService.getActiveOrders(status, requestFor)
+
 
     suspend fun acceptRejectOrder(
         @Path("id") id: String, @Body param: JsonObject

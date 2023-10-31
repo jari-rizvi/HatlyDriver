@@ -24,6 +24,7 @@ class NetworkCallPoints {
 
         const val GET_ORDERS = "incoming-requests";
         const val GET_ORDERS_BYSTATUS = "incoming-requests/all";
+        const val GET_ACTIVE_ORDER = "incoming-requests/all";
 
         const val ACCEPT_REJECT_ORDER = "incoming-requests/response/{id}";
 

@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -25,20 +27,23 @@ import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getorders.IncomingRequest
-import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
+import com.teamx.hatly.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
 import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.Doc
-import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingAdapter
+import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
+import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
-    DialogHelperClass.Companion.ConfirmLocationDialog {
+    DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,onAcceptReject {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -65,8 +70,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 //    lateinit var orderAdapter: AllOrdersAdapter
     lateinit var orderArrayList: ArrayList<Doc>
 
-    lateinit var incomingOrderAdapter: IncomingAdapter
-    lateinit var incomingOrderArrayList: ArrayList<IncomingRequest>
+    lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
+    lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
+//    lateinit var incomingOrderArrayList: ArrayList<IncomingRequest>
+    lateinit var incomingOrderSocketArrayList: ArrayList<IncomingOrderSocketData>
+    lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,46 +101,47 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 //        mViewModel.getOrders(/*"1000", "1", "CASH_ON_DELIVERY"*/)
 
-        if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
-            mViewModel.getOrdersResponse.observe(requireActivity()) {
-                when (it.status) {
-                    Resource.Status.LOADING -> {
-                        loadingDialog.show()
-                    }
+//        if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
+//            mViewModel.getOrdersResponse.observe(requireActivity()) {
+//                when (it.status) {
+//                    Resource.Status.LOADING -> {
+//                        loadingDialog.show()
+//                    }
+//
+//                    Resource.Status.SUCCESS -> {
+//                        loadingDialog.dismiss()
+//                        it.data?.let { data ->
+//                            data.incomingRequests.forEach {
+//                                incomingOrderArrayList.add(it)
+//                            }
+//
+//                            incomingOrderAdapter.notifyDataSetChanged()
+//
+//
+//                        }
+//                    }
+//
+//                    Resource.Status.ERROR -> {
+//                        loadingDialog.dismiss()
+//                        DialogHelperClass.errorDialog(
+//                            requireContext(),
+//                            it.message!!
+//                        )
+//                    }
+//                }
+//                if (isAdded) {
+//                    mViewModel.getOrdersResponse.removeObservers(
+//                        viewLifecycleOwner
+//                    )
+//                }
+//            }
+//        }
 
-                    Resource.Status.SUCCESS -> {
-                        loadingDialog.dismiss()
-                        it.data?.let { data ->
-                            data.incomingRequests.forEach {
-                                incomingOrderArrayList.add(it)
-                            }
-
-                            incomingOrderAdapter.notifyDataSetChanged()
-
-
-                        }
-                    }
-
-                    Resource.Status.ERROR -> {
-                        loadingDialog.dismiss()
-                        DialogHelperClass.errorDialog(
-                            requireContext(),
-                            it.message!!
-                        )
-                    }
-                }
-                if (isAdded) {
-                    mViewModel.getOrdersResponse.removeObservers(
-                        viewLifecycleOwner
-                    )
-                }
-            }
-        }
-
-
+        OrderRecyclerview()
+        ParcelRecyclerview()
 //       mViewDataBinding.slideToUnlock.externalListener = this
 //        OrderRecyclerview()
-        incomingOrderArrayList = ArrayList()
+//        incomingOrderArrayList = ArrayList()
 
         /*        productArrayList.add("")
                 productArrayList.add("")
@@ -192,16 +201,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
-//    private fun OrderRecyclerview() {
-//        incomingOrderArrayList = ArrayList()
-//
-//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-//        mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
-//
-//        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList,this)
-//        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
-//
-//    }
+    private fun OrderRecyclerview() {
+        incomingOrderSocketArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
+
+        incomingOrderAdapter = IncomingOrderSocketAdapter(incomingOrderSocketArrayList,this)
+        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
+
+    }
+    private fun ParcelRecyclerview() {
+        incomingParcelSocketArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
+
+        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList)
+        mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
+
+    }
 
 
     var locationPermissionGranted = true
@@ -339,7 +358,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             RiderSocketClass.connectRider(
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
                 originLatitude,
-                originLongitude
+                originLongitude,
+                this
             )
 
             /*DialogHelperClass.confirmLocation(
@@ -363,6 +383,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
                 originLatitude,
                 originLongitude
+            ,this
             )
         } else {
             val snackbar = Snackbar.make(
@@ -385,6 +406,110 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
             // Permission was denied. Handle this however is appropriate for your app.
         }
+    }
+
+    override fun onIncomingOrderRecieve(incomingOrderSocketData: IncomingOrderSocketData) {
+        incomingOrderSocketArrayList.clear()
+        GlobalScope.launch(Dispatchers.Main) {
+
+            incomingOrderSocketArrayList.add(incomingOrderSocketData)
+
+
+     /*       getAllChatsModelX.forEach {
+                var str = ""
+                val timestamp = it.createdAt
+
+
+//                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
+//                val matcher: Matcher = pattern.matcher(timestamp)
+//
+//                if (matcher.matches()) { val date: String = matcher.group(1)
+//                    val time: String = matcher.group(2)
+//                    println("Date: $date")
+//                    println("Time: $time")
+//                    str = time
+//                }
+                if (it.messages.isNotEmpty()) {
+
+                    val timeStamp = timeFormatter(it.messages[0].createdAt)
+
+                    it.messages[0].createdAt = timeStamp
+
+
+//                messagesListArrayList.add()
+                    it.color = long.get(Random().nextInt(long.size - 1))
+                    messagesListArrayList.add(
+                        it*//*  AllChatsModel(
+                    "1",
+                    "${it.order_detail.get(0).shop}",
+                    "#${it.order_detail.get(0)._id}",
+                    str
+                )*//*
+                    )
+                }
+
+
+            }*/
+
+//            incomingOrderAdapter.notifyDataSetChanged()
+
+            mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    override fun onIncomingParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
+        incomingParcelSocketArrayList.clear()
+        GlobalScope.launch(Dispatchers.Main) {
+
+            incomingParcelSocketArrayList.add(incomingParcelSocketData)
+
+
+            /*       getAllChatsModelX.forEach {
+                       var str = ""
+                       val timestamp = it.createdAt
+
+
+       //                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
+       //                val matcher: Matcher = pattern.matcher(timestamp)
+       //
+       //                if (matcher.matches()) { val date: String = matcher.group(1)
+       //                    val time: String = matcher.group(2)
+       //                    println("Date: $date")
+       //                    println("Time: $time")
+       //                    str = time
+       //                }
+                       if (it.messages.isNotEmpty()) {
+
+                           val timeStamp = timeFormatter(it.messages[0].createdAt)
+
+                           it.messages[0].createdAt = timeStamp
+
+
+       //                messagesListArrayList.add()
+                           it.color = long.get(Random().nextInt(long.size - 1))
+                           messagesListArrayList.add(
+                               it*//*  AllChatsModel(
+                    "1",
+                    "${it.order_detail.get(0).shop}",
+                    "#${it.order_detail.get(0)._id}",
+                    str
+                )*//*
+                    )
+                }
+
+
+            }*/
+
+//            incomingOrderAdapter.notifyDataSetChanged()
+
+            mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
+
+        }
+    }
+    override fun onAcceptClick(position: Int) {
+    }
+
+    override fun onRejectClick(position: Int) {
     }
 
 
