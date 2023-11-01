@@ -3,7 +3,7 @@ package com.teamx.hatly.constants
 class NetworkCallPoints {
     companion object {
         const val LOGIN_PHONE = "auth/login/app";
-        const val SIGN_UP = "driver";
+        const val SIGN_UP = "driver/auth/signup";
 
         // Register Otp Verify
 
@@ -18,9 +18,11 @@ class NetworkCallPoints {
         const val CHANGE_PASSWORD = "change-password";
 
 
-        const val FORGOT_PASS_PHONE = "forget-password-phone";
+        const val FORGOT_PASS_PHONE = "auth/forgot/password/app";
+        const val FCM_TOKEN = "auth/addToken"
 
 
+        const val NOTIFICATION_LIST = "notification/all"
 
         const val GET_ORDERS = "incoming-requests";
         const val GET_ORDERS_BYSTATUS = "incoming-requests/all";

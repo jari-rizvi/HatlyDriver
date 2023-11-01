@@ -1,14 +1,12 @@
 package com.teamx.hatly.data.dataclasses.getorders
 
 data class Parcel(
-    val _id: Id,
-    val createdAt: String,
+    val _id: String,
     val details: Details,
     val fare: Int,
     val receiverLocation: ReceiverLocation,
-    val senderId: SenderId,
+    val senderId: String,
     val senderLocation: SenderLocation,
     val status: String,
-    val trackingNumber: String,
-    val updatedAt: String
+    val trackingNumber: String
 )

@@ -104,9 +104,8 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
                         it.data?.let { data ->
 
                             val bundle = Bundle()
-                            bundle.putString("phone", data.phone_number)
-                            bundle.putString("Sid", data.twilio.sid)
-                            bundle.putString("otpid", data.id)
+                            bundle.putString("phone", data.contact)
+                            bundle.putString("otpid", data._id)
 
                             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                             navController.navigate(R.id.otpFragment, bundle, options)

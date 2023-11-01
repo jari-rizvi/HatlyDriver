@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.teamx.hatly.baseclasses.BaseViewModel
-import com.teamx.hatly.data.dataclasses.forgotPass.forgotPassPhoneData
+import com.teamx.hatly.data.dataclasses.forgotPass.ForgotData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -21,8 +21,8 @@ class ForgotViewModel @Inject constructor(
     private val networkHelper: NetworkHelper
 ) : BaseViewModel() {
 
-    private val _forgotPassPhoneResponse = MutableLiveData<Resource<forgotPassPhoneData>>()
-    val forgotPassPhoneResponse: LiveData<Resource<forgotPassPhoneData>>
+    private val _forgotPassPhoneResponse = MutableLiveData<Resource<ForgotData>>()
+    val forgotPassPhoneResponse: LiveData<Resource<ForgotData>>
         get() = _forgotPassPhoneResponse
     fun forgotPassPhone(param : JsonObject) {
         viewModelScope.launch {

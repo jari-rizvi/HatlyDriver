@@ -77,7 +77,7 @@ class ForgotFragment : BaseFragment<FragmentForgotBinding, ForgotViewModel>() {
 
             val params = JsonObject()
             try {
-                params.addProperty("phone", userEmail)
+                params.addProperty("contact", userEmail)
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -94,14 +94,20 @@ class ForgotFragment : BaseFragment<FragmentForgotBinding, ForgotViewModel>() {
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
+                            if (data.success) {
+                                val bundle = Bundle()
+                                bundle.putString("phone",userEmail)
+                                bundle.putBoolean("fromSignup",false)
+                                navController = Navigation.findNavController(
+                                    requireActivity(), R.id.nav_host_fragment
+                                )
+                                navController.navigate(R.id.otpFragment, bundle, options)
+                            }
 
                             val bundle = Bundle()
                             bundle.putString("phone", userEmail)
 
-                            navController = Navigation.findNavController(
-                                requireActivity(), R.id.nav_host_fragment
-                            )
-                            navController.navigate(R.id.otpFragment, bundle, options)
+
                         }
                     }
                     Resource.Status.ERROR -> {

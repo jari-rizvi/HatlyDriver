@@ -4,23 +4,22 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.constants.NetworkCallPoints
 import com.teamx.hatly.constants.NetworkCallPoints.Companion.TOKENER
 import com.teamx.hatly.data.dataclasses.ResetPass.ResetPassPhoneData
-import com.teamx.hatly.data.dataclasses.forgotPass.forgotPassPhoneData
+import com.teamx.hatly.data.dataclasses.SignUp.RegisterData
+import com.teamx.hatly.data.dataclasses.fcmmodel.FcmModel
+import com.teamx.hatly.data.dataclasses.forgotPass.ForgotData
 import com.teamx.hatly.data.dataclasses.getActiveorder.GetActiveOrderData
 import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
 import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
 import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
-import com.teamx.hatly.data.models.SignUp.RegisterData
 import com.teamx.hatly.data.models.otpVerify.OtpVerifyData
 import com.teamx.hatly.data.models.otpVerifyForgot.OtpVerifyForgotData
 import com.teamx.hatly.data.models.resendOtp.ResendOtpData
+import com.teamx.hatly.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
-
-    //Get Post Update Delete
-
     @POST(NetworkCallPoints.LOGIN_PHONE)
     suspend fun loginPhone(@Body params: JsonObject?): Response<LoginData>
 
@@ -37,16 +36,27 @@ interface ApiService {
     suspend fun resendOtp(@Body params: JsonObject?): Response<ResendOtpData>
 
     @POST(NetworkCallPoints.FORGOT_PASS_PHONE)
-    suspend fun forgotPassPhone(@Body params: JsonObject?): Response<forgotPassPhoneData>
+    suspend fun forgotPassPhone(@Body params: JsonObject?): Response<ForgotData>
+
+    @GET(NetworkCallPoints.NOTIFICATION_LIST)
+    suspend fun notification(
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<ModelNotification>
+
+
+    @POST(NetworkCallPoints.FCM_TOKEN)
+    suspend fun fcm(
+        @Body params: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<FcmModel>
+
 
     @POST(NetworkCallPoints.RESET_PASS_PHONE)
     suspend fun resetPassPhone(@Body params: JsonObject?): Response<ResetPassPhoneData>
 
     @GET(NetworkCallPoints.GET_ORDERS)
     suspend fun getOrders(
-        /*  @Query("limit") limit: String,
-          @Query("page") page: String,
-          @Query("orderType") orderType: String,*/
+          @Query("requestFor") requestFor: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<GetAllOrdersData>
 

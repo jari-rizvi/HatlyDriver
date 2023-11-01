@@ -9,13 +9,14 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.example.payhilt.utils.CounterNotificationService
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.teamx.hatly.MainApplication
-import com.teamx.hatly.baseclasses.BaseActivity
-import com.teamx.hatly.utils.FragHelper
-import com.teamx.hatly.R
 import com.teamx.hatly.BR
+import com.teamx.hatly.MainApplication
+import com.teamx.hatly.R
+import com.teamx.hatly.baseclasses.BaseActivity
 import com.teamx.hatly.databinding.ActivityMainBinding
+import com.teamx.hatly.utils.FragHelper
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -244,6 +245,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         private const val STATE_SAVE_STATE = "save_state"
         private const val STATE_KEEP_FRAGS = "keep_frags"
         private const val STATE_HELPER = "helper"
+        var service: CounterNotificationService? = null
+
     }
 
     private lateinit var stateHelper: FragHelper

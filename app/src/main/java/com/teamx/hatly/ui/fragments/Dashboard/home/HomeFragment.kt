@@ -23,10 +23,18 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.data.dataclasses.getorders.PastDispatche
+import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
 import com.teamx.hatly.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
@@ -34,6 +42,7 @@ import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.Doc
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatly.utils.DialogHelperClass
+import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -43,7 +52,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
-    DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,onAcceptReject {
+    DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack, onAcceptReject {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -67,12 +76,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     private var originLongitude: String = "0.0"
 
 
-//    lateinit var orderAdapter: AllOrdersAdapter
+    //    lateinit var orderAdapter: AllOrdersAdapter
     lateinit var orderArrayList: ArrayList<Doc>
+
+    lateinit var pastparcelArrayList: ArrayList<PastDispatche>
+    lateinit var pastOrderArrayList: ArrayList<PastDispatche>
+    lateinit var pastOrderAdapter: PastParcelAdapter
+
+
+    var type: String = ""
+
 
     lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
     lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
-//    lateinit var incomingOrderArrayList: ArrayList<IncomingRequest>
     lateinit var incomingOrderSocketArrayList: ArrayList<IncomingOrderSocketData>
     lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
 
@@ -94,51 +110,100 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, null, options)
         }
+        mViewDataBinding.constraintLayout1.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.notificaitonFragment, null, options)
+        }
 
 
         getDeviceLocation()
 
 
-//        mViewModel.getOrders(/*"1000", "1", "CASH_ON_DELIVERY"*/)
+        /*      when (type) {
+                  "parcel" -> {
 
-//        if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
-//            mViewModel.getOrdersResponse.observe(requireActivity()) {
-//                when (it.status) {
-//                    Resource.Status.LOADING -> {
-//                        loadingDialog.show()
-//                    }
-//
-//                    Resource.Status.SUCCESS -> {
-//                        loadingDialog.dismiss()
-//                        it.data?.let { data ->
-//                            data.incomingRequests.forEach {
-//                                incomingOrderArrayList.add(it)
-//                            }
-//
-//                            incomingOrderAdapter.notifyDataSetChanged()
-//
-//
-//                        }
-//                    }
-//
-//                    Resource.Status.ERROR -> {
-//                        loadingDialog.dismiss()
-//                        DialogHelperClass.errorDialog(
-//                            requireContext(),
-//                            it.message!!
-//                        )
-//                    }
-//                }
-//                if (isAdded) {
-//                    mViewModel.getOrdersResponse.removeObservers(
-//                        viewLifecycleOwner
-//                    )
-//                }
-//            }
-//        }
+                  }
+
+                  "order" -> {
+
+                  }
+              }*/
+
+        mViewModel.getOrders("order")
+        mViewModel.getOrders("parcel")
+
+        if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
+            mViewModel.getOrdersResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.pastDispatches.forEach {
+                                pastOrderArrayList.add(it)
+                                pastparcelArrayList.add(it)
+                            }
+
+                            pastOrderAdapter.notifyDataSetChanged()
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.getOrdersResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
+            }
+        }
+
+
+
+
+        Firebase.initialize(requireContext())
+        FirebaseApp.initializeApp(requireContext())
+        if (!mViewModel.fcmResponse.hasActiveObservers()) {
+            askNotificationPermission()
+        }
+
+        if (!mViewModel.fcmResponse.hasActiveObservers()) {
+            mViewModel.fcmResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            mViewDataBinding.root.snackbar(data.message)
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        mViewDataBinding.root.snackbar(it.message!!)
+                    }
+                }
+            }
+        }
 
         OrderRecyclerview()
         ParcelRecyclerview()
+        PastOrderRecyclerview()
+        PastParcelRecyclerview()
 //       mViewDataBinding.slideToUnlock.externalListener = this
 //        OrderRecyclerview()
 //        incomingOrderArrayList = ArrayList()
@@ -207,10 +272,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
 
-        incomingOrderAdapter = IncomingOrderSocketAdapter(incomingOrderSocketArrayList,this)
+        incomingOrderAdapter = IncomingOrderSocketAdapter(incomingOrderSocketArrayList, this)
         mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
 
     }
+
     private fun ParcelRecyclerview() {
         incomingParcelSocketArrayList = ArrayList()
 
@@ -219,6 +285,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList)
         mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
+
+    }
+
+
+    private fun PastParcelRecyclerview() {
+        pastparcelArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        mViewDataBinding.recyclerViewSpecialPastOrders.layoutManager = linearLayoutManager
+
+        pastOrderAdapter = PastParcelAdapter(pastparcelArrayList)
+        mViewDataBinding.recyclerViewSpecialPastOrders.adapter = pastOrderAdapter
+
+    }
+
+
+    private fun PastOrderRecyclerview() {
+        pastOrderArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+        mViewDataBinding.recyclerViewPastOrders.layoutManager = linearLayoutManager
+
+        pastOrderAdapter = PastParcelAdapter(pastOrderArrayList)
+        mViewDataBinding.recyclerViewPastOrders.adapter = pastOrderAdapter
 
     }
 
@@ -309,8 +399,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
-
-
 //    private fun productRecyclerview1() {
 //        productArrayList1 = ArrayList()
 //
@@ -382,8 +470,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             RiderSocketClass.connectRider(
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
                 originLatitude,
-                originLongitude
-            ,this
+                originLongitude, this
             )
         } else {
             val snackbar = Snackbar.make(
@@ -415,31 +502,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             incomingOrderSocketArrayList.add(incomingOrderSocketData)
 
 
-     /*       getAllChatsModelX.forEach {
-                var str = ""
-                val timestamp = it.createdAt
+            /*       getAllChatsModelX.forEach {
+                       var str = ""
+                       val timestamp = it.createdAt
 
 
-//                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-//                val matcher: Matcher = pattern.matcher(timestamp)
-//
-//                if (matcher.matches()) { val date: String = matcher.group(1)
-//                    val time: String = matcher.group(2)
-//                    println("Date: $date")
-//                    println("Time: $time")
-//                    str = time
-//                }
-                if (it.messages.isNotEmpty()) {
+       //                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
+       //                val matcher: Matcher = pattern.matcher(timestamp)
+       //
+       //                if (matcher.matches()) { val date: String = matcher.group(1)
+       //                    val time: String = matcher.group(2)
+       //                    println("Date: $date")
+       //                    println("Time: $time")
+       //                    str = time
+       //                }
+                       if (it.messages.isNotEmpty()) {
 
-                    val timeStamp = timeFormatter(it.messages[0].createdAt)
+                           val timeStamp = timeFormatter(it.messages[0].createdAt)
 
-                    it.messages[0].createdAt = timeStamp
+                           it.messages[0].createdAt = timeStamp
 
 
-//                messagesListArrayList.add()
-                    it.color = long.get(Random().nextInt(long.size - 1))
-                    messagesListArrayList.add(
-                        it*//*  AllChatsModel(
+       //                messagesListArrayList.add()
+                           it.color = long.get(Random().nextInt(long.size - 1))
+                           messagesListArrayList.add(
+                               it*//*  AllChatsModel(
                     "1",
                     "${it.order_detail.get(0).shop}",
                     "#${it.order_detail.get(0)._id}",
@@ -506,11 +593,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         }
     }
+
     override fun onAcceptClick(position: Int) {
     }
 
     override fun onRejectClick(position: Int) {
     }
+
+
+    private fun askNotificationPermission() {
+        Log.d("fcmToken", "askNotificationPermission")
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("123123", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            val params = JsonObject()
+            params.addProperty("fcmToken", task.result)
+
+
+            mViewModel.fcm(params)
+            Log.d("fcmToken", "gaya ${params}")
+
+
+        })
+
+    }
+
 
 
 }

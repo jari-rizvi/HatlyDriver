@@ -6,6 +6,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
+    id 'com.google.gms.google-services'
 }
 
 
@@ -67,12 +68,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.5.0'
-    kapt "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0"
+    implementation 'com.google.firebase:firebase-inappmessaging-display-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-messaging:23.3.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.6.0'
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.5'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.3.1'
     implementation 'com.google.firebase:firebase-auth:21.0.5'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

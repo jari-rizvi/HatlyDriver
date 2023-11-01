@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import com.teamx.hatly.baseclasses.BaseViewModel
-import com.teamx.hatly.data.models.SignUp.RegisterData
+import com.teamx.hatly.data.dataclasses.SignUp.RegisterData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
