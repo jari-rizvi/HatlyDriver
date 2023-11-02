@@ -98,6 +98,10 @@
         android:id="@+id/topUpFragment"
         android:name="com.teamx.hatly.ui.fragments.topUp.TopUpFragment"
         android:label="TopUpFragment" />
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="com.teamx.hatly.ui.fragments.wallet.WalletFragment"
+        android:label="WalletFragment" />
 
 
 </navigation>

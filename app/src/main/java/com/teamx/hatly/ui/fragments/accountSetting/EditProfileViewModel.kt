@@ -9,6 +9,7 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.baseclasses.BaseViewModel
 import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.dataclasses.modelUploadImages.ModelUploadImages
+import com.teamx.hatly.data.dataclasses.sucess.SuccessData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -23,6 +24,35 @@ class EditProfileViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val networkHelper: NetworkHelper
 ) : BaseViewModel() {
+
+
+    private val _changePasswordResponse = MutableLiveData<Resource<SuccessData>>()
+    val changePasswordResponse: LiveData<Resource<SuccessData>>
+        get() = _changePasswordResponse
+
+    fun changePassword(params: JsonObject) {
+        viewModelScope.launch {
+            _changePasswordResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.changePassword(params).let {
+                        if (it.isSuccessful) {
+                            _changePasswordResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _changePasswordResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _changePasswordResponse.postValue(Resource.error(jsonObj.getString("message")))
+//                            _changePasswordResponse.postValue(Resource.error(it.message(), null))
+                        }
+                    }
+                } catch (e: Exception) {
+                    _changePasswordResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _changePasswordResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
 
 
     private val _uploadReviewImgResponse = MutableLiveData<Resource<ModelUploadImages>>()

@@ -11,6 +11,7 @@ import com.teamx.hatly.data.dataclasses.getActiveorder.GetActiveOrderData
 import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
 import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
 import com.teamx.hatly.data.dataclasses.login.LoginData
+import com.teamx.hatly.data.dataclasses.meModel.me.MeModel
 import com.teamx.hatly.data.dataclasses.modelUploadImages.ModelUploadImages
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
 import com.teamx.hatly.data.models.otpVerify.OtpVerifyData
@@ -34,6 +35,13 @@ interface ApiService {
 
     @POST(NetworkCallPoints.OTP_VERIFY)
     suspend fun otpVerify(@Body params: JsonObject?): Response<OtpVerifyData>
+
+    @PUT(NetworkCallPoints.CHANGE_PASSWORD)
+    suspend fun changePassword(
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
 
     @POST(NetworkCallPoints.OTP_VERIFY_PHONE)
     suspend fun otpVerifyForgot(@Body params: JsonObject?): Response<OtpVerifyForgotData>
@@ -67,6 +75,11 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<ModelDetachCredCards>
+
+    @GET(NetworkCallPoints.ME)
+    suspend fun me(
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<MeModel>
 
     @GET(NetworkCallPoints.CREDS_CARDS)
     suspend fun getCredCards(

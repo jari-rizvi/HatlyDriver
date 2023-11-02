@@ -5,6 +5,8 @@ class NetworkCallPoints {
         const val LOGIN_PHONE = "auth/login/app";
         const val SIGN_UP = "driver/auth/signup";
         const val UPDATE_PROFILE = "user/update"
+        const val ME = "auth/me"
+
 
 
         // Register Otp Verify
@@ -17,7 +19,8 @@ class NetworkCallPoints {
         // Create new password
         const val RESET_PASS = "reset-password";
         const val RESET_PASS_PHONE = "Reset-Password-Phone";
-        const val CHANGE_PASSWORD = "change-password";
+        const val CHANGE_PASSWORD = "auth/update-profile"
+
 
 
         const val UPLOAD_REVIEW_IMGS = "upload/uploadMultiple"

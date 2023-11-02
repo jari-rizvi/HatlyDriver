@@ -182,11 +182,11 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
 
         paymentSheet.presentWithPaymentIntent(
             clientSecret, PaymentSheet.Configuration(
-                merchantDisplayName = "Hatly",
+                merchantDisplayName = "HatlyDriver",
 //                customer = customerConfig,
                 // Set `allowsDelayedPaymentMethods` to true if your business
                 // can handle payment methods that complete payment after a delay, like SEPA Debit and Sofort.
-                allowsDelayedPaymentMethods = false
+                allowsDelayedPaymentMethods = true
             )
         )
     }

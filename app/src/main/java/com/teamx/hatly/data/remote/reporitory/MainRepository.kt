@@ -20,6 +20,7 @@ class MainRepository @Inject constructor(
 
     suspend fun otpVerify(@Body param: JsonObject) = apiService.otpVerify(param)
 
+    suspend fun changePassword(@Body params: JsonObject) = apiService.changePassword(params)
     suspend fun otpVerifyForgot(@Body param: JsonObject) = apiService.otpVerifyForgot(param)
 
     suspend fun resendOtp(@Body param: JsonObject) = apiService.resendOtp(param)
@@ -32,6 +33,9 @@ class MainRepository @Inject constructor(
     suspend fun setDefaultCredCards(
         @Body params: JsonObject
     ) = apiService.setDefaultCredCards(params)
+
+    suspend fun me() = apiService.me()
+
 
     suspend fun setDetachCredCards(
         @Body params: JsonObject
@@ -51,12 +55,12 @@ class MainRepository @Inject constructor(
     suspend fun updateProfile(
         @Body params: JsonObject,
     ) = apiService.updateProfile(params)
+
     suspend fun getOrders(
-         @Query("requestFor") requestFor: String
+        @Query("requestFor") requestFor: String
     ) = apiService.getOrders(requestFor)
 
     suspend fun fcm(@Body param: JsonObject) = apiService.fcm(param)
-
 
 
     suspend fun getOrdersByStatus(

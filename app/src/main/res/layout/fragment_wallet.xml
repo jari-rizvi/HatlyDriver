@@ -59,6 +59,38 @@
             app:layout_constraintVertical_bias="0.05">
 
 
+            <ImageView
+                android:id="@+id/imgTopUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/input_auth_field"
+                android:backgroundTint="@color/white"
+                android:elevation="1dp"
+                android:padding="@dimen/_5sdp"
+                android:src="@drawable/back_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/textView36"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView36"
+                app:layout_constraintTop_toTopOf="@+id/textView36"
+                app:layout_constraintVertical_bias="0.3"
+                app:tint="#363636" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text="Top up"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/imgTopUp"
+                app:layout_constraintStart_toStartOf="@+id/imgTopUp"
+                app:layout_constraintTop_toBottomOf="@+id/imgTopUp" />
+
+
+
             <TextView
                 android:id="@+id/textView36"
                 android:layout_width="wrap_content"
