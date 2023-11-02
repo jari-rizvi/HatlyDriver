@@ -3,7 +3,6 @@ package com.teamx.hatly.ui.fragments.Auth.newPassword
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
@@ -15,6 +14,9 @@ import com.teamx.hatly.databinding.FragmentNewPassBinding
 import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONException
 
 @AndroidEntryPoint
@@ -28,9 +30,11 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private var newPass: String? = null
-    private var phone: String? = null
-    private var token: String? = null
+    private var userNew: String? = null
+    private var userConfirmPass: String? = null
+
+    private var phone: String? = ""
+    private var uniqueId: String? = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,78 +49,79 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
             }
         }
 
-        mViewDataBinding.btnSave.setOnClickListener {
-            validate()
 
+        mViewDataBinding.btnSave.setOnClickListener {
+            if (isValidate()) {
+                initialization()
+                mViewModel.updatePass(createParams())
+            }
+        }
+
+        val bundle = arguments
+        phone = bundle?.getString("phone")
+        uniqueId = bundle?.getString("uniqueId")
+        Log.d("createParams", "onViewCreated phone: $phone")
+
+        if (!mViewModel.updateResponse.hasActiveObservers()) {
+            mViewModel.updateResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                dataStoreProvider.saveUserToken(data.token)
+                            }
+                            DialogHelperClass.changePasswordDialog(requireActivity(), this, true)
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        Log.d("createParams", "Resource.Status.ERROR: ${it.message}")
+                    }
+                }
+            }
         }
 
     }
 
-    private fun resetPassCall() {
-        super.subscribeToNetworkLiveData()
+    private fun initialization() {
+        userNew = mViewDataBinding.etPass.text.toString().trim()
+        userConfirmPass = mViewDataBinding.etCnfrmPass.text.toString().trim()
+    }
 
-        val bundle = arguments
-        if (bundle != null) {
-            newPass = mViewDataBinding.etPass.text.toString()
-            phone = bundle.getString("phone").toString()
-            Log.d("TAG", "resetPassCall: $phone")
-        }
-
+    private fun createParams(): JsonObject {
         val params = JsonObject()
         try {
-            params.addProperty("password", newPass)
-            params.addProperty("phoneNumber", phone)
+            params.addProperty("contact", phone)
+            params.addProperty("password", userConfirmPass.toString())
+            params.addProperty("uniqueId", uniqueId)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-
-        mViewModel.resetPassPhone(params, this)
-
-
-        mViewModel.resetPassPhoneResponse.observe(requireActivity(), Observer {
-            when (it.status) {
-                Resource.Status.LOADING -> {
-                    loadingDialog.show()
-                }
-                Resource.Status.SUCCESS -> {
-                    loadingDialog.dismiss()
-                    it.data?.let { data ->
-                        DialogHelperClass.changePasswordDialog(requireContext(),this,true)
-
-                    }
-                }
-                Resource.Status.ERROR -> {
-                    loadingDialog.dismiss()
-                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
-                }
-            }
-        })
+        return params
     }
 
-    fun validate(): Boolean {
+    private fun isValidate(): Boolean {
         if (mViewDataBinding.etPass.text.toString().trim().isEmpty()) {
-            mViewDataBinding.root.snackbar(getString(R.string.enter_Password))
-            return false
-        }
-        if (mViewDataBinding.etPass.text.toString().trim().length < 8) {
-            mViewDataBinding.root.snackbar(getString(R.string.password_8_character))
+            mViewDataBinding.root.snackbar("Enter password")
             return false
         }
         if (mViewDataBinding.etCnfrmPass.text.toString().trim().isEmpty()) {
-            mViewDataBinding.root.snackbar(getString(R.string.enter_Password))
+            mViewDataBinding.root.snackbar("Enter confirm password")
             return false
         }
-        if (mViewDataBinding.etCnfrmPass.text.toString().trim().length < 7) {
-            mViewDataBinding.root.snackbar(getString(R.string.password_8_character))
-            return false
-        }
-        if (!mViewDataBinding.etPass.text.toString().trim()
-                .equals(mViewDataBinding.etCnfrmPass.text.toString().trim())
+        if (mViewDataBinding.etPass.text.toString()
+                .trim() != mViewDataBinding.etCnfrmPass.text.toString().trim()
         ) {
-            mViewDataBinding.root.snackbar(getString(R.string.password_does_not_match))
+            mViewDataBinding.root.snackbar("Password not matched")
             return false
         }
-        resetPassCall()
         return true
     }
 
@@ -127,4 +132,5 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
         )
         navController.navigate(R.id.homeFragment, null, options)
     }
+
 }

@@ -11,9 +11,10 @@ class NetworkCallPoints {
 
         // Register Otp Verify
 
-        const val OTP_VERIFY = "register/phone-verify";
-        const val OTP_VERIFY_PHONE = "verify-phone-otp-code";
-        const val RESEND_OTP_VERIFY = "register/resend-otp";
+        const val OTP_VERIFY = "auth/verify/signup/otp";
+        const val UPDATE_PASS = "auth/password/update/app"
+        const val VERIFY_FORGOT_PASS = "auth/verify/forgot/otp";
+        const val RESEND_OTP_VERIFY = "auth/resend/otp";
 
 
         // Create new password

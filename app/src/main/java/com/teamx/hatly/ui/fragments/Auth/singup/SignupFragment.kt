@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
@@ -19,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 
 @AndroidEntryPoint
-class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
+class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
 
     override val layoutId: Int
         get() = R.layout.fragment_signup
@@ -103,7 +102,6 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
 
                             val bundle = Bundle()
                             bundle.putString("phone", data.contact)
-                            bundle.putString("otpid", data._id)
 
                             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                             navController.navigate(R.id.otpFragment, bundle, options)
@@ -166,16 +164,6 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
         }
 
         signup()
-
-//        if (mViewDataBinding.cbPolicy.isChecked) {
-//            signup()
-//        } else {
-//            mViewDataBinding.root.snackbar("Please Agree to continue")
-//        }
-
-
-
-
         return true
     }
 }

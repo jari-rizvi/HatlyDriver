@@ -20,6 +20,9 @@ class MainRepository @Inject constructor(
 
     suspend fun otpVerify(@Body param: JsonObject) = apiService.otpVerify(param)
 
+    suspend fun updatePass(@Body param: JsonObject) = apiService.updatePass(param)
+
+
     suspend fun changePassword(@Body params: JsonObject) = apiService.changePassword(params)
     suspend fun otpVerifyForgot(@Body param: JsonObject) = apiService.otpVerifyForgot(param)
 
