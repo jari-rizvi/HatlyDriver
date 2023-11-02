@@ -4,6 +4,8 @@ class NetworkCallPoints {
     companion object {
         const val LOGIN_PHONE = "auth/login/app";
         const val SIGN_UP = "driver/auth/signup";
+        const val UPDATE_PROFILE = "user/update"
+
 
         // Register Otp Verify
 
@@ -18,6 +20,8 @@ class NetworkCallPoints {
         const val CHANGE_PASSWORD = "change-password";
 
 
+        const val UPLOAD_REVIEW_IMGS = "upload/uploadMultiple"
+
         const val FORGOT_PASS_PHONE = "auth/forgot/password/app";
         const val FCM_TOKEN = "auth/addToken"
 
@@ -31,7 +35,15 @@ class NetworkCallPoints {
         const val ACCEPT_REJECT_ORDER = "incoming-requests/response/{id}";
 
 
-        
+        const val CREDS_CARDS = "stripe/list/paymentMethods"
+        const val WALLET_TOPUP = "wallet/topup"
+        const val DEFAULT_CREDS_CARDS = "stripe/set/paymentMethod"
+        const val DETACH_CREDS_CARDS = "stripe/detach/paymentMethod"
+
+
+
+
+
         var TOKENER = ""
     }
 }

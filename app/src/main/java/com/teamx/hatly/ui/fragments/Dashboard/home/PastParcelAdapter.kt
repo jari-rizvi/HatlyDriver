@@ -22,16 +22,11 @@ class PastParcelAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.
 
         val list: PastDispatche = arrayList[position]
 
-//        holder.binding.textView13.text = list.pickup.toString()
-//        holder.binding.address.text = list.dropOff.toString()
-
-
         try {
+            holder.binding.address.text = list.dropOff.address
+            holder.binding.textView13.text = list.pickup.formattedAddress
 
-
-            holder.binding.textView13.text = list.parcel.receiverLocation.location.address
-
-            val inputString = list.parcel.receiverLocation.location.address
+            val inputString = list.pickup.formattedAddress
 
             val streetAddressRegex = Regex("Street Address: (.*?),")
             val localityRegex = Regex("Locality: (.*?),")
@@ -53,7 +48,7 @@ class PastParcelAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.
 
 
 
-            holder.binding.price.text = list.parcel.fare.toString() + "AED"
+            holder.binding.price.text = list.charges.toString() + "AED"
         }
         catch (e:Exception){
 

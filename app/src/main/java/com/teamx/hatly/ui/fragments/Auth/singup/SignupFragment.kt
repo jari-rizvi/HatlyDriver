@@ -28,8 +28,6 @@ class SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() {
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    private lateinit var options: NavOptions
     private var userEmail: String? = null
     private var password: String? = null
     private var name: String? = null

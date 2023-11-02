@@ -27,8 +27,6 @@ class OtpFragment : BaseFragment<FragmentOtpBinding, OtpViewModel>() {
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    private lateinit var options: NavOptions
     private var phoneNumber: String? = null
     private var sid: String? = null
     private var otpid: String? = null

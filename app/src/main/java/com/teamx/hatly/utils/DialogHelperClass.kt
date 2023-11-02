@@ -23,6 +23,70 @@ class DialogHelperClass {
         }
 
 
+        interface ContactUs {
+            fun onBackToHome()
+        }
+
+//        fun ContactDialog(context: Context, contactUs: ContactUs): Dialog {
+//            val dialog = Dialog(context)
+//            dialog.setContentView(R.layout.dialog_contact_us)
+//
+//            dialog.window?.setLayout(
+//                WindowManager.LayoutParams.MATCH_PARENT,
+//                WindowManager.LayoutParams.MATCH_PARENT
+//            );
+//
+//            val txtLogin = dialog.findViewById<TextView>(R.id.txtLogin)
+//
+//            txtLogin.setOnClickListener {
+//                contactUs.onBackToHome()
+//                dialog.dismiss()
+//            }
+//
+//
+//
+//            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//            dialog.setCancelable(false)
+//            dialog.show()
+//            return dialog
+//        }
+
+        fun wallettDialog(context: Context, topPrice : String, contactUs: ContactUs): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.wallet_dialog)
+
+            dialog.window?.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            );
+
+            val txtLogin = dialog.findViewById<TextView>(R.id.txtLogin)
+            val txtTitle215545644 = dialog.findViewById<TextView>(R.id.txtTitle215545644)
+            val txtDialogPrice = dialog.findViewById<TextView>(R.id.txtDialogPrice)
+
+            txtDialogPrice.text = try {
+                "$topPrice Aed"
+            }catch (e : Exception){
+                "null"
+            }
+
+            txtTitle215545644.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            txtLogin.setOnClickListener {
+                contactUs.onBackToHome()
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setCancelable(false)
+            dialog.show()
+            return dialog
+        }
+
+
+
         fun errorDialog(context: Context, errorMessage: String) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_layout_error)

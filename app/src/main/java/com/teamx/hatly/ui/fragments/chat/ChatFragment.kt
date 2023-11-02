@@ -1,4 +1,4 @@
-package com.teamx.hatlyUser.ui.fragments.chat
+package com.teamx.hatly.ui.fragments.chat
 
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -42,8 +42,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    private lateinit var options: NavOptions
 
 //    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
     private lateinit var messagesUserArrayList: ArrayList<RecieveMessage>

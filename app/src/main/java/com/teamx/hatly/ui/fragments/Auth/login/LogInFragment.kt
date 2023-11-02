@@ -1,19 +1,17 @@
 package com.teamx.hatly.ui.fragments.Auth.login
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.remote.Resource
-import com.teamx.hatly.utils.DialogHelperClass
+import com.teamx.hatly.utils.PrefHelper
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -31,8 +29,6 @@ class LogInFragment :
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    private lateinit var options: NavOptions
     private var userEmail: String? = null
     private var password: String? = null
 
@@ -49,10 +45,6 @@ class LogInFragment :
             }
         }
 
-        mViewDataBinding.btnLogin.setOnClickListener {
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.action_logInFragment_to_homeFragment, null, options)
-        }
 
         mViewDataBinding.btnSingup.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -81,8 +73,7 @@ class LogInFragment :
     }
 
 
-    override fun subscribeToNetworkLiveData() {
-        super.subscribeToNetworkLiveData()
+     fun apiforlogin() {
 
         initialization()
 
@@ -96,36 +87,43 @@ class LogInFragment :
                 e.printStackTrace()
             }
             mViewModel.loginPhone(params)
-            Log.e("UserData", params.toString())
-
 
             if (!mViewModel.loginResponse.hasActiveObservers()) {
-                mViewModel.loginResponse.observe(requireActivity()) {
+                mViewModel.loginResponse.observe(requireActivity(), Observer {
                     when (it.status) {
                         Resource.Status.LOADING -> {
                             loadingDialog.show()
                         }
+
                         Resource.Status.SUCCESS -> {
                             loadingDialog.dismiss()
+
                             it.data?.let { data ->
                                 lifecycleScope.launch(Dispatchers.IO) {
                                     dataStoreProvider.saveUserToken(data.token)
                                 }
 
-                                findNavController().navigate(R.id.action_logInFragment_to_homeFragment)
+                                PrefHelper.getInstance(requireActivity()).setUserData(data)
+
+
+                                navController =
+                                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                                navController.navigate(R.id.homeFragment, null, options)
 
                             }
+
+
                         }
+
+
                         Resource.Status.ERROR -> {
                             loadingDialog.dismiss()
-                            DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                            mViewDataBinding.root.snackbar(it.message!!)
                         }
                     }
-                    if (isAdded) {
-                        mViewModel.loginResponse.removeObservers(viewLifecycleOwner)
-                    }
-                }
+                })
             }
+
 
         }
     }
@@ -144,7 +142,7 @@ class LogInFragment :
             mViewDataBinding.root.snackbar("Password must have atleast 8 charachters")
             return false
         }
-        subscribeToNetworkLiveData()
+        apiforlogin()
         return true
     }
 }

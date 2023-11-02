@@ -2,7 +2,6 @@ package com.teamx.hatly.ui.fragments.accountSetting
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
@@ -21,8 +20,6 @@ class ChangePasswordFragment :
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    private lateinit var options: NavOptions
     private var userEmail: String? = null
     private var password: String? = null
 

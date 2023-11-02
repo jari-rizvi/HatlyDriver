@@ -193,6 +193,9 @@ dependencies {
     implementation 'com.paypal.sdk:paypal-android-sdk:2.16.0'
 
 
+    // Stripe Android SDK
+    implementation 'com.stripe:stripe-android:20.25.5'
+
     // EasyPermissions by Google
     implementation 'pub.devrel:easypermissions:3.0.0'
 

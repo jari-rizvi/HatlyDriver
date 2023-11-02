@@ -1,7 +1,12 @@
 package com.teamx.hatly.data.dataclasses.getorders
 
 data class Pickup(
-    val address: String,
-    val coordinates: Coordinates,
+    val city: String,
+    val coordinates: List<Double>,
+    val country: String,
+    val formattedAddress: String,
+    val lat: Double,
+    val lng: Double,
+    val state: String,
     val type: String
 )

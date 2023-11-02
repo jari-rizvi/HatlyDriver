@@ -1,11 +1,13 @@
 package com.teamx.hatly.ui.fragments.Auth.temp
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.NavOptions
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-
 import androidx.navigation.navOptions
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
@@ -27,8 +29,6 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
         get() = TempViewModel::class.java
     override val bindingVariable: Int
         get() = BR.viewModel
-
-    private lateinit var options: NavOptions
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,12 +62,15 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
                         registerListener()
                     }
                 } else {
-                    findNavController().navigate(R.id.action_tempFragment_to_homeFragment)
-
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.homeFragment, null, options)
                 }
             }
 
         }
+
+        askNotificationPermission()
 
 
 //        Handler(Looper.getMainLooper()).postDelayed({
@@ -78,6 +81,42 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 
 
     }
+
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+
+
+        } else {
+
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+
+
+
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+
+            } else {
+                // Directly ask for t
+                //
+                //
+                // he permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
 
     private fun loginListener() {
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)

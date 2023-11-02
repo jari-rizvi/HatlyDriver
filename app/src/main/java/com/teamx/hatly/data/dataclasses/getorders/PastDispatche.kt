@@ -2,12 +2,14 @@ package com.teamx.hatly.data.dataclasses.getorders
 
 data class PastDispatche(
     val _id: String,
-//    val dropOff: DropOffX,
+    val charges: Double,
+    val dropOff: DropOff,
     val estimatedDeliveryTime: Int,
-    val parcel: ParcelX,
-//    val pickup: PickupX,
+    val orders: Orders,
+    val pickup: Pickup,
     val requestFor: String,
     val requestId: String,
-    val riderId: String,
+    val riderId: RiderId,
+    val shop: ShopX,
     val status: String
 )

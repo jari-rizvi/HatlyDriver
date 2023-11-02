@@ -4,7 +4,9 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.data.local.db.AppDao
 import com.teamx.hatly.data.local.dbModel.CartDao
 import com.teamx.hatly.data.remote.ApiService
+import okhttp3.MultipartBody
 import retrofit2.http.Body
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import javax.inject.Inject
@@ -27,7 +29,28 @@ class MainRepository @Inject constructor(
 
     suspend fun notification() = apiService.notification()
 
+    suspend fun setDefaultCredCards(
+        @Body params: JsonObject
+    ) = apiService.setDefaultCredCards(params)
 
+    suspend fun setDetachCredCards(
+        @Body params: JsonObject
+    ) = apiService.setDetachCredCards(params)
+
+    suspend fun topUpSaved(
+        @Body params: JsonObject
+    ) = apiService.topUpSaved(params)
+
+    suspend fun getCredCards(
+    ) = apiService.getCredCards()
+
+    suspend fun uploadReviewImg(
+        @Part images: List<MultipartBody.Part>
+    ) = apiService.uploadReviewImg(images)
+
+    suspend fun updateProfile(
+        @Body params: JsonObject,
+    ) = apiService.updateProfile(params)
     suspend fun getOrders(
          @Query("requestFor") requestFor: String
     ) = apiService.getOrders(requestFor)

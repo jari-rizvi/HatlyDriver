@@ -3,7 +3,6 @@ package com.teamx.hatly.ui.fragments.Auth.forgot
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
@@ -28,7 +27,6 @@ class ForgotFragment : BaseFragment<FragmentForgotBinding, ForgotViewModel>() {
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
     private var userEmail: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -26,8 +26,6 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
         get() = NotificationViewModel::class.java
     override val bindingVariable: Int
         get() = BR.viewModel
-
-    private lateinit var options: NavOptions
     var layoutManager2: LinearLayoutManager? = null
 
     var isScrolling = false
@@ -50,6 +48,10 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
                 popEnter = R.anim.nav_default_pop_enter_anim
                 popExit = R.anim.nav_default_pop_exit_anim
             }
+        }
+
+        mViewDataBinding.imgBack.setOnClickListener {
+            popUpStack()
         }
 
 

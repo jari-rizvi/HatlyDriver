@@ -153,6 +153,7 @@
             android:imeOptions="actionNext"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
+            android:visibility="gone"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
             app:hintTextColor="@color/black"

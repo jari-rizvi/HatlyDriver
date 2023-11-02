@@ -28,7 +28,7 @@ BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fra
 
     lateinit var sharedViewModel: SharedViewModel
     lateinit var navController: NavController
-    private lateinit var options: NavOptions
+    lateinit var options: NavOptions
     lateinit var dataStoreProvider: DataStoreProvider
 
     private var mActivity: BaseActivity<*, *>? = null

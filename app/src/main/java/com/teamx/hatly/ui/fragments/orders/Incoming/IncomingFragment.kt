@@ -30,8 +30,6 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
-
     lateinit var id: String
 
 

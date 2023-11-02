@@ -22,8 +22,6 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(){
         get() = BR.viewModel
 
 
-    private lateinit var options: NavOptions
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

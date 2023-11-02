@@ -25,8 +25,6 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
-
 
     lateinit var pastOrderAdapter: PastOrderAdapter
     lateinit var pastOrderArrayList: ArrayList<Doc>

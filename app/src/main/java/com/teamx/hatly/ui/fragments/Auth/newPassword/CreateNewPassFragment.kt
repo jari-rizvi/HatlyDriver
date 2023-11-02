@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
@@ -32,7 +31,6 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
     private var newPass: String? = null
     private var phone: String? = null
     private var token: String? = null
-    private lateinit var options: NavOptions
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

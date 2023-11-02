@@ -10,10 +10,11 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,7 +39,6 @@ import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
 import com.teamx.hatly.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
-import com.teamx.hatly.ui.fragments.chat.socket.model.allmessageData.Doc
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatly.utils.DialogHelperClass
@@ -61,8 +61,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
-
     lateinit var productArrayList: ArrayList<String>
     lateinit var productArrayList1: ArrayList<String>
     private lateinit var seekBar: SeekBar
@@ -76,11 +74,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     private var originLongitude: String = "0.0"
 
 
-    //    lateinit var orderAdapter: AllOrdersAdapter
-    lateinit var orderArrayList: ArrayList<Doc>
-
     lateinit var pastparcelArrayList: ArrayList<PastDispatche>
     lateinit var pastOrderArrayList: ArrayList<PastDispatche>
+
     lateinit var pastOrderAdapter: PastParcelAdapter
 
 
@@ -112,27 +108,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.notificaitonFragment, null, options)
+            navController.navigate(R.id.topUpFragment, null, options)
+        }
+        mViewDataBinding.constraintLayout.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.editProfileFragment, null, options)
         }
 
 
         getDeviceLocation()
 
 
-        /*      when (type) {
-                  "parcel" -> {
-
-                  }
-
-                  "order" -> {
-
-                  }
-              }*/
 
         mViewModel.getOrders("order")
         mViewModel.getOrders("parcel")
 
-        if (!mViewModel.getOrdersResponse.hasActiveObservers()) {
             mViewModel.getOrdersResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
@@ -167,16 +157,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     )
                 }
             }
-        }
 
 
-
-
-        Firebase.initialize(requireContext())
-        FirebaseApp.initializeApp(requireContext())
-        if (!mViewModel.fcmResponse.hasActiveObservers()) {
-            askNotificationPermission()
-        }
 
         if (!mViewModel.fcmResponse.hasActiveObservers()) {
             mViewModel.fcmResponse.observe(requireActivity()) {
@@ -204,25 +186,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         ParcelRecyclerview()
         PastOrderRecyclerview()
         PastParcelRecyclerview()
-//       mViewDataBinding.slideToUnlock.externalListener = this
-//        OrderRecyclerview()
-//        incomingOrderArrayList = ArrayList()
 
-        /*        productArrayList.add("")
-                productArrayList.add("")
-                productArrayList.add("")
-                productArrayList.add("")
-
-                productAdapter.notifyDataSetChanged()
-
-
-                productArrayList1.add("")
-                productArrayList1.add("")
-                productArrayList1.add("")
-                productArrayList1.add("")
-
-                productAdapter.notifyDataSetChanged()
-                */
 
 
         seekBar = mViewDataBinding.slider
@@ -261,6 +225,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 // Not needed for this example
             }
         })
+
+
+
+        val spinner = mViewDataBinding.spinner
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.spinner_items, android.R.layout.simple_spinner_item)
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        // Apply the adapter to the spinner
+        spinner.adapter = adapter
+
+        // Set a selection listener to handle item selection
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                val selectedItem = parent.getItemAtPosition(position) as String
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
 
 
     }
@@ -356,37 +345,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                             Timber.tag("lastKnownLocation").d(
                                 "Current location is . Using defaults. ${lastKnownLocation.latitude}  ${lastKnownLocation.longitude}"
                             )
-//                            mapFragment!!.getMapAsync {
-//                                mMap = it
-//                                it!!.addMarker(
-//                                    MarkerOptions().position(
-//                                        LatLng(
-//                                            originLatitude, originLongitude
-//                                        )
-//                                    )
-//                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.location_png_pin)) // Specifies the anchor to be at a particular point in the marker image.
-//                                        .anchor(0.5f, 1f)
-//                                )
-//                                it?.moveCamera(
-//                                    CameraUpdateFactory.newLatLngZoom(
-//                                        LatLng(
-//                                            lastKnownLocation.latitude, lastKnownLocation.longitude
-//                                        ), 1.toFloat()
-//                                    )
-//                                )
-//                            }
+
 
                         }
                     } else {
                         Timber.tag("TAG").d("Current location is null. Using defaults.")
                         Timber.tag("TAG").d("Exception:   ${task.exception}")
-//                        mMap?.moveCamera(
-//                            CameraUpdateFactory.newLatLngZoom(
-//                                LatLng(
-//                                    originLatitude, originLongitude
-//                                ), 1.toFloat()
-//                            )
-//                        )
                         mMap?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
@@ -398,17 +362,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
-
-//    private fun productRecyclerview1() {
-//        productArrayList1 = ArrayList()
-//
-//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-//        mViewDataBinding.recyclerView2.layoutManager = linearLayoutManager
-//
-//        productAdapter = IncomingAdapter(productArrayList1)
-//        mViewDataBinding.recyclerView2.adapter = productAdapter
-//
-//    }
 
     override fun onConfirmLocation() {
         requestPermission()
@@ -449,6 +402,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 originLongitude,
                 this
             )
+
+            Firebase.initialize(requireContext())
+            FirebaseApp.initializeApp(requireContext())
+
+            if (!mViewModel.fcmResponse.hasActiveObservers()) {
+                askNotificationPermission()
+            }
 
             /*DialogHelperClass.confirmLocation(
                 requireContext(), this@HomeFragment, true*/
@@ -502,44 +462,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             incomingOrderSocketArrayList.add(incomingOrderSocketData)
 
 
-            /*       getAllChatsModelX.forEach {
-                       var str = ""
-                       val timestamp = it.createdAt
-
-
-       //                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-       //                val matcher: Matcher = pattern.matcher(timestamp)
-       //
-       //                if (matcher.matches()) { val date: String = matcher.group(1)
-       //                    val time: String = matcher.group(2)
-       //                    println("Date: $date")
-       //                    println("Time: $time")
-       //                    str = time
-       //                }
-                       if (it.messages.isNotEmpty()) {
-
-                           val timeStamp = timeFormatter(it.messages[0].createdAt)
-
-                           it.messages[0].createdAt = timeStamp
-
-
-       //                messagesListArrayList.add()
-                           it.color = long.get(Random().nextInt(long.size - 1))
-                           messagesListArrayList.add(
-                               it*//*  AllChatsModel(
-                    "1",
-                    "${it.order_detail.get(0).shop}",
-                    "#${it.order_detail.get(0)._id}",
-                    str
-                )*//*
-                    )
-                }
-
-
-            }*/
-
-//            incomingOrderAdapter.notifyDataSetChanged()
-
             mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
         }
     }
@@ -550,44 +472,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
             incomingParcelSocketArrayList.add(incomingParcelSocketData)
 
-
-            /*       getAllChatsModelX.forEach {
-                       var str = ""
-                       val timestamp = it.createdAt
-
-
-       //                val pattern: Pattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})T(\\d{2}:\\d{2}:\\d{2})\\.\\d{3}Z")
-       //                val matcher: Matcher = pattern.matcher(timestamp)
-       //
-       //                if (matcher.matches()) { val date: String = matcher.group(1)
-       //                    val time: String = matcher.group(2)
-       //                    println("Date: $date")
-       //                    println("Time: $time")
-       //                    str = time
-       //                }
-                       if (it.messages.isNotEmpty()) {
-
-                           val timeStamp = timeFormatter(it.messages[0].createdAt)
-
-                           it.messages[0].createdAt = timeStamp
-
-
-       //                messagesListArrayList.add()
-                           it.color = long.get(Random().nextInt(long.size - 1))
-                           messagesListArrayList.add(
-                               it*//*  AllChatsModel(
-                    "1",
-                    "${it.order_detail.get(0).shop}",
-                    "#${it.order_detail.get(0)._id}",
-                    str
-                )*//*
-                    )
-                }
-
-
-            }*/
-
-//            incomingOrderAdapter.notifyDataSetChanged()
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
 
@@ -621,7 +505,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         })
 
     }
-
 
 
 }

@@ -1,4 +1,4 @@
-package com.teamx.hatlyUser.ui.fragments.chat
+package com.teamx.hatly.ui.fragments.chat
 
 
 import com.teamx.hatly.baseclasses.BaseViewModel

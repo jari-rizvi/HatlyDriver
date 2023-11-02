@@ -24,8 +24,6 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
-
     //    lateinit var productAdapter: ActiveAdapter
     lateinit var activeOrderAdapter: ActiveAdapter
 

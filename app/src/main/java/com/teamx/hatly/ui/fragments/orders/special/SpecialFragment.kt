@@ -23,8 +23,6 @@ class SpecialFragment : BaseFragment<FragmentSpecialBinding, SpecialViewModel>()
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private lateinit var options: NavOptions
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.lifecycleOwner = viewLifecycleOwner
