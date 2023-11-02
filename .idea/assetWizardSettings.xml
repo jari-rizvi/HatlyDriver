@@ -35,8 +35,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="fa6109" />
-                            <entry key="outputName" value="address_location" />
-                            <entry key="sourceFile" value="D:\MariaIcons\address_location.svg" />
+                            <entry key="outputName" value="top_up" />
+                            <entry key="sourceFile" value="D:\top_up.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -104,11 +104,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         mViewDataBinding.profilePicture.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.orderFragment, null, options)
+            navController.navigate(R.id.profileFragment, null, options)
         }
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.walletFragment, null, options)
+            navController.navigate(R.id.notificaitonFragment, null, options)
         }
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)

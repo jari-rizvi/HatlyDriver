@@ -102,6 +102,10 @@
         android:id="@+id/walletFragment"
         android:name="com.teamx.hatly.ui.fragments.wallet.WalletFragment"
         android:label="WalletFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.teamx.hatly.ui.fragments.Dashboard.Profile.ProfileFragment"
+        android:label="ProfileFragment" />
 
 
 </navigation>

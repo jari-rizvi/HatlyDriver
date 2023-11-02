@@ -6,7 +6,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
@@ -54,12 +54,22 @@ class EditProfileFragment :
             }
         }
 
+        mViewDataBinding.etPhone.isEnabled = false
+        mViewDataBinding.etPhone.isFocusable = false
+        mViewDataBinding.etPhone.isFocusableInTouchMode = false
+
         val userData = PrefHelper.getInstance(requireActivity()).getUserData()
 
         mViewDataBinding.etName.setText(userData?.name)
         mViewDataBinding.etPhone.setText(userData?.contact)
-        Picasso.get().load(userData?.profileImage).resize(500,500).into(mViewDataBinding.hatlyIcon)
+        Picasso.get().load(userData?.profileImage).resize(500, 500).into(mViewDataBinding.hatlyIcon)
 
+
+
+        mViewDataBinding.btnChangePass.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.changePasswordFragment, null, options)
+        }
 
 
         mViewDataBinding.btnSave.setOnClickListener {

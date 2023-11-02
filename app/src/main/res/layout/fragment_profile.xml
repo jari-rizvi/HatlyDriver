@@ -59,16 +59,14 @@
             app:layout_constraintTop_toTopOf="@+id/imgBack"
             app:layout_constraintVertical_bias="0.75" />
 
-
-
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/profilePicture"
-            android:layout_width="@dimen/_60sdp"
-            android:layout_height="@dimen/_60sdp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/border_background"
-            android:elevation="@dimen/_5sdp"
-            android:padding="@dimen/_2sdp"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:background="@drawable/bg_circle"
+            android:backgroundTint="@color/black"
+            android:clipToOutline="true"
+            android:scaleType="fitXY"
             android:src="@drawable/account"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,42 +74,29 @@
             app:layout_constraintTop_toBottomOf="@+id/textView23"
             app:layout_constraintVertical_bias="0.03" />
 
-        <ImageView
-            android:id="@+id/btnAddPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_background"
-            android:elevation="@dimen/_5sdp"
-            android:src="@drawable/account"
-            app:layout_constraintBottom_toBottomOf="@+id/profilePicture"
-            app:layout_constraintEnd_toEndOf="@+id/profilePicture"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toStartOf="@+id/profilePicture"
-            app:layout_constraintTop_toTopOf="@+id/profilePicture"
-            app:layout_constraintVertical_bias="1" />
 
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Admin"
             android:fontFamily="@font/open_sans_bold"
-            android:textColor="@color/red"
+            android:text=""
+            android:textColor="@color/redd"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/profilePicture"
             app:layout_constraintStart_toStartOf="@+id/profilePicture"
             app:layout_constraintTop_toBottomOf="@+id/profilePicture"
-            app:layout_constraintVertical_bias="0.03" />
+            app:layout_constraintVertical_bias="0.02" />
 
         <TextView
             android:id="@+id/userEmail"
+            style="@style/open_sans_regular_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dsdsd"
-            style="@style/open_sans_regular_medium"
-            android:textSize="@dimen/_10ssp"
+            android:text=""
             android:textColor="@color/textSecondaryColor"
+            android:textSize="@dimen/_10ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/userName"
             app:layout_constraintStart_toStartOf="@+id/userName"
@@ -127,17 +112,43 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/account_settings"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userEmail"
-            app:layout_constraintVertical_bias="0.07"
-            app:drawableStartCompat="@drawable/account" />
+            app:layout_constraintVertical_bias="0.05" />
+
+        <TextView
+            android:id="@+id/btnWallet"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            android:background="@drawable/card_background_green"
+            android:backgroundTint="@color/white"
+            android:drawablePadding="@dimen/_8sdp"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/_5sdp"
+            android:text="Wallet"
+            android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAccountSettings"
+           android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/btnHelpCentre"
@@ -148,17 +159,20 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/help_center"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnAccountSettings"
-            app:layout_constraintVertical_bias="0.05"
-            app:drawableStartCompat="@drawable/account" />
+            app:layout_constraintTop_toBottomOf="@+id/btnWallet"
+           android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/btnPrivacy"
@@ -169,17 +183,20 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/privacy_policy"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnHelpCentre"
-            app:layout_constraintVertical_bias="0.05"
-            app:drawableStartCompat="@drawable/account" />
+           android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/btnTerms"
@@ -190,17 +207,20 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/terms_condition"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnPrivacy"
-            app:layout_constraintVertical_bias="0.05"
-            app:drawableStartCompat="@drawable/account" />
+           android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/btnContactUs"
@@ -211,17 +231,20 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/contact_us"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnTerms"
-            app:layout_constraintVertical_bias="0.05"
-            app:drawableStartCompat="@drawable/account" />
+           android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/btnLogout"
@@ -232,17 +255,21 @@
             android:backgroundTint="@color/white"
             android:drawablePadding="@dimen/_8sdp"
             android:elevation="@dimen/_2sdp"
-            android:fontFamily="@font/open_sans_bold"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
             android:text="@string/logout"
             android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/account"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnContactUs"
-            app:layout_constraintVertical_bias="0.05"
-            app:drawableStartCompat="@drawable/account" />
+           android:layout_marginTop="@dimen/_10sdp"
+            tools:ignore="RtlSymmetry" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

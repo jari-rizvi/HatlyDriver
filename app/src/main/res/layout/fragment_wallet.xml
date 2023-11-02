@@ -63,17 +63,15 @@
                 android:id="@+id/imgTopUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/input_auth_field"
-                android:backgroundTint="@color/white"
                 android:elevation="1dp"
+                app:layout_constraintHorizontal_bias="0.5"
                 android:padding="@dimen/_5sdp"
-                android:src="@drawable/back_arrow"
+                android:src="@drawable/top_up"
                 app:layout_constraintBottom_toBottomOf="@+id/textView36"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView36"
                 app:layout_constraintTop_toTopOf="@+id/textView36"
-                app:layout_constraintVertical_bias="0.3"
-                app:tint="#363636" />
+                app:layout_constraintVertical_bias="0.3" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,14 +79,14 @@
                 android:fontFamily="@font/open_sans_regular"
                 android:text="Top up"
                 android:textAlignment="center"
+                app:layout_constraintHorizontal_bias="0.01"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14ssp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:textSize="@dimen/_12ssp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/imgTopUp"
-                app:layout_constraintStart_toStartOf="@+id/imgTopUp"
-                app:layout_constraintTop_toBottomOf="@+id/imgTopUp" />
-
+                app:layout_constraintBottom_toBottomOf="@+id/imgTopUp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imgTopUp"
+                app:layout_constraintTop_toTopOf="@+id/imgTopUp" />
 
 
             <TextView
@@ -97,9 +95,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
                 android:text="@string/available_balance"
+                android:textSize="@dimen/_14ssp"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/textView37"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -110,9 +110,11 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="500.00 AED"
+                android:textSize="@dimen/_17ssp"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView36"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/textView36"
                 app:layout_constraintTop_toBottomOf="@+id/textView36" />
         </androidx.constraintlayout.widget.ConstraintLayout>
