@@ -144,10 +144,13 @@ class EditProfileFragment :
                             userData!!.profileImage = data.profileImage
                             PrefHelper.getInstance(requireActivity()).setUserData(userData)
                             mViewDataBinding.root.snackbar("Profile updated")
+
+                            mViewDataBinding.etName.setText(data.name)
                         }
                     }
 
                     Resource.Status.ERROR -> {
+
                         loadingDialog.dismiss()
                         mViewDataBinding.root.snackbar(it.message!!)
                     }
