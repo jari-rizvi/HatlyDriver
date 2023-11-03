@@ -43,6 +43,7 @@ class NetworkCallPoints {
         const val WALLET_TOPUP = "wallet/topup"
         const val DEFAULT_CREDS_CARDS = "stripe/set/paymentMethod"
         const val DETACH_CREDS_CARDS = "stripe/detach/paymentMethod"
+        const val TRANSACTION_HISTORY = "incoming-requests/transaction-history"
 
 
 

@@ -5,7 +5,6 @@ import com.teamx.hatly.constants.AppConstants.ApiConfiguration.Companion.BASE_UR
 import com.teamx.hatly.data.models.socket_models.ExceptionData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
-import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingAdapter
 import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
@@ -93,8 +92,8 @@ object RiderSocketClass {
 
 
     val gson = Gson()
-    lateinit var activeOrderArrayList: ArrayList<IncomingOrderSocketData>
-    lateinit var incomingOrderAdapter: IncomingAdapter
+//    lateinit var activeOrderArrayList: ArrayList<IncomingOrderSocketData>
+//    lateinit var incomingOrderAdapter: IncomingAdapter
 
 
     private fun onListenerEverything() {

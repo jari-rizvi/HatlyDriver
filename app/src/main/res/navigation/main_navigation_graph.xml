@@ -106,6 +106,10 @@
         android:id="@+id/profileFragment"
         android:name="com.teamx.hatly.ui.fragments.Dashboard.Profile.ProfileFragment"
         android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/transcationHistoryFragment"
+        android:name="com.teamx.hatly.ui.fragments.wallet.TranscationHistoryFragment"
+        android:label="TranscationHistoryFragment" />
 
 
 </navigation>

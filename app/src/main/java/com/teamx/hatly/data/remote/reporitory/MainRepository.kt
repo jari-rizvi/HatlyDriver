@@ -38,7 +38,8 @@ class MainRepository @Inject constructor(
     ) = apiService.setDefaultCredCards(params)
 
     suspend fun me() = apiService.me()
-
+    suspend fun getTransactionHistory( @Query("limit") limit: Int,
+                                       @Query("page") page: Int) = apiService.getTransactionHistory(limit, page)
 
     suspend fun setDetachCredCards(
         @Body params: JsonObject

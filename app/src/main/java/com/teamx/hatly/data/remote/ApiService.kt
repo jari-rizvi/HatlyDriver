@@ -15,6 +15,7 @@ import com.teamx.hatly.data.dataclasses.meModel.me.MeModel
 import com.teamx.hatly.data.dataclasses.model.ModelVerifyPassOtp
 import com.teamx.hatly.data.dataclasses.modelUploadImages.ModelUploadImages
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
+import com.teamx.hatly.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatly.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatly.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
 import com.teamx.hatly.ui.fragments.payments.paymentmethod.modelDetach.ModelDetachCredCards
@@ -82,6 +83,12 @@ interface ApiService {
     suspend fun me(
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<MeModel>
+ @GET(NetworkCallPoints.TRANSACTION_HISTORY)
+    suspend fun getTransactionHistory(
+     @Query("limit") limit: Int,
+     @Query("page") page: Int,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<TransactionHistoryData>
 
     @GET(NetworkCallPoints.CREDS_CARDS)
     suspend fun getCredCards(

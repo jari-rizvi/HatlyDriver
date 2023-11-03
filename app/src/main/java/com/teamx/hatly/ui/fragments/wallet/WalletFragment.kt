@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
@@ -14,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(){
+class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
 
     override val layoutId: Int
         get() = R.layout.fragment_wallet
@@ -23,6 +25,9 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(){
     override val bindingVariable: Int
         get() = BR.viewModel
 
+
+    lateinit var transactionHistoryAdapter: TransactionAdapter
+    lateinit var transactionHistoryArrayList: ArrayList<com.teamx.hatly.data.dataclasses.transactionHistory.Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,7 +46,12 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(){
             navController.navigate(R.id.topUpFragment, null, options)
         }
 
+        mViewDataBinding.textView39.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.transcationHistoryFragment, null, options)
+        }
 
+        TransactionRecyclerview()
         mViewModel.me()
         if (!mViewModel.meResponse.hasActiveObservers()) {
             mViewModel.meResponse.observe(requireActivity()) {
@@ -70,6 +80,44 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(){
             }
         }
 
+
+        mViewModel.trancationHisotory(5,1)
+        if (!mViewModel.transactionHistoryResponse.hasActiveObservers()) {
+            mViewModel.transactionHistoryResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                transactionHistoryArrayList.add(it)
+                            }
+
+                            transactionHistoryAdapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        mViewDataBinding.root.snackbar(it.message!!)
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun TransactionRecyclerview() {
+        transactionHistoryArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        mViewDataBinding.Tranrecycler.layoutManager = linearLayoutManager
+
+        transactionHistoryAdapter = TransactionAdapter(transactionHistoryArrayList)
+        mViewDataBinding.Tranrecycler.adapter = transactionHistoryAdapter
 
     }
 

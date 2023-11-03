@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.teamx.hatly.baseclasses.BaseViewModel
 import com.teamx.hatly.data.dataclasses.meModel.me.MeModel
+import com.teamx.hatly.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -46,6 +47,34 @@ class WalletViewModel @Inject constructor(
                     _meResponse.postValue(Resource.error("${e.message}", null))
                 }
             } else _meResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
+    private val transactionHistoryeResponse = MutableLiveData<Resource<TransactionHistoryData>>()
+    val transactionHistoryResponse: LiveData<Resource<TransactionHistoryData>>
+        get() = transactionHistoryeResponse
+    fun trancationHisotory(limit: Int, page: Int) {
+        viewModelScope.launch {
+            transactionHistoryeResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.getTransactionHistory(limit,page).let {
+                        if (it.isSuccessful) {
+                            transactionHistoryeResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            transactionHistoryeResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            transactionHistoryeResponse.postValue(Resource.error(jsonObj.getString("message")))
+//                            transactionHistoryeResponse.postValue(Resource.error(it.message(), null))
+                        }
+                    }
+                } catch (e: Exception) {
+                    transactionHistoryeResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else transactionHistoryeResponse.postValue(Resource.error("No internet connection", null))
         }
     }
 

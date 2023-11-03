@@ -201,7 +201,7 @@ class MessageGenericViewHolder2(
 
 }
 
-private fun getTimeInString(timestamp: String): String {
+fun getTimeInString(timestamp: String): String {
     var str = ""
 
     val pattern: Pattern =
@@ -217,7 +217,7 @@ private fun getTimeInString(timestamp: String): String {
     return str
 }
 
-private fun timeAgo(timeMili: Long): String {
+ fun timeAgo(timeMili: Long): String {
 
     return DateUtils.getRelativeTimeSpanString(
         timeMili!!, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS
