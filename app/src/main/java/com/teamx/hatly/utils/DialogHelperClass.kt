@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.R
+import kotlinx.coroutines.Job
 
 class DialogHelperClass {
     companion object {
@@ -108,7 +109,11 @@ class DialogHelperClass {
         }
 
 
-        fun changePasswordDialog(context: Context, dialogCallBack: ChangePasswordDialog, boo: Boolean) {
+        fun changePasswordDialog(
+            context: Context,
+            dialogCallBack: ChangePasswordDialog,
+            function: () -> Job
+        ) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.password_change_dialog)
             dialog.window!!.setLayout(
@@ -116,17 +121,16 @@ class DialogHelperClass {
             )
 
 
-            val removeBtn = dialog.findViewById<TextView>(R.id.btnLogin)
+            val removeBtn = dialog.findViewById<TextView>(R.id.btnvverify)
             removeBtn.setOnClickListener {
-                if (boo) {
-                    dialogCallBack.onLoginButton()
-                }
-
-                val cancelBtn = dialog.findViewById<TextView>(R.id.imageView19)
+                dialogCallBack.onLoginButton()
+                dialog.dismiss()
+            }
+                val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView19)
                 cancelBtn.setOnClickListener {
                     dialog.dismiss()
                 }
-            }
+
 
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()

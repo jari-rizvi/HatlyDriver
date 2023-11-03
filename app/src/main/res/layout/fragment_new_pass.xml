@@ -131,6 +131,7 @@
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />
@@ -163,6 +164,7 @@
                 android:drawableStart="@drawable/password"
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
+                android:inputType="textPassword"
                 android:maxLines="1"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black" />

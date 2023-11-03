@@ -3,6 +3,7 @@ package com.teamx.hatly.ui.fragments.Auth.newPassword
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
@@ -14,7 +15,6 @@ import com.teamx.hatly.databinding.FragmentNewPassBinding
 import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONException
@@ -72,17 +72,26 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            CoroutineScope(Dispatchers.Main).launch {
-                                dataStoreProvider.saveUserToken(data.token)
+
+
+                            DialogHelperClass.changePasswordDialog(requireActivity(), this) {
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    try {
+                                        // Perform the work here, e.g., saveUserToken
+                                        dataStoreProvider.saveUserToken(data.token)
+                                    } catch (e: Exception) {
+                                        // Handle exceptions as needed
+                                    }
+                                }
                             }
-                            DialogHelperClass.changePasswordDialog(requireActivity(), this, true)
+
 
                         }
                     }
 
                     Resource.Status.ERROR -> {
                         loadingDialog.dismiss()
-                        Log.d("createParams", "Resource.Status.ERROR: ${it.message}")
+                        mViewDataBinding.root.snackbar(it.message!!)
                     }
                 }
             }

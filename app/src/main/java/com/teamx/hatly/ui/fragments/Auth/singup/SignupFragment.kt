@@ -12,7 +12,6 @@ import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentSignupBinding
-import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
@@ -111,7 +110,7 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
                     }
                     Resource.Status.ERROR -> {
                         loadingDialog.dismiss()
-                        DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                        mViewDataBinding.root.snackbar(it.message!!)
                     }
                 }
                 if (isAdded) {
