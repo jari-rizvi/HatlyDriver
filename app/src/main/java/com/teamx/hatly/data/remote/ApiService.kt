@@ -9,11 +9,12 @@ import com.teamx.hatly.data.dataclasses.fcmmodel.FcmModel
 import com.teamx.hatly.data.dataclasses.forgotPass.ForgotData
 import com.teamx.hatly.data.dataclasses.getActiveorder.GetActiveOrderData
 import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
-import com.teamx.hatly.data.dataclasses.getorders.GetAllOrdersData
 import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.dataclasses.meModel.me.MeModel
 import com.teamx.hatly.data.dataclasses.model.ModelVerifyPassOtp
 import com.teamx.hatly.data.dataclasses.modelUploadImages.ModelUploadImages
+import com.teamx.hatly.data.dataclasses.pastParcels.GetPastParcelsData
+import com.teamx.hatly.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
 import com.teamx.hatly.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatly.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
@@ -119,11 +120,18 @@ interface ApiService {
     @POST(NetworkCallPoints.RESET_PASS_PHONE)
     suspend fun resetPassPhone(@Body params: JsonObject?): Response<ResetPassPhoneData>
 
-    @GET(NetworkCallPoints.GET_ORDERS)
-    suspend fun getOrders(
-        @Query("requestFor") requestFor: String,
+    @GET(NetworkCallPoints.GET_PAST_ORDERS)
+    suspend fun getPastOrders(
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
-    ): Response<GetAllOrdersData>
+    ): Response<PastOrdersData>
+ @GET(NetworkCallPoints.GET_PAST_PARCELS)
+    suspend fun getPastParcels(
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<GetPastParcelsData>
 
     @GET(NetworkCallPoints.GET_ORDERS_BYSTATUS)
     suspend fun getOrdersByStatus(

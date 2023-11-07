@@ -298,7 +298,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -320,9 +319,9 @@
                     style="@style/open_sans_white_bold_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
                     android:text="Special Incoming Orders"
                     android:textColor="@color/black"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
                     android:textSize="@dimen/_13ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -346,7 +345,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewSpecialOrders"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_120sdp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -383,10 +382,10 @@
                     app:layout_constraintStart_toEndOf="@+id/textView19"
                     app:layout_constraintTop_toTopOf="@+id/textView19" />
 
-                 <androidx.recyclerview.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewIncomingOrders"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_120sdp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"
@@ -395,7 +394,6 @@
                     app:layout_constraintVertical_bias="0.03"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_incoming_order" />
-
 
 
                 <TextView
@@ -410,6 +408,21 @@
                     app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
                     app:layout_constraintTop_toBottomOf="@+id/recyclerViewIncomingOrders"
                     app:layout_constraintVertical_bias="0.01" />
+
+
+                <TextView
+                    android:id="@+id/btnPastOrderAll"
+                    style="@style/open_sans_secondary_bold_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_all"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView200"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintStart_toEndOf="@+id/textView200"
+                    app:layout_constraintTop_toTopOf="@+id/textView200" />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -438,6 +451,21 @@
                     app:layout_constraintStart_toStartOf="@+id/recyclerViewPastOrders"
                     app:layout_constraintTop_toBottomOf="@+id/recyclerViewPastOrders"
                     app:layout_constraintVertical_bias="0.01" />
+
+
+                <TextView
+                    android:id="@+id/btnPastParcelAll"
+                    style="@style/open_sans_secondary_bold_medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/view_all"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_10ssp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView2000"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintStart_toEndOf="@+id/textView2000"
+                    app:layout_constraintTop_toTopOf="@+id/textView2000" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewSpecialPastOrders"
@@ -513,13 +541,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_centerInParent="true"
-                        android:max="100"
                         android:clickable="false"
                         android:focusable="false"
-                        android:thumbOffset="-10dp"
+                        android:max="100"
                         android:progressDrawable="@drawable/swipe_button_background"
                         android:splitTrack="true"
                         android:thumb="@drawable/custom_thumb"
+                        android:thumbOffset="-10dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -530,13 +558,13 @@
                         android:layout_height="0dp"
                         android:layout_below="@id/slider"
                         android:layout_centerHorizontal="true"
-                        android:paddingTop="16dp"
                         android:enabled="false"
                         android:gravity="center"
-                        android:textStyle="bold"
+                        android:paddingTop="16dp"
                         android:textAlignment="center"
-                        android:textSize="@dimen/_12ssp"
                         android:textColor="#000000"
+                        android:textSize="@dimen/_12ssp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -579,15 +607,9 @@
                     app:srcCompat="@drawable/go_online" />
 
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
-
-
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

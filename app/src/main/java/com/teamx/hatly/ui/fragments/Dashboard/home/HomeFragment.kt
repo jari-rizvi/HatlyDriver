@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,25 +35,29 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getorders.PastDispatche
+import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
 import com.teamx.hatly.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
+import com.teamx.hatly.ui.fragments.orders.Incoming.onAcceptReject
 import com.teamx.hatly.utils.DialogHelperClass
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import timber.log.Timber
 
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
-    DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack, onAcceptReject {
+    DialogHelperClass.Companion.ReasonDialog,
+    onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
+    onAcceptRejectSocket {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -61,8 +66,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    lateinit var productArrayList: ArrayList<String>
-    lateinit var productArrayList1: ArrayList<String>
+    lateinit var id: String
+
     private lateinit var seekBar: SeekBar
     private lateinit var statusText: TextView
 
@@ -74,10 +79,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     private var originLongitude: String = "0.0"
 
 
-    lateinit var pastparcelArrayList: ArrayList<PastDispatche>
-    lateinit var pastOrderArrayList: ArrayList<PastDispatche>
+    lateinit var pastparcelArrayList: ArrayList<com.teamx.hatly.data.dataclasses.pastParcels.Doc>
+    lateinit var pastOrderArrayList: ArrayList<com.teamx.hatly.data.dataclasses.pastorder.Doc>
 
-    lateinit var pastOrderAdapter: PastParcelAdapter
+    lateinit var pastOrderAdapter: PastOrderAdapter
+    lateinit var pastParcelAdapter: PastParcelAdapter
 
 
     var type: String = ""
@@ -88,11 +94,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     lateinit var incomingOrderSocketArrayList: ArrayList<IncomingOrderSocketData>
     lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
 
+
+    lateinit var incomingOrderArrayList: ArrayList<Doc>
+
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.lifecycleOwner = viewLifecycleOwner
-
+        incomingOrderArrayList = ArrayList()
         options = navOptions {
             anim {
                 enter = com.teamx.hatly.R.anim.enter_from_left
@@ -115,48 +125,90 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             navController.navigate(R.id.editProfileFragment, null, options)
         }
 
+        mViewDataBinding.btnPastParcelAll.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.parcelFragment, null, options)
+        }
+
 
         getDeviceLocation()
 
 
 
-        mViewModel.getOrders("order")
-        mViewModel.getOrders("parcel")
 
-            mViewModel.getOrdersResponse.observe(requireActivity()) {
-                when (it.status) {
-                    Resource.Status.LOADING -> {
-                        loadingDialog.show()
-                    }
+        mViewModel.getPastParcels(1, 5)
 
-                    Resource.Status.SUCCESS -> {
-                        loadingDialog.dismiss()
-                        it.data?.let { data ->
-                            data.pastDispatches.forEach {
-                                pastOrderArrayList.add(it)
-                                pastparcelArrayList.add(it)
-                            }
+        mViewModel.getPastParcelsResponse.observe(requireActivity()) {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
 
-                            pastOrderAdapter.notifyDataSetChanged()
-
-
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        data.docs.forEach {
+                            pastparcelArrayList.add(it)
                         }
-                    }
 
-                    Resource.Status.ERROR -> {
-                        loadingDialog.dismiss()
-                        DialogHelperClass.errorDialog(
-                            requireContext(),
-                            it.message!!
-                        )
+                        pastParcelAdapter.notifyDataSetChanged()
+
+
                     }
                 }
-                if (isAdded) {
-                    mViewModel.getOrdersResponse.removeObservers(
-                        viewLifecycleOwner
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(
+                        requireContext(),
+                        it.message!!
                     )
                 }
             }
+            if (isAdded) {
+                mViewModel.getPastParcelsResponse.removeObservers(
+                    viewLifecycleOwner
+                )
+            }
+        }
+
+
+
+        mViewModel.getPastOrders(1, 5)
+
+        mViewModel.getPastOrdersResponse.observe(requireActivity()) {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        data.docs.forEach {
+                            pastOrderArrayList.add(it)
+                        }
+
+                        pastOrderAdapter.notifyDataSetChanged()
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(
+                        requireContext(),
+                        it.message!!
+                    )
+                }
+            }
+            if (isAdded) {
+                mViewModel.getPastOrdersResponse.removeObservers(
+                    viewLifecycleOwner
+                )
+            }
+        }
 
 
 
@@ -227,11 +279,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         })
 
 
-
         val spinner = mViewDataBinding.spinner
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.spinner_items, android.R.layout.simple_spinner_item)
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.spinner_items,
+            android.R.layout.simple_spinner_item
+        )
 
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -241,7 +296,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         // Set a selection listener to handle item selection
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
             }
@@ -284,8 +344,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialPastOrders.layoutManager = linearLayoutManager
 
-        pastOrderAdapter = PastParcelAdapter(pastparcelArrayList)
-        mViewDataBinding.recyclerViewSpecialPastOrders.adapter = pastOrderAdapter
+        pastParcelAdapter = PastParcelAdapter(pastparcelArrayList)
+        mViewDataBinding.recyclerViewSpecialPastOrders.adapter = pastParcelAdapter
 
     }
 
@@ -296,7 +356,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewPastOrders.layoutManager = linearLayoutManager
 
-        pastOrderAdapter = PastParcelAdapter(pastOrderArrayList)
+        pastOrderAdapter = PastOrderAdapter(pastOrderArrayList)
         mViewDataBinding.recyclerViewPastOrders.adapter = pastOrderAdapter
 
     }
@@ -478,10 +538,86 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
-    override fun onAcceptClick(position: Int) {
+
+    override fun onAcceptSokcetClick(position: Int) {
+
+
+        id = incomingOrderArrayList[position]._id
+
+        Log.d("TAG", "onAcceptClick: $id")
+        val params = JsonObject()
+        try {
+            params.addProperty("status", "accepted")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.acceptReject(id, params)
+
+        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        showToast(data.message)
+                        incomingOrderAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
     }
 
-    override fun onRejectClick(position: Int) {
+    override fun onRejectSocketClick(position: Int) {
+        DialogHelperClass.submitReason(
+            requireContext(), this, true, "", ""
+        )
+    }
+
+    override fun onSubmitClick(status: String, rejectionReason: String) {
+        val params = JsonObject()
+        try {
+            params.addProperty("status", "rejected")
+            params.addProperty("rejectionReason", rejectionReason)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.acceptReject(id, params)
+
+        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        showToast(data.message)
+
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
+    }
+
+
+    override fun onCancelClick() {
     }
 
 
@@ -506,5 +642,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     }
 
+
+    override fun onAcceptClick(position: Int) {
+    }
+
+    override fun onRejectClick(position: Int) {
+    }
 
 }

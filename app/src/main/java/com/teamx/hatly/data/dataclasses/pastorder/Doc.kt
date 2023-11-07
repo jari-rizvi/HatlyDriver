@@ -1,0 +1,16 @@
+package com.teamx.hatly.data.dataclasses.pastorder
+
+data class Doc(
+    val _id: String,
+    val charges: Double,
+    val dropOff: DropOff,
+    val estimatedDeliveryTime: Double,
+    val order: String,
+    val pickup: Pickup,
+    val requestFor: String,
+    val requestId: String,
+    val riderId: String,
+    val shop: String,
+    val status: String,
+    val total: Double
+)

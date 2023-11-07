@@ -32,7 +32,8 @@ class NetworkCallPoints {
 
         const val NOTIFICATION_LIST = "notification/all"
 
-        const val GET_ORDERS = "incoming-requests";
+        const val GET_PAST_ORDERS = "incoming-requests/pastOrders";
+        const val GET_PAST_PARCELS = "incoming-requests/pastParcels";
         const val GET_ORDERS_BYSTATUS = "incoming-requests/all";
         const val GET_ACTIVE_ORDER = "incoming-requests/all";
 

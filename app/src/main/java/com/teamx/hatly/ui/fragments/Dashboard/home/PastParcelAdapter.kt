@@ -3,11 +3,10 @@ package com.teamx.hatly.ui.fragments.Dashboard.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamx.hatly.data.dataclasses.getorders.PastDispatche
 import com.teamx.hatly.databinding.ItemPastOrderBinding
 
 
-class PastParcelAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.Adapter<PastParcelAdapter.TopProductViewHolder>() {
+class PastParcelAdapter(val arrayList: ArrayList<com.teamx.hatly.data.dataclasses.pastParcels.Doc>) : RecyclerView.Adapter<PastParcelAdapter.TopProductViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopProductViewHolder {
@@ -20,13 +19,13 @@ class PastParcelAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
-        val list: PastDispatche = arrayList[position]
+        val list: com.teamx.hatly.data.dataclasses.pastParcels.Doc = arrayList[position]
 
         try {
-            holder.binding.address.text = list.dropOff.address
-            holder.binding.textView13.text = list.pickup.formattedAddress
+            holder.binding.address.text = list.parcel.receiverLocation.location.address
+            holder.binding.textView13.text = list.parcel.senderLocation.location.address
 
-            val inputString = list.pickup.formattedAddress
+            val inputString = list.parcel.receiverLocation.location.address
 
             val streetAddressRegex = Regex("Street Address: (.*?),")
             val localityRegex = Regex("Locality: (.*?),")
@@ -48,7 +47,7 @@ class PastParcelAdapter(val arrayList: ArrayList<PastDispatche>) : RecyclerView.
 
 
 
-            holder.binding.price.text = list.charges.toString() + "AED"
+            holder.binding.price.text = list.parcel.fare.toString()+" AED"
         }
         catch (e:Exception){
 

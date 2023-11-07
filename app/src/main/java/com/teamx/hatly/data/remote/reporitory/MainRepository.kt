@@ -38,8 +38,10 @@ class MainRepository @Inject constructor(
     ) = apiService.setDefaultCredCards(params)
 
     suspend fun me() = apiService.me()
-    suspend fun getTransactionHistory( @Query("limit") limit: Int,
-                                       @Query("page") page: Int) = apiService.getTransactionHistory(limit, page)
+    suspend fun getTransactionHistory(
+        @Query("limit") limit: Int,
+        @Query("page") page: Int
+    ) = apiService.getTransactionHistory(limit, page)
 
     suspend fun setDetachCredCards(
         @Body params: JsonObject
@@ -60,9 +62,15 @@ class MainRepository @Inject constructor(
         @Body params: JsonObject,
     ) = apiService.updateProfile(params)
 
-    suspend fun getOrders(
-        @Query("requestFor") requestFor: String
-    ) = apiService.getOrders(requestFor)
+    suspend fun getPastOrders(
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ) = apiService.getPastOrders(page, limit)
+
+    suspend fun getPastParcels(
+        @Query("page") page: Int,
+        @Query("limit") limit: Int
+    ) = apiService.getPastParcels(page, limit)
 
     suspend fun fcm(@Body param: JsonObject) = apiService.fcm(param)
 

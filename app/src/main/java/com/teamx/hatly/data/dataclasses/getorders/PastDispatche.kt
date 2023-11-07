@@ -4,7 +4,7 @@ data class PastDispatche(
     val _id: String,
     val charges: Double,
     val dropOff: DropOff,
-    val estimatedDeliveryTime: Int,
+    val estimatedDeliveryTime: Any,
     val orders: Orders,
     val pickup: Pickup,
     val requestFor: String,

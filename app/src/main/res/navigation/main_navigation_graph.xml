@@ -110,6 +110,10 @@
         android:id="@+id/transcationHistoryFragment"
         android:name="com.teamx.hatly.ui.fragments.wallet.TranscationHistoryFragment"
         android:label="TranscationHistoryFragment" />
+    <fragment
+        android:id="@+id/parcelFragment"
+        android:name="com.teamx.hatly.ui.fragments.parcel.ParcelFragment"
+        android:label="ParcelFragment" />
 
 
 </navigation>

@@ -10,7 +10,7 @@ import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.In
 
 class IncomingOrderSocketAdapter(
     val arrayList: ArrayList<IncomingOrderSocketData>,
-    private val onAccepetReject: onAcceptReject
+    private val onAcceptRejectSocket: onAcceptRejectSocket
 ) : RecyclerView.Adapter<IncomingOrderSocketAdapter.TopProductViewHolder>() {
 
 
@@ -60,10 +60,10 @@ class IncomingOrderSocketAdapter(
         }
 
         holder.binding.buttons.btnAccept.setOnClickListener {
-            onAccepetReject.onAcceptClick(position)
+            onAcceptRejectSocket.onAcceptSokcetClick(position)
         }
         holder.binding.buttons.btnReject.setOnClickListener {
-            onAccepetReject.onRejectClick(position)
+            onAcceptRejectSocket.onRejectSocketClick(position)
         }
 
     }
@@ -80,8 +80,8 @@ class IncomingOrderSocketAdapter(
     }
 }
 
-interface onAcceptReject{
-    fun onAcceptClick(position: Int)
-    fun onRejectClick(position: Int)
+interface onAcceptRejectSocket{
+    fun onAcceptSokcetClick(position: Int)
+    fun onRejectSocketClick(position: Int)
 
 }
