@@ -245,6 +245,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         private const val STATE_SAVE_STATE = "save_state"
         private const val STATE_KEEP_FRAGS = "keep_frags"
         private const val STATE_HELPER = "helper"
+        var bottomNav: BottomNavigationView? = null
         var service: CounterNotificationService? = null
 
     }

@@ -57,7 +57,7 @@ import timber.log.Timber
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
-    onAcceptRejectSocket {
+    onAcceptRejectSocket,onAcceptRejectParcel {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -114,7 +114,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         mViewDataBinding.profilePicture.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.profileFragment, null, options)
+            navController.navigate(R.id.trackFragment, null, options)
         }
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -129,14 +129,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, null, options)
         }
+        mViewDataBinding.btnPastOrderAll.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.orderFragment, null, options)
+        }
 
 
         getDeviceLocation()
 
-
-
-
-        mViewModel.getPastParcels(1, 5)
+        mViewModel.getPastParcels(1, 5,"delivered")
 
         mViewModel.getPastParcelsResponse.observe(requireActivity()) {
             when (it.status) {
@@ -174,7 +175,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
 
-        mViewModel.getPastOrders(1, 5)
+        mViewModel.getPastOrders(1, 5,"delivered")
 
         mViewModel.getPastOrdersResponse.observe(requireActivity()) {
             when (it.status) {
@@ -238,8 +239,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         ParcelRecyclerview()
         PastOrderRecyclerview()
         PastParcelRecyclerview()
-
-
 
         seekBar = mViewDataBinding.slider
         statusText = mViewDataBinding.statusText
@@ -332,7 +331,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
 
-        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList)
+        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList,this)
         mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
 
     }
@@ -542,7 +541,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun onAcceptSokcetClick(position: Int) {
 
 
-        id = incomingOrderArrayList[position]._id
+        id = incomingOrderSocketArrayList[position]._id
 
         Log.d("TAG", "onAcceptClick: $id")
         val params = JsonObject()
@@ -563,6 +562,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
+                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                            it._id != id
+                        }
+                        incomingOrderSocketArrayList.clear()
+                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
+
                         showToast(data.message)
                         incomingOrderAdapter.notifyDataSetChanged()
                     }
@@ -577,6 +582,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectSocketClick(position: Int) {
+        id = incomingOrderSocketArrayList[position]._id
+
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
         )
@@ -602,7 +609,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
+                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                            it._id != id
+                        }
+
+
+                        incomingOrderSocketArrayList.removeLast()
+
+//                        incomingOrderSocketArrayList.clear()
+//                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
                         showToast(data.message)
+                        incomingOrderAdapter.notifyDataSetChanged()
 
 
                     }
@@ -647,6 +664,57 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectClick(position: Int) {
+    }
+
+    override fun onAcceptParcelClick(position: Int) {
+        id = incomingParcelSocketArrayList[position]._id
+
+        Log.d("TAG", "onAcceptClick: $id")
+        val params = JsonObject()
+        try {
+            params.addProperty("status", "accepted")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.acceptReject(id, params)
+
+        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        val incomingParcelSocketArrayList1 = incomingParcelSocketArrayList.filter {
+                            it._id != id
+                        }
+                        incomingParcelSocketArrayList.clear()
+                        incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
+
+                        showToast(data.message)
+                        incomingParcelAdapter.notifyDataSetChanged()
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
+
+    }
+
+    override fun onRejectParcelClick(position: Int) {
+        id = incomingParcelSocketArrayList[position]._id
+
+        DialogHelperClass.submitReason(
+            requireContext(), this, true, "", ""
+        )
+
     }
 
 }

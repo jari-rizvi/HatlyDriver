@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import com.teamx.hatly.data.dataclasses.pastorder.Doc
 import com.teamx.hatly.databinding.ItemActiveListBinding
 
 
 class ActiveAdapter(
-    val arrayList: ArrayList<com.teamx.hatly.data.dataclasses.getActiveorder.Doc>) : RecyclerView.Adapter<ActiveAdapter.TopProductViewHolder>() {
+    val arrayList: ArrayList<Doc>
+) : RecyclerView.Adapter<ActiveAdapter.TopProductViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopProductViewHolder {
@@ -21,7 +23,7 @@ class ActiveAdapter(
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
-        val list: com.teamx.hatly.data.dataclasses.getActiveorder.Doc = arrayList[position]
+        val list: Doc = arrayList[position]
 
 //        holder.binding.textView13.text = list.pickup.toString()
 //        holder.binding.address.text = list.dropOff.toString()
@@ -30,7 +32,18 @@ class ActiveAdapter(
         try {
 
 
-            holder.binding.textView23.text = list.orders.products[0].productName
+            holder.binding.textView23.text = list.shop.name
+            holder.binding.textView24.text = list.shop.address.streetAddress
+            holder.binding.ratingBar.rating = list.shop.ratting.toFloat()
+            Picasso.get().load(list.shop.image).into(holder.binding.imgIcon)
+
+            try {
+                Picasso.get().load(list.orders.customer.profileImage).into(holder.binding.imgAvatar)
+
+            } catch (e: Exception) {
+
+            }
+
 
             Picasso.get().load(list.orders.products[0].image).into(holder.binding.imgIcon)
 
@@ -58,14 +71,14 @@ class ActiveAdapter(
 
 
             holder.binding.textView27.text = list.orders.products[0].productName
-            holder.binding.textView28.text = list.orders.products[0].prize.toString()+" AED"
-            holder.binding.textView31.text = list.orders.total.toString()
-            holder.binding.textView32.text = list.customer.name
+            holder.binding.textView29.text = list.orders.products[0].prize.toString()
+
+            holder.binding.textView28.text = list.orders.products[0].prize.toString() + " AED"
+            holder.binding.textView31.text = list.orders.subTotal.toString()
+            holder.binding.textView32.text = list.orders.customer.name
             holder.binding.textView33.text = list.dropOff.address
             holder.binding.textView35.text = list.orders.specialNote
-            holder.binding.ratingBar.rating = list.averageRating.toFloat()
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
 

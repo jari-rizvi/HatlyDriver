@@ -8,6 +8,7 @@ data class Customer(
     val email: String,
     val location: Location,
     val name: String,
+    val image: String,
     val role: String,
     val verified: Boolean,
     val wallet: Double

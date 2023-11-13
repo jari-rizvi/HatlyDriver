@@ -3,7 +3,7 @@ package com.teamx.hatly.ui.fragments.orders.Incoming
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
+import com.teamx.hatly.data.dataclasses.pastorder.Doc
 import com.teamx.hatly.databinding.ItemIncomingListBinding
 
 
@@ -30,7 +30,7 @@ class IncomingAdapter(
 
             holder.binding.pickup.address.text = list.dropOff.address
 
-            val inputString = list.pickup.address
+            val inputString = list.pickup.formattedAddress
 
             val streetAddressRegex = Regex("Street Address: (.*?),")
             val localityRegex = Regex("Locality: (.*?),")
@@ -52,7 +52,7 @@ class IncomingAdapter(
 
 
 
-            holder.binding.pickup.price.text = list.parcel.fare.toString() + "AED"
+            holder.binding.pickup.price.text = list.charges.toString() + "AED"
         }
         catch (e:Exception){
 

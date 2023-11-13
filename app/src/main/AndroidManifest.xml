@@ -26,6 +26,7 @@
         tools:node="remove" />
 
 
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -37,6 +38,11 @@
         android:theme="@style/NoAppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
+
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAnLo0ejCEMH_cPgZaokWej4UdgyIIy5HI" />
 
 
         <activity

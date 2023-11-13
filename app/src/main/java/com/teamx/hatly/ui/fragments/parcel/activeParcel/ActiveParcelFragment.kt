@@ -2,16 +2,15 @@ package com.teamx.hatly.ui.fragments.parcel.activeParcel
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.data.dataclasses.pastParcels.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentActiveBinding
-import com.teamx.hatly.ui.fragments.orders.active.ActiveAdapter
 import com.teamx.hatly.ui.fragments.orders.active.ActiveViewModel
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,10 +26,10 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
         get() = BR.viewModel
 
     //    lateinit var productAdapter: ActiveAdapter
-    lateinit var activeOrderAdapter: ActiveAdapter
+    lateinit var activeOrderAdapter: ActiveParcelAdapter
 
     //    lateinit var productArrayList: ArrayList<String>
-    lateinit var activeOrderArrayList: ArrayList<com.teamx.hatly.data.dataclasses.getActiveorder.Doc>
+    lateinit var activeOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,10 +46,14 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
 
 
 
-        mViewModel.getActiveOrder("accepted", "parcel")
+        try {
+            mViewModel.getPastParcels(1,10,"accepted")
+        } catch (e: Exception) {
 
-        if (!mViewModel.getActiveOrderResponse.hasActiveObservers()) {
-            mViewModel.getActiveOrderResponse.observe(requireActivity()) {
+        }
+
+        if (!mViewModel.getPastParcelsResponse.hasActiveObservers()) {
+            mViewModel.getPastParcelsResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
@@ -78,49 +81,32 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
                     }
                 }
                 if (isAdded) {
-                    mViewModel.getActiveOrderResponse.removeObservers(
+                    mViewModel.getPastParcelsResponse.removeObservers(
                         viewLifecycleOwner
                     )
                 }
             }
         }
 
-        ActiveOrderRecyclerview()
 
+        ActiveParcelRecyclerview()
 
-//        productRecyclerview()
-//
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
-//
-//        productAdapter.notifyDataSetChanged()
 
     }
 
-    private fun ActiveOrderRecyclerview() {
+    private fun ActiveParcelRecyclerview() {
         activeOrderArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
 
-        activeOrderAdapter = ActiveAdapter(activeOrderArrayList)
+        activeOrderAdapter = ActiveParcelAdapter(activeOrderArrayList)
         mViewDataBinding.activeRecyclerView.adapter = activeOrderAdapter
 
     }
 
 
-//    private fun productRecyclerview() {
-//        productArrayList = ArrayList()
-//
-//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-//        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
-//
-//        productAdapter = ActiveAdapter(productArrayList)
-//        mViewDataBinding.activeRecyclerView.adapter = productAdapter
-//
-//    }
+
 
 
 }

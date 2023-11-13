@@ -3,7 +3,6 @@ package com.teamx.hatly.ui.fragments.orders.Incoming
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,7 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
+import com.teamx.hatly.data.dataclasses.pastorder.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentIncomingBinding
 import com.teamx.hatly.utils.DialogHelperClass
@@ -52,13 +51,13 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
 
 
         try {
-            mViewModel.getIncomingOrders("accepted")
+            mViewModel.getPastOrders(1,10,"delivered")
         } catch (e: Exception) {
 
         }
 
-        if (!mViewModel.getOPastrdersResponse.hasActiveObservers()) {
-            mViewModel.getOPastrdersResponse.observe(requireActivity()) {
+        if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
+            mViewModel.getPastOrdersResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
@@ -86,7 +85,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
                     }
                 }
                 if (isAdded) {
-                    mViewModel.getOPastrdersResponse.removeObservers(
+                    mViewModel.getPastOrdersResponse.removeObservers(
                         viewLifecycleOwner
                     )
                 }

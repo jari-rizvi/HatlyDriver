@@ -3,7 +3,6 @@ package com.teamx.hatly.ui.fragments.parcel.incomingParcel
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,12 +10,10 @@ import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
+import com.teamx.hatly.data.dataclasses.pastParcels.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentIncomingBinding
-import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingAdapter
 import com.teamx.hatly.ui.fragments.orders.Incoming.IncomingViewModel
-import com.teamx.hatly.ui.fragments.orders.Incoming.onAcceptReject
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
@@ -24,7 +21,7 @@ import org.json.JSONException
 @AndroidEntryPoint
 class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
-    onAcceptReject {
+    onAcceptRejectPar {
 
     override val layoutId: Int
         get() = R.layout.fragment_incoming
@@ -36,7 +33,7 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
     lateinit var id: String
 
 
-    lateinit var incomingOrderAdapter: IncomingAdapter
+    lateinit var incomingOrderAdapter: IncomingParcelAdapter
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,13 +52,13 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
 
 
         try {
-            mViewModel.getIncomingOrders("accepted")
+            mViewModel.getPastParcels(1,10,"delivered")
         } catch (e: Exception) {
 
         }
 
-        if (!mViewModel.getOPastrdersResponse.hasActiveObservers()) {
-            mViewModel.getOPastrdersResponse.observe(requireActivity()) {
+        if (!mViewModel.getPastParcelsResponse.hasActiveObservers()) {
+            mViewModel.getPastParcelsResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
@@ -89,12 +86,14 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
                     }
                 }
                 if (isAdded) {
-                    mViewModel.getOPastrdersResponse.removeObservers(
+                    mViewModel.getPastParcelsResponse.removeObservers(
                         viewLifecycleOwner
                     )
                 }
             }
         }
+
+
 
         IncomingOrderRecyclerview()
     }
@@ -105,7 +104,7 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
 
-        incomingOrderAdapter = IncomingAdapter(incomingOrderArrayList, this)
+        incomingOrderAdapter = IncomingParcelAdapter(incomingOrderArrayList, this)
         mViewDataBinding.activeRecyclerView.adapter = incomingOrderAdapter
 
     }

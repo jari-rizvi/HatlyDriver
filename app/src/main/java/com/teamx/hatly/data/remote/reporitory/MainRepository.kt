@@ -64,13 +64,15 @@ class MainRepository @Inject constructor(
 
     suspend fun getPastOrders(
         @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ) = apiService.getPastOrders(page, limit)
+        @Query("limit") limit: Int,
+        @Query("status") status: String
+    ) = apiService.getPastOrders(page, limit,status)
 
     suspend fun getPastParcels(
         @Query("page") page: Int,
-        @Query("limit") limit: Int
-    ) = apiService.getPastParcels(page, limit)
+        @Query("limit") limit: Int,
+        @Query("status") status: String
+    ) = apiService.getPastParcels(page, limit,status)
 
     suspend fun fcm(@Body param: JsonObject) = apiService.fcm(param)
 

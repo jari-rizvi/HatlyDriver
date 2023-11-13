@@ -3,7 +3,7 @@ package com.teamx.hatly.ui.fragments.parcel
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamx.hatly.BR
@@ -11,7 +11,6 @@ import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.databinding.FragmentParcelBinding
 import com.teamx.hatly.ui.fragments.orders.OrdersViewModel
-import com.teamx.hatly.ui.fragments.orders.ViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +38,8 @@ ParcelFragment : BaseFragment<FragmentParcelBinding, OrdersViewModel>() {
         }
 
         mViewDataBinding.imgBack.setOnClickListener {
-            popUpStack()
+            findNavController().navigate(R.id.action_parcelFragment_to_homeFragment)
+
         }
 
         setupViewPager()
@@ -73,7 +73,7 @@ ParcelFragment : BaseFragment<FragmentParcelBinding, OrdersViewModel>() {
     }
 
     private fun setupViewPager() {
-        val adapter = ViewPagerAdapter(requireActivity(), 3)
+        val adapter = ViewPagerParcelAdapter(requireActivity(), 3)
         mViewDataBinding.viewPager.adapter = adapter
     }
 

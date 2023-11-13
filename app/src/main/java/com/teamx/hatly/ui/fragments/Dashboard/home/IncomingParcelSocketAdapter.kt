@@ -8,7 +8,8 @@ import com.teamx.hatly.databinding.ItemIncomingListBinding
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 
 
-class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketData>) : RecyclerView.Adapter<IncomingParcelSocketAdapter.TopProductViewHolder>() {
+class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketData>,
+                                  private val onAcceptRejectParcel: onAcceptRejectParcel) : RecyclerView.Adapter<IncomingParcelSocketAdapter.TopProductViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TopProductViewHolder {
@@ -26,27 +27,40 @@ class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketD
         try {
 
 
-            holder.binding.pickup.address.text = list.dropOff.address
 
-            val inputString = list.pickup.address
 
-            val streetAddressRegex = Regex("Street Address: (.*?),")
-            val localityRegex = Regex("Locality: (.*?),")
+            val address1 = list.parcel.receiverLocation.location.address
+            val address2 = list.parcel.senderLocation.location.address
 
-            val streetAddressMatch = streetAddressRegex.find(inputString)
-            val localityMatch = localityRegex.find(inputString)
+            val trimmedAddress1 = address1.substringBefore("\n")
+            val trimmedAddress2 = address2.substringBefore("\n")
 
-            if (streetAddressMatch != null && localityMatch != null) {
-                val streetAddress = streetAddressMatch.groupValues[1]
-                val locality = localityMatch.groupValues[1]
 
-                // Combine street address and locality into a single string
-                val combinedAddress = "$streetAddress, $locality"
-                holder.binding.pickup.textView13.text = combinedAddress
+            holder.binding.pickup.textView13.text = trimmedAddress1
+            holder.binding.pickup.address.text = trimmedAddress2
 
-            } else {
-                println("Street address and/or locality not found in the input string.")
-            }
+
+//            holder.binding.pickup.address.text = list.parcel.senderLocation.location.address
+
+//            val inputString = list.parcel.senderLocation.location.address
+//
+//            val streetAddressRegex = Regex("Street Address: (.*?),")
+//            val localityRegex = Regex("Locality: (.*?),")
+//
+//            val streetAddressMatch = streetAddressRegex.find(inputString)
+//            val localityMatch = localityRegex.find(inputString)
+//
+//            if (streetAddressMatch != null && localityMatch != null) {
+//                val streetAddress = streetAddressMatch.groupValues[1]
+//                val locality = localityMatch.groupValues[1]
+//
+//                // Combine street address and locality into a single string
+//                val combinedAddress = "$streetAddress, $locality"
+//                holder.binding.pickup.textView13.text = combinedAddress
+//
+//            } else {
+//                println("Street address and/or locality not found in the input string.")
+//            }
 
 
 
@@ -56,12 +70,12 @@ class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketD
 
         }
 
- /*       holder.binding.buttons.btnAccept.setOnClickListener {
-            onAccepetReject.onAcceptClick(position)
+        holder.binding.buttons.btnAccept.setOnClickListener {
+            onAcceptRejectParcel.onAcceptParcelClick(position)
         }
         holder.binding.buttons.btnReject.setOnClickListener {
-            onAccepetReject.onRejectClick(position)
-        }*/
+            onAcceptRejectParcel.onRejectParcelClick(position)
+        }
 
     }
 
@@ -77,9 +91,8 @@ class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketD
     }
 }
 
-/*
-interface onAcceptReject{
-    fun onAcceptClick(position: Int)
-    fun onRejectClick(position: Int)
+interface onAcceptRejectParcel{
+    fun onAcceptParcelClick(position: Int)
+    fun onRejectParcelClick(position: Int)
 
-}*/
+}

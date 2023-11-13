@@ -345,7 +345,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewSpecialOrders"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_120sdp"
+                    android:layout_height="@dimen/_140sdp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -385,7 +385,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewIncomingOrders"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_120sdp"
+                    android:layout_height="@dimen/_140sdp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"

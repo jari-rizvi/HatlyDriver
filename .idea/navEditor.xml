@@ -154,6 +154,15 @@
                             <option name="y" value="788" />
                           </Point>
                         </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_orderFragment_to_homeFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -183,8 +192,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="69" />
-                            <option name="y" value="-979" />
+                            <option name="x" value="891" />
+                            <option name="y" value="357" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -268,6 +277,18 @@
                           <Point>
                             <option name="x" value="1232" />
                             <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="trackFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="69" />
+                            <option name="y" value="-1471" />
                           </Point>
                         </option>
                       </LayoutPositions>

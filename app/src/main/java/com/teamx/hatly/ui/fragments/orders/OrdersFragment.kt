@@ -3,7 +3,7 @@ package com.teamx.hatly.ui.fragments.orders
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamx.hatly.BR
@@ -37,7 +37,7 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
         }
 
         mViewDataBinding.imgBack.setOnClickListener {
-            popUpStack()
+            findNavController().navigate(R.id.action_orderFragment_to_homeFragment)
         }
 
         setupViewPager()
@@ -55,9 +55,11 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
                 0 -> {
                     tab.text = "Active"
                 }
+
                 1 -> {
                     tab.text = "Incoming"
                 }
+
                 2 -> {
                     tab.text = "Completed"
                 }

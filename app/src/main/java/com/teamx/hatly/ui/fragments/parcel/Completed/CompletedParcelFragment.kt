@@ -2,18 +2,17 @@ package com.teamx.hatly.ui.fragments.parcel.Completed
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
-import com.teamx.hatly.data.dataclasses.getOrderStatus.Doc
+import com.teamx.hatly.data.dataclasses.pastParcels.Doc
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentCompletedBinding
+import com.teamx.hatly.ui.fragments.Dashboard.home.PastParcelAdapter
 import com.teamx.hatly.ui.fragments.orders.Completed.CompletedViewModel
-import com.teamx.hatly.ui.fragments.orders.Completed.PastOrderAdapter
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +27,7 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
         get() = BR.viewModel
 
 
-    lateinit var pastOrderAdapter: PastOrderAdapter
+    lateinit var pastOrderAdapter: PastParcelAdapter
     lateinit var pastOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,41 +44,39 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
         }
 
 
-        mViewModel.getOPastrders("delivered")
+        mViewModel.getPastParcels(1, 5,"delivered")
 
-        if (!mViewModel.getOPastrdersResponse.hasActiveObservers()) {
-            mViewModel.getOPastrdersResponse.observe(requireActivity()) {
-                when (it.status) {
-                    Resource.Status.LOADING -> {
-                        loadingDialog.show()
-                    }
+        mViewModel.getPastParcelsResponse.observe(requireActivity()) {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
 
-                    Resource.Status.SUCCESS -> {
-                        loadingDialog.dismiss()
-                        it.data?.let { data ->
-                            data.docs.forEach {
-                                pastOrderArrayList.add(it)
-                            }
-
-                            pastOrderAdapter.notifyDataSetChanged()
-
-
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        data.docs.forEach {
+                            pastOrderArrayList.add(it)
                         }
-                    }
 
-                    Resource.Status.ERROR -> {
-                        loadingDialog.dismiss()
-                        DialogHelperClass.errorDialog(
-                            requireContext(),
-                            it.message!!
-                        )
+                        pastOrderAdapter.notifyDataSetChanged()
+
+
                     }
                 }
-                if (isAdded) {
-                    mViewModel.getOPastrdersResponse.removeObservers(
-                        viewLifecycleOwner
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(
+                        requireContext(),
+                        it.message!!
                     )
                 }
+            }
+            if (isAdded) {
+                mViewModel.getPastParcelsResponse.removeObservers(
+                    viewLifecycleOwner
+                )
             }
         }
 
@@ -92,7 +89,7 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.pastRecyclerView.layoutManager = linearLayoutManager
 
-        pastOrderAdapter = PastOrderAdapter(pastOrderArrayList)
+        pastOrderAdapter = PastParcelAdapter(pastOrderArrayList)
         mViewDataBinding.pastRecyclerView.adapter = pastOrderAdapter
 
     }

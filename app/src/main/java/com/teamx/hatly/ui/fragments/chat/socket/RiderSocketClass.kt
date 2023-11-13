@@ -65,7 +65,7 @@ object RiderSocketClass {
             }
 
             riderSocket?.on("INCOMING_PARCEL") { args ->
-                Timber.tag("MessageSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
+                Timber.tag("MessageSocketClass").d("INCOMING_PARCEL: }${args.get(0)}")
 
                 try {
                     Timber.tag("ChatSocketClass").d("Get_ALL_CHATS: ${args.get(0)}")
@@ -75,6 +75,10 @@ object RiderSocketClass {
                 } catch (e: java.lang.Exception) {
                     Timber.tag("ChatSocketClass").d("ExceptionData: ${args[0]}")
                 }
+            }
+
+            riderSocket?.on("REQUEST_ACCEPTED") { args ->
+                Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED: }${args.get(0)}")
             }
 
 
@@ -97,6 +101,11 @@ object RiderSocketClass {
 
 
     private fun onListenerEverything() {
+
+        riderSocket?.on("REQUEST_ACCEPTED") { args ->
+            Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED: }${args.get(0)}")
+        }
+
         riderSocket?.on("exception") { args ->
 
             try {

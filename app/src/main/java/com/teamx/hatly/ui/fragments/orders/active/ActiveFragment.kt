@@ -2,33 +2,32 @@ package com.teamx.hatly.ui.fragments.orders.active
 
 import android.os.Bundle
 import android.view.View
-import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.data.dataclasses.pastorder.Doc
 import com.teamx.hatly.data.remote.Resource
-import com.teamx.hatly.databinding.FragmentActiveBinding
+import com.teamx.hatly.databinding.FragmentActiveParcelBinding
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
+class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel>() {
 
     override val layoutId: Int
-        get() = R.layout.fragment_active
+        get() = R.layout.fragment_active_parcel
     override val viewModel: Class<ActiveViewModel>
         get() = ActiveViewModel::class.java
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    //    lateinit var productAdapter: ActiveAdapter
+
     lateinit var activeOrderAdapter: ActiveAdapter
 
-    //    lateinit var productArrayList: ArrayList<String>
-    lateinit var activeOrderArrayList: ArrayList<com.teamx.hatly.data.dataclasses.getActiveorder.Doc>
+    lateinit var activeOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,8 +42,51 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
             }
         }
 
+        try {
+            mViewModel.getPastOrders(1,10,"accepted")
+        } catch (e: Exception) {
+
+        }
+
+        if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
+            mViewModel.getPastOrdersResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                activeOrderArrayList.add(it)
+                            }
+
+                            activeOrderAdapter.notifyDataSetChanged()
 
 
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.getPastOrdersResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
+            }
+        }
+
+
+
+/*
         mViewModel.getActiveOrder("accepted", "order")
 
         if (!mViewModel.getActiveOrderResponse.hasActiveObservers()) {
@@ -81,19 +123,16 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
                     )
                 }
             }
-        }
+        }*/
+
+
+
+
+
+
 
         ActiveOrderRecyclerview()
 
-
-//        productRecyclerview()
-//
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
-//        productArrayList.add("")
-//
-//        productAdapter.notifyDataSetChanged()
 
     }
 

@@ -8,7 +8,6 @@ import com.teamx.hatly.data.dataclasses.SignUp.RegisterData
 import com.teamx.hatly.data.dataclasses.fcmmodel.FcmModel
 import com.teamx.hatly.data.dataclasses.forgotPass.ForgotData
 import com.teamx.hatly.data.dataclasses.getActiveorder.GetActiveOrderData
-import com.teamx.hatly.data.dataclasses.getOrderStatus.GetOrderStatus
 import com.teamx.hatly.data.dataclasses.login.LoginData
 import com.teamx.hatly.data.dataclasses.meModel.me.MeModel
 import com.teamx.hatly.data.dataclasses.model.ModelVerifyPassOtp
@@ -124,20 +123,22 @@ interface ApiService {
     suspend fun getPastOrders(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
+        @Query("status") status: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<PastOrdersData>
  @GET(NetworkCallPoints.GET_PAST_PARCELS)
     suspend fun getPastParcels(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
-        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+        @Query("status") status: String,
+     @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<GetPastParcelsData>
 
     @GET(NetworkCallPoints.GET_ORDERS_BYSTATUS)
     suspend fun getOrdersByStatus(
         @Query("status") status: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
-    ): Response<GetOrderStatus>
+    ): Response<PastOrdersData>
 
     @GET(NetworkCallPoints.GET_ACTIVE_ORDER)
     suspend fun getActiveOrders(

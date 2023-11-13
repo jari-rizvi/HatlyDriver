@@ -22,10 +22,21 @@ class PastParcelAdapter(val arrayList: ArrayList<com.teamx.hatly.data.dataclasse
         val list: com.teamx.hatly.data.dataclasses.pastParcels.Doc = arrayList[position]
 
         try {
-            holder.binding.address.text = list.parcel.receiverLocation.location.address
-            holder.binding.textView13.text = list.parcel.senderLocation.location.address
+      /*      holder.binding.address.text = list.parcel.receiverLocation.location.address
+            holder.binding.textView13.text = list.parcel.senderLocation.location.address*/
 
-            val inputString = list.parcel.receiverLocation.location.address
+
+            val address1 = list.parcel.receiverLocation.location.address
+            val address2 = list.parcel.senderLocation.location.address
+
+            val trimmedAddress1 = address1.substringBefore("\n")
+            val trimmedAddress2 = address2.substringBefore("\n")
+
+
+            holder.binding.address.text = trimmedAddress1
+            holder.binding.textView13.text = trimmedAddress2
+
+  /*          val inputString = list.parcel.receiverLocation.location.address
 
             val streetAddressRegex = Regex("Street Address: (.*?),")
             val localityRegex = Regex("Locality: (.*?),")
@@ -43,7 +54,7 @@ class PastParcelAdapter(val arrayList: ArrayList<com.teamx.hatly.data.dataclasse
 
             } else {
                 println("Street address and/or locality not found in the input string.")
-            }
+            }*/
 
 
 

@@ -91,14 +91,14 @@ class HomeViewModel @Inject constructor(
     val getPastOrdersResponse: LiveData<Resource<PastOrdersData>>
         get() = _getPastOrdersResponse
 
-    fun getPastOrders(page: Int, limit: Int) {
+    fun getPastOrders(page: Int, limit: Int,status:String) {
         viewModelScope.launch {
             _getPastOrdersResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastOrders(page, limit).let {
+                    mainRepository.getPastOrders(page, limit,status).let {
                         if (it.isSuccessful) {
                             _getPastOrdersResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
@@ -131,14 +131,14 @@ class HomeViewModel @Inject constructor(
     val getPastParcelsResponse: LiveData<Resource<GetPastParcelsData>>
         get() = _getPastParcelsResponse
 
-    fun getPastParcels(page: Int, limit: Int) {
+    fun getPastParcels(page: Int, limit: Int,status:String) {
         viewModelScope.launch {
             _getPastParcelsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastParcels(page, limit).let {
+                    mainRepository.getPastParcels(page, limit,status).let {
                         if (it.isSuccessful) {
                             _getPastParcelsResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())

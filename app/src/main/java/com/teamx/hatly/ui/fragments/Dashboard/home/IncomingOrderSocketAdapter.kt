@@ -29,9 +29,20 @@ class IncomingOrderSocketAdapter(
         try {
 
 
-            holder.binding.pickup.address.text = list.dropOff.address
+            val address1 = list.dropOff.address
+            val address2 = list.pickup.formattedAddress
 
-            val inputString = list.shop.address.streetAddress
+            val trimmedAddress1 = address1.substringBefore("\n")
+            val trimmedAddress2 = address2.substringBefore("\n")
+
+
+            holder.binding.pickup.textView13.text = trimmedAddress1
+            holder.binding.pickup.address.text = trimmedAddress2
+
+
+        /*    holder.binding.pickup.address.text = list.dropOff.address
+
+            val inputString = list.pickup.formattedAddress
 
             val streetAddressRegex = Regex("Street Address: (.*?),")
             val localityRegex = Regex("Locality: (.*?),")
@@ -50,10 +61,10 @@ class IncomingOrderSocketAdapter(
             } else {
                 println("Street address and/or locality not found in the input string.")
             }
+*/
 
 
-
-            holder.binding.pickup.price.text = list.products[0].prize.toString()
+            holder.binding.pickup.price.text = list.total.toString()
         }
         catch (e:Exception){
 
