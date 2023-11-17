@@ -54,6 +54,11 @@ class EditProfileFragment :
             }
         }
 
+        mViewDataBinding.imgBack.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
+        }
+
         mViewDataBinding.etPhone.isEnabled = false
         mViewDataBinding.etPhone.isFocusable = false
         mViewDataBinding.etPhone.isFocusableInTouchMode = false

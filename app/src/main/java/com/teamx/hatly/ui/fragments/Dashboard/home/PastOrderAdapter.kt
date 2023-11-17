@@ -49,6 +49,7 @@ class PastOrderAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter<Pas
 
 
             holder.binding.price.text = list.charges.toString() + "AED"
+            holder.binding.ordername.text = list.orders.products[0].productName
         }
         catch (e:Exception){
 

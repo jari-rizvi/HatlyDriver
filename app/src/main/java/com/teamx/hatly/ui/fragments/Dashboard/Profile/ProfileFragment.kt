@@ -37,6 +37,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
         }
 
 
+        mViewDataBinding.imgBack.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
+        }
+
         mViewDataBinding.btnAccountSettings.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.editProfileFragment, null, options)

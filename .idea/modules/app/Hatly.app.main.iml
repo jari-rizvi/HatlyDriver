@@ -136,6 +136,7 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/ef9ad278e8e7555706823583af651a5e/transformed/jetified-stripe-android-20.25.5-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/b521855bbea32b296a23e6767391978b/transformed/jetified-paymentsheet-20.25.5-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/45e1ca0bac037d0f3706677d99a708f4/transformed/jetified-payments-core-20.25.5-api.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/133ee9ccd02f2502afa629378a80e847/transformed/jetified-google-maps-services-0.15.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/280fb6bcb4fde692570a24dd10f55aad/transformed/jetified-converter-gson-2.9.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/22d2793201efbf964e91b9f3f48e9f33/transformed/jetified-retrofit-2.9.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/ab96f4c8fe4aae4611e993b5b90a9675/transformed/jetified-picasso-2.71828-api.jar</arg>
@@ -213,6 +214,7 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/f4d2d8550f5c310e200fc35b1e4d3082/transformed/jetified-auto-value-annotations-1.8.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/8195bda7469da860c00b2e40ee5ec676/transformed/jetified-protolite-well-known-types-18.0.0-api.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/cb0c2c26be9544b8552653443a36962e/transformed/jetified-protobuf-javalite-3.21.1.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-3/0301400ed7bf9894214f08b5bbbf9e92/transformed/jetified-opencensus-api-0.25.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/ab0a2cbd2c4768f5be23541daf4b4d46/transformed/jetified-grpc-context-1.48.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/a3934795fb2caf57cb5b17c986842674/transformed/jetified-jsr305-3.0.2.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-3/46b58bb1318aa0229d66262f010fc229/transformed/jetified-failureaccess-1.0.1.jar</arg>
@@ -366,15 +368,17 @@
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:disklrucache:4.11.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.bumptech.glide:annotations:4.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.maps:google-maps-services:0.15.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio-jvm:3.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.opencensus:opencensus-api:0.25.0" level="project" />
     <orderEntry type="library" name="Gradle: androidx.room:room-common:2.4.3" level="project" />
     <orderEntry type="library" name="Gradle: com.google.dagger:dagger:2.45" level="project" />
     <orderEntry type="library" name="Gradle: com.google.dagger:hilt-core:2.42" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-common-java8:2.6.1" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:retrofit:2.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.9.1" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okio:okio-jvm:3.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.retrofit2:converter-gson:2.9.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:4.9.1" level="project" />
     <orderEntry type="library" name="Gradle: commons-cli:commons-cli:1.2" level="project" />
     <orderEntry type="library" name="Gradle: androidx.collection:collection-ktx:1.1.0" level="project" />

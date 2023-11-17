@@ -5,7 +5,7 @@ import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
-import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,13 +43,15 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
         get() = BR.viewModel
 
 
-//    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
+    //    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
     private lateinit var messagesUserArrayList: ArrayList<RecieveMessage>
 
-//    private lateinit var messagesUserAdapter: ChatAdapter
+    //    private lateinit var messagesUserAdapter: ChatAdapter
     private lateinit var messagesUserAdapter: MessageAdapter
 
     var userId = ""
+    private var orderId: String = ""
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,12 +64,22 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+        mViewDataBinding.imgBack.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
+            MessageSocketClass.disconnect()
+        }
+
+        val bundle = arguments
+        orderId = bundle?.getString("orderId").toString()
+
+        Log.d("TAG", "orderIdorderIdorderId: $orderId")
 
 
 //        MessageSocketClass.connect("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI4MDBmYjA4ODFjNGUzYTBiNjdkZmNmMmZhYWRkY2YiLCJpYXQiOjE2OTc0NTQxMzIsImV4cCI6MTAzMzc0NTQxMzJ9.ADKHPgvmRMsAu6EiNZHsLYLAVbhQokpgnhG335SsJ0s","6511befda128e070ad313243")
         MessageSocketClass.connect2(
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-            "6511befda128e070ad313243", this, this
+            orderId, this, this
         )
         mViewDataBinding.imgSend.setOnClickListener {
             val text: String = mViewDataBinding.inpChat.text.toString()

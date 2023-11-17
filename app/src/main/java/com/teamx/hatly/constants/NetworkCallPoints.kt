@@ -38,6 +38,7 @@ class NetworkCallPoints {
         const val GET_ACTIVE_ORDER = "incoming-requests/all";
 
         const val ACCEPT_REJECT_ORDER = "incoming-requests/response/{id}";
+        const val PICKED_DISPATCH_ORDER = "incoming-requests/{id}";
 
 
         const val CREDS_CARDS = "stripe/list/paymentMethods"

@@ -155,4 +155,12 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
+
+    @POST(NetworkCallPoints.PICKED_DISPATCH_ORDER)
+    suspend fun pickedDispatchOrder(
+        @Path("id") id: String,
+        @Body params: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
 }

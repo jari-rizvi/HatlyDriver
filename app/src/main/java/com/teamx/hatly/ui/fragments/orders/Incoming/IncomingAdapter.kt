@@ -29,6 +29,7 @@ class IncomingAdapter(
 
 
             holder.binding.pickup.address.text = list.dropOff.address
+            holder.binding.ordername.text = list.orders.products[0].productName
 
             val inputString = list.pickup.formattedAddress
 

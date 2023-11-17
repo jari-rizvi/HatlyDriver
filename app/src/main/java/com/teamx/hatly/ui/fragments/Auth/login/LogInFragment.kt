@@ -99,16 +99,14 @@ class LogInFragment :
                             loadingDialog.dismiss()
 
                             it.data?.let { data ->
-                                lifecycleScope.launch(Dispatchers.IO) {
+                                lifecycleScope.launch(Dispatchers.Main) {
                                     dataStoreProvider.saveUserToken(data.token)
+                                    navController =
+                                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                                    navController.navigate(R.id.homeFragment, null, options)
                                 }
 
                                 PrefHelper.getInstance(requireActivity()).setUserData(data)
-
-
-                                navController =
-                                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                navController.navigate(R.id.homeFragment, null, options)
 
                             }
 

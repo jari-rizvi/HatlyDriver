@@ -96,8 +96,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
-
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -111,6 +109,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 popExit = com.teamx.hatly.R.anim.nav_default_pop_exit_anim
             }
         }
+
+        apiCalls()
+
 
         mViewDataBinding.profilePicture.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -137,103 +138,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         getDeviceLocation()
 
-        mViewModel.getPastParcels(1, 5,"delivered")
-
-        mViewModel.getPastParcelsResponse.observe(requireActivity()) {
-            when (it.status) {
-                Resource.Status.LOADING -> {
-                    loadingDialog.show()
-                }
-
-                Resource.Status.SUCCESS -> {
-                    loadingDialog.dismiss()
-                    it.data?.let { data ->
-                        data.docs.forEach {
-                            pastparcelArrayList.add(it)
-                        }
-
-                        pastParcelAdapter.notifyDataSetChanged()
-
-
-                    }
-                }
-
-                Resource.Status.ERROR -> {
-                    loadingDialog.dismiss()
-                    DialogHelperClass.errorDialog(
-                        requireContext(),
-                        it.message!!
-                    )
-                }
-            }
-            if (isAdded) {
-                mViewModel.getPastParcelsResponse.removeObservers(
-                    viewLifecycleOwner
-                )
-            }
-        }
-
-
-
-        mViewModel.getPastOrders(1, 5,"delivered")
-
-        mViewModel.getPastOrdersResponse.observe(requireActivity()) {
-            when (it.status) {
-                Resource.Status.LOADING -> {
-                    loadingDialog.show()
-                }
-
-                Resource.Status.SUCCESS -> {
-                    loadingDialog.dismiss()
-                    it.data?.let { data ->
-                        data.docs.forEach {
-                            pastOrderArrayList.add(it)
-                        }
-
-                        pastOrderAdapter.notifyDataSetChanged()
-
-
-                    }
-                }
-
-                Resource.Status.ERROR -> {
-                    loadingDialog.dismiss()
-                    DialogHelperClass.errorDialog(
-                        requireContext(),
-                        it.message!!
-                    )
-                }
-            }
-            if (isAdded) {
-                mViewModel.getPastOrdersResponse.removeObservers(
-                    viewLifecycleOwner
-                )
-            }
-        }
-
-
+        Firebase.initialize(requireContext())
+        FirebaseApp.initializeApp(requireContext())
 
         if (!mViewModel.fcmResponse.hasActiveObservers()) {
-            mViewModel.fcmResponse.observe(requireActivity()) {
-                when (it.status) {
-                    Resource.Status.LOADING -> {
-                        loadingDialog.show()
-                    }
-
-                    Resource.Status.SUCCESS -> {
-                        loadingDialog.dismiss()
-                        it.data?.let { data ->
-                            mViewDataBinding.root.snackbar(data.message)
-                        }
-                    }
-
-                    Resource.Status.ERROR -> {
-                        loadingDialog.dismiss()
-                        mViewDataBinding.root.snackbar(it.message!!)
-                    }
-                }
-            }
+            getFcmToken()
         }
+
 
         OrderRecyclerview()
         ParcelRecyclerview()
@@ -310,7 +221,101 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
+    }
 
+    fun apiCalls(){
+        mViewModel.getPastParcels(1, 5,"delivered")
+
+        if (!mViewModel.getPastParcelsResponse.hasActiveObservers()) {
+            mViewModel.getPastParcelsResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                pastparcelArrayList.add(it)
+                            }
+
+                            pastParcelAdapter.notifyDataSetChanged()
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+            }
+        }
+
+
+
+        mViewModel.getPastOrders(1, 5,"delivered")
+
+
+        if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
+            mViewModel.getPastOrdersResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                pastOrderArrayList.add(it)
+                            }
+
+                            pastOrderAdapter.notifyDataSetChanged()
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+            }
+        }
+
+
+
+        if (!mViewModel.fcmResponse.hasActiveObservers()) {
+            mViewModel.fcmResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            mViewDataBinding.root.snackbar(data.message)
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        mViewDataBinding.root.snackbar(it.message!!)
+                    }
+                }
+            }
+        }
     }
 
 
@@ -462,12 +467,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 this
             )
 
-            Firebase.initialize(requireContext())
+           /* Firebase.initialize(requireContext())
             FirebaseApp.initializeApp(requireContext())
 
             if (!mViewModel.fcmResponse.hasActiveObservers()) {
                 askNotificationPermission()
-            }
+            }*/
 
             /*DialogHelperClass.confirmLocation(
                 requireContext(), this@HomeFragment, true*/
@@ -539,8 +544,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     override fun onAcceptSokcetClick(position: Int) {
-
-
         id = incomingOrderSocketArrayList[position]._id
 
         Log.d("TAG", "onAcceptClick: $id")
@@ -621,6 +624,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         showToast(data.message)
                         incomingOrderAdapter.notifyDataSetChanged()
 
+                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.orderFragment, null, options)
+
 
                     }
                 }
@@ -633,13 +639,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         })
     }
 
-
     override fun onCancelClick() {
     }
 
 
-    private fun askNotificationPermission() {
+
+
+    private fun getFcmToken() {
         Log.d("fcmToken", "askNotificationPermission")
+
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -647,6 +655,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 return@OnCompleteListener
             }
 
+            // Get new FCM registration token
+//            fcmToken = task.result
             val params = JsonObject()
             params.addProperty("fcmToken", task.result)
 
@@ -656,8 +666,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
         })
-
+        // FCM SDK (and your app) can post notifications.
+//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+//                Log.d("fcmToken", "POST_NOTIFICATIONS")
+//            } else {
+//                Log.d("fcmToken", "else")
+//            }
+//        }
     }
+
 
 
     override fun onAcceptClick(position: Int) {
@@ -696,6 +713,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                         showToast(data.message)
                         incomingParcelAdapter.notifyDataSetChanged()
+
+                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.parcelFragment, null, options)
                     }
                 }
 

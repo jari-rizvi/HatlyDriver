@@ -56,6 +56,7 @@ class PastParcelAdapter(val arrayList: ArrayList<com.teamx.hatly.data.dataclasse
                 println("Street address and/or locality not found in the input string.")
             }*/
 
+            holder.binding.ordername.text = list.parcel.details.item
 
 
             holder.binding.price.text = list.parcel.fare.toString()+" AED"

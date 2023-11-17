@@ -4,7 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.navigation.NavOptions
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamx.hatly.BR
@@ -51,7 +51,8 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
         }
 
         mViewDataBinding.imgBack.setOnClickListener {
-            popUpStack()
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
         }
 
 

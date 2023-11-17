@@ -1,46 +1,57 @@
 package com.teamx.hatly.ui.fragments.track
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.Snackbar
+import com.google.gson.JsonObject
+import com.google.maps.DirectionsApi
+import com.google.maps.GeoApiContext
+import com.google.maps.model.TravelMode
+import com.squareup.picasso.Picasso
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
+import com.teamx.hatly.constants.NetworkCallPoints
+import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentTrackBinding
-import com.teamx.hatly.ui.activity.mainActivity.MainActivity
+import com.teamx.hatly.ui.fragments.Dashboard.home.HomeFragment
+import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
+import com.teamx.hatly.ui.fragments.chat.socket.TrackSocketClass
 import com.teamx.hatly.ui.fragments.topUp.TopUpModel
+import com.teamx.hatly.utils.DialogHelperClass
+import com.teamx.hatly.utils.LocationPermission
+import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
+import timber.log.Timber
 
 @AndroidEntryPoint
-class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapReadyCallback,android.location.LocationListener {
+class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapReadyCallback,
+    android.location.LocationListener {
 
     override val layoutId: Int
         get() = R.layout.fragment_track
@@ -50,6 +61,8 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         get() = BR.viewModel
 
     var mapFragment: SupportMapFragment? = null
+    private lateinit var googleMap: GoogleMap
+
 
     var locationCallback: LocationCallback? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -58,12 +71,25 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     var locationRequest: LocationRequest? = null
-    private var originLatitude2: Double = 24.9324
-    private var originLongitude2: Double = 67.0873
+
 
     // Coordinates of a park nearby
     private var destinationLatitude: Double = 0.0
     private var destinationLongitude: Double = 0.0
+
+
+    private var originLatitude: Double = 0.0
+    private var originLongitude: Double = 0.0
+
+    private var destinitionLatitude: Double = 0.0
+    private var destinitionLongitude: Double = 0.0
+
+    lateinit var bundle: Bundle
+
+    lateinit var handler: Handler
+    lateinit var runnable: Runnable
+    lateinit var id: String
+
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,6 +103,68 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
             }
         }
 
+        handler = Handler()
+
+        orderDetailsApiCall()
+
+        bundle = Bundle()
+
+
+        mViewDataBinding.bottomSheetLayout.imgChat.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.chatFragment, bundle, options)
+        }
+
+
+
+        try {
+            requestPermission()
+        } catch (e: Exception) {
+        }
+
+        mViewDataBinding.constraintLayout.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.homeFragment, null, options)
+            RiderSocketClass.disconnect()
+
+        }
+
+        mViewDataBinding.bottomSheetLayout.btnComplete.setOnClickListener {
+            val params = JsonObject()
+            try {
+                params.addProperty("status", "delivered")
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+            mViewModel.pickedDispatchOrder(id, params)
+        }
+
+
+        mViewModel.pickedDispatchOrderResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+                        TrackSocketClass.disconnect()
+                        navController = Navigation.findNavController(
+                            requireActivity(),
+                            R.id.nav_host_fragment
+                        )
+                        navController.navigate(R.id.homeFragment, null, options)
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
 
         bottomSheetBehavior =
             BottomSheetBehavior.from(mViewDataBinding.bottomSheetLayout.bottomSheet)
@@ -89,13 +177,23 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
-                    BottomSheetBehavior.STATE_EXPANDED -> MainActivity.bottomNav?.visibility =
-                        View.GONE
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        Log.d("bottomSheetBehavior", "onStateChanged: STATE_EXPANDED")
 
-                    BottomSheetBehavior.STATE_COLLAPSED -> MainActivity.bottomNav?.visibility =
-                        View.VISIBLE
+                    }
 
-                    else -> "Persistent Bottom Sheet"
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        Log.d("bottomSheetBehavior", "onStateChanged: STATE_COLLAPSED")
+
+                    }
+
+                    BottomSheetBehavior.STATE_DRAGGING -> {
+                        Log.d("bottomSheetBehavior", "onStateChanged: STATE_DRAGGING")
+                    }
+
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        Log.d("bottomSheetBehavior", "onStateChanged: STATE_HIDDEN")
+                    }
                 }
             }
         })
@@ -106,343 +204,359 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         bottomSheetBehavior.state = state
 
 
-
-
-
         mapFragment = childFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
+
+        getDeviceLocation()
+
+        runnable = Runnable {
+            getDeviceLocation()
+            Log.d("runnableIs", "Runnable: ")
+            TrackSocketClass.updateRide(originLatitude, originLongitude)
+            createPollyLine(
+                LatLng(originLatitude, originLongitude),
+                LatLng(destinitionLatitude, destinitionLongitude)
             )
-            != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            locationPermissionRequest.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            )
-
-            Log.d("permissionIsAllowed", "onViewCreated: if")
-
-//            requestFineLocationPermission()
-//            requestBackgroundLocationPermission()
-            return
-        } else {
-
-            if (!checkLocationIsEnable()) {
-                Log.d("permissionIsAllowed", "isMyLocationButtonEnabled: if")
-//                mMap?.isMyLocationEnabled = true
-//                mMap?.uiSettings?.isMyLocationButtonEnabled = true
-                Toast.makeText(requireActivity(), "Enable your location!", Toast.LENGTH_SHORT)
-                    .show()
-                return
-            } else {
-                getUserLocation()
-            }
-
+            handler.postDelayed(runnable, 3000)
         }
 
 
     }
 
 
-    private fun checkLocationIsEnable(): Boolean {
-        val locationManager =
-            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun getUserLocation() {
-        locationRequest = LocationRequest.create()
-        locationRequest?.interval = 100
-        locationRequest?.fastestInterval = 50
-        locationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                if (isAdded) {
-                    if (locationResult != null) {
-
-                        //Showing the latitude, longitude and accuracy on the home screen.
-                        for (location in locationResult.locations) {
-                            Log.d("permissionIsAllowed", "locationResult: ${location}")
-                            originLatitude2 = location.latitude
-                            originLongitude2 = location.longitude
-
-                            val desLocation = LatLng(originLatitude2, originLongitude2)
-
-                          /*  mViewModel.carMarker?.remove()
-
-                            if (mViewModel.carMarker == null && strETA.isNotBlank()) {
-                                *//*  carMarker = mMap?.addMarker(
-                              MarkerOptions().position(desLocation)
-                                  .icon(BitmapDescriptorFactory.fromResource(R.drawable.carspic))
-                          )*//*
-                                if (isAdded) {
-                                    mViewModel.carMarker =
-                                        voisMap(CarMarkerModel("ETA: ", strETA), desLocation)
-                                }
-                            }
-
-                            mViewModel.carMarker?.position = desLocation
-//                        if (isAdded) {
-//                            voisMap2(ShopModel("adfasf", "", desLocation, "$strETA"), desLocation)
-//                        }
-
-//                        mViewModel.carMarker?.remove()
-                            mViewModel.carMarker = mMap?.addMarker(
-                                MarkerOptions().position(desLocation)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.carspic))
-                            )
-
-                            s2.updateRide(orderId, originLatitude2, originLongitude2)
-
-//                        Log.d("animateMarker", "carMarker: ${mViewModel.carMarker!!}")
-//                        Log.d("animateMarker", "desLocation: ${desLocation}")
-
-
-                            animateMarker(mViewModel.carMarker!!, desLocation, false)
-
-
-                            mViewDataBinding.tvLoc.text = MessageFormat.format(
-                                "Lat: {0} Long: {1} Accuracy: {2}",
-                                location.latitude,
-                                location.longitude,
-                                location.accuracy
-                            )
-*/
-//                            setNotifyValues()
-                            if (ActivityCompat.checkSelfPermission(
-                                    requireContext(),
-                                    Manifest.permission.POST_NOTIFICATIONS
-                                ) != PackageManager.PERMISSION_GRANTED
-                            ) {
-
-                                ActivityCompat.requestPermissions(
-                                    requireActivity(),
-                                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                                    0
-                                )
-                                return
-                            }
-//                            notificationManager?.notify(1, builder!!.build())
-
-
-//                        mMap!!.addMarker(MarkerOptions().position(desLocation))
-                            val destinationLocation =
-                                LatLng(destinationLatitude, destinationLongitude)
-
-                        /*    if (isAdded) {
-                                Log.d("strETA", "strETA: ${strETA}")
-                                voisMap2(
-                                    ShopModel(sharedViewModel.trackShopsDetail.value!!.shopName, sharedViewModel.trackShopsDetail.value!!.shopImg, destinationLocation, strETA), destinationLocation
-                                )
-                                mViewDataBinding.textView23.text = strETA
-                                mViewDataBinding.textView21.text = totalDistanceTrack
-                            }
-//                        sharedViewModel.trackShopsDetail.value.shopName
-//
-                            val urll = getDirectionURL(desLocation, destinationLocation, apiKey)
-                            try {
-
-                                GetDirection(urll).execute()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }*/
-//                        mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(desLocation, 17F))
-                        }
-                    }
-                }
-            }
-        }
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            if (isAdded) {
-                originLatitude2 = it.latitude
-                originLongitude2 = it.longitude
-                val originLocation = LatLng(originLatitude2, originLongitude2)
-                isMarkerRemove = true
-               /* mViewModel.carMarker = mMap?.addMarker(
-                    MarkerOptions().position(originLocation)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.carspic))
-                )*/
-
-                val destinationLocation = LatLng(destinationLatitude, destinationLongitude)
-               /* if (isAdded) {
-                    Log.d("strETA", "strETA: ${strETA}")
-                    voisMap2(
-                        ShopModel(
-                            sharedViewModel.trackShopsDetail.value!!.shopName,
-                            sharedViewModel.trackShopsDetail.value!!.shopImg,
-                            destinationLocation,
-                            strETA
-                        ), destinationLocation
-                    )
-                }
-                val desLocation = LatLng(originLatitude2, originLongitude2)
-                val urll = getDirectionURL(desLocation, destinationLocation, apiKey)
-                try {
-                    GetDirection(urll).execute()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }*/
-
-//                mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(originLocation, 17F))
-//                goNow()
-                handler.postDelayed(runnable, 5000)
-                Log.d("lastLocation", "onCreate:latitude${it.latitude}longitude${it.longitude} ")
-            }
-        }
-
-    }
-
-    private val handler = Handler()
-
-    private val runnable = kotlinx.coroutines.Runnable {
-        Log.d("runnableIs", "Runnable: ")
-        reqLocation()
-    }
-
-    var isMarkerRemove = true
-    private fun reqLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-       /* if (isMarkerRemove) {
-            mViewModel.carMarker?.remove()
-            isMarkerRemove = false
-        }*/
-        fusedLocationClient.removeLocationUpdates(locationCallback!!)
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest!!, locationCallback!!, Looper.getMainLooper()
-        )
-        handler.removeCallbacks(runnable)
-        handler.postDelayed(runnable, 5000)
-//        handler.post(runnable)
-    }
-
+//    private fun checkLocationIsEnable(): Boolean {
+//        val locationManager =
+//            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+//            LocationManager.NETWORK_PROVIDER
+//        )
+//    }
 
 
     private val PERMISSION_REQUEST_CODE = 123
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-//            navController.navigate(R.id.discoverFragment, null, options)
-          /*  DialogHelperClass.startRide(
-                requireContext(), this, true
-            )*/
-        } else {
-            val snackbar = Snackbar.make(
-                mViewDataBinding.root,
-                "Permission required to proceed..",
-                Snackbar.LENGTH_SHORT
+    private fun requestPermission() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            /* RiderSocketClass.connectRider(
+                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                 originLatitude,
+                 originLongitude
+             )*/
+
+            // Show an explanation to the user *asynchronously*
+            // why the permission is needed and why the user should grant it
+
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ), PERMISSION_REQUEST_CODE
             )
-            snackbar.setAction("Settings") {
-                //
-                Log.d("TAG", "ScankonRequestPermissionsResult: ")
-                /*        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", requireActivity().packageName, null)
-                        intent.data = uri
-                        requireActivity().startActivity(intent)*/
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", context?.packageName, null)
-                intent.data = uri
-                startActivity(intent)
-                //
-//                snackbar.dismiss()
-            }
-            snackbar.show()
-            // Permission was denied. Handle this however is appropriate for your app.
+        } else {
+            // Permission has already been granted
+            TrackSocketClass.connectRiderTrack(
+                NetworkCallPoints.TOKENER,
+                id
+            )
+
+            /* Firebase.initialize(requireContext())
+             FirebaseApp.initializeApp(requireContext())
+
+             if (!mViewModel.fcmResponse.hasActiveObservers()) {
+                 askNotificationPermission()
+             }*/
+
+            /*DialogHelperClass.confirmLocation(
+                requireContext(), this@HomeFragment, true*/
+
+
+//            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+//            navController.navigate(R.id.dashboard, null, options)
         }
     }
 
 
-    private val locationPermissionRequest =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                when {
-                    permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                        // Precise location access granted.
-                        Log.d("allowLocation", "locationPermissionRequest: ACCESS_FINE_LOCATION")
-                      /*  DialogHelperClass.startRide(
-                            requireContext(), this, true
-                        )*/
+    fun orderDetailsApiCall() {
+        try {
+            mViewModel.getPastOrders(1, 10, "accepted")
+        } catch (e: Exception) {
+
+        }
+
+        if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
+            mViewModel.getPastOrdersResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
                     }
 
-                    permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                        // Only approximate location access granted.
-                        Log.d("allowLocation", "locationPermissionRequest: ACCESS_COARSE_LOCATION")
-                       /* DialogHelperClass.startRide(
-                            requireContext(), this, true
-                        )*/
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            try {
+
+                                destinitionLatitude = data.docs[0].dropOff.lat
+                                destinitionLongitude = data.docs[0].dropOff.lng
+
+                                id = data.docs[0].requestId
+
+                                TrackSocketClass.connectRiderTrack(
+                                    NetworkCallPoints.TOKENER,
+                                    id
+                                )
+
+                                handler.postDelayed(runnable, 3000)
+
+                                bundle.putString("orderId", data.docs[0].requestId)
+
+                                mViewDataBinding.bottomSheetLayout.textView23.text =
+                                    data.docs[0].shop.name
+                                mViewDataBinding.bottomSheetLayout.textView24.text =
+                                    data.docs[0].shop.address.streetAddress
+                                mViewDataBinding.bottomSheetLayout.ratingBar.rating =
+                                    data.docs[0].shop.ratting.toFloat()
+                                Picasso.get().load(data.docs[0].shop.image)
+                                    .into(mViewDataBinding.bottomSheetLayout.imgIcon)
+
+                                try {
+                                    Picasso.get().load(data.docs[0].orders.customer.profileImage)
+                                        .into(mViewDataBinding.bottomSheetLayout.imgAvatar)
+
+                                } catch (e: Exception) {
+
+                                }
+
+
+                                Picasso.get().load(data.docs[0].orders.products[0].image)
+                                    .into(mViewDataBinding.bottomSheetLayout.imgIcon)
+
+
+                                val address1 = data.docs[0].dropOff.address
+                                val address2 = data.docs[0].pickup.formattedAddress
+
+                                val trimmedAddress1 = address1.substringBefore("\n")
+                                val trimmedAddress2 = address2.substringBefore("\n")
+
+
+                                mViewDataBinding.bottomSheetLayout.textView33.text =
+                                    trimmedAddress1
+
+                                mViewDataBinding.bottomSheetLayout.textView24.text =
+                                    trimmedAddress2
+
+
+                                mViewDataBinding.bottomSheetLayout.textView27.text =
+                                    data.docs[0].orders.products[0].productName
+                                mViewDataBinding.bottomSheetLayout.textView29.text =
+                                    data.docs[0].orders.products[0].prize.toString()
+
+                                mViewDataBinding.bottomSheetLayout.textView28.text =
+                                    data.docs[0].orders.products[0].prize.toString() + " AED"
+                                mViewDataBinding.bottomSheetLayout.textView31.text =
+                                    data.docs[0].orders.subTotal.toString()
+                                mViewDataBinding.bottomSheetLayout.textView32.text =
+                                    data.docs[0].orders.customer.name
+                                mViewDataBinding.bottomSheetLayout.textView35.text =
+                                    data.docs[0].orders.specialNote
+                            } catch (e: Exception) {
+
+                            }
+
+
+                        }
                     }
 
-                    permissions.getOrDefault(
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION, false
-                    ) -> {
-                        Log.d(
-                            "allowLocation",
-                            "locationPermissionRequest: ACCESS_BACKGROUND_LOCATION"
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
                         )
                     }
-
-                    else -> {
-                        // No location access granted.
-                        Log.d("allowLocation", "locationPermissionRequest: else")
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                        val uri = Uri.fromParts("package", context?.packageName, null)
-                        intent.data = uri
-                        startActivity(intent)
-                    }
                 }
-            } else {
-                Log.d("allowLocation", "locationPermissionRequest: not working")
+                if (isAdded) {
+                    mViewModel.getPastOrdersResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
             }
         }
 
 
+    }
+
     override fun onMapReady(p0: GoogleMap) {
+        if (LocationPermission.requestPermission(requireActivity())) {
+            googleMap = p0
+
+//            googleMap.uiSettings.isZoomControlsEnabled = false
+//            googleMap.uiSettings.isScrollGesturesEnabled = false
+//            googleMap.uiSettings.isRotateGesturesEnabled = false
+//            googleMap.isMyLocationEnabled = false
+//            googleMap.uiSettings.isTiltGesturesEnabled = false
+//            googleMap.uiSettings.isZoomGesturesEnabled = false
+//            googleMap.uiSettings.isMapToolbarEnabled = false
+
+//            val location = LatLng(24.90141311636262, 67.1151442708337) // San Francisco coordinates
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 12f))
+
+//            googleMap.clear()
+//            createPollyLine()
+
+        } else {
+            if (isAdded) {
+                mViewDataBinding.root.snackbar("Allow location")
+            }
+        }
+    }
+
+
+    private fun createPollyLine(origin: LatLng, destination: LatLng) {
+
+//        val destination = LatLng(24.897369355794208, 67.07753405615058)
+//        val origin = LatLng(24.90125984648241, 67.1152140082674)
+
+        // Move the camera to the origin
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(origin, 12f))
+
+        // Create a GeoApiContext with your API key
+        val context =
+            GeoApiContext.Builder().apiKey("AIzaSyAnLo0ejCEMH_cPgZaokWej4UdgyIIy5HI").build()
+
+        // Request directions
+        val directions = DirectionsApi.newRequest(context)
+            .origin(com.google.maps.model.LatLng(origin.latitude, origin.longitude))
+            .destination(com.google.maps.model.LatLng(destination.latitude, destination.longitude))
+            .mode(TravelMode.DRIVING) // You can use other modes like walking, bicycling, etc.
+            .await()
+
+        try {
+
+            // Convert Google Maps Directions API LatLng to Google Maps Android API LatLng
+            val polyline = directions.routes[0].overviewPolyline.decodePath()
+                .map { LatLng(it.lat, it.lng) }
+
+            // Create a PolylineOptions and add the polyline to the map
+            val polylineOptions = PolylineOptions()
+                .addAll(polyline)
+                .color(requireActivity().getColor(R.color.red))
+                .width(10f) // Line width
+
+            googleMap.addPolyline(polylineOptions)
+            animateCameraAlongPolyline(polyline)
+        } catch (e: Exception) {
+
+        }
+
+    }
+
+
+    private fun animateCameraAlongPolyline(polyline: List<LatLng>) {
+
+        googleMap.setOnMapLoadedCallback {
+            val startPosition = polyline.first()
+
+
+            val endPosition = polyline.last()
+
+//        val centerPosition = LatLng(
+//            (startPosition.latitude + endPosition.latitude) / 2,
+//            (startPosition.longitude + endPosition.longitude) / 2
+//        )
+
+            // Calculate appropriate zoom level to fit the entire polyline
+            /*val bounds = LatLngBounds.builder()
+                .include(startPosition)
+                .include(endPosition)
+                .build()
+
+            val padding = 100 // Padding in pixels*/
+
+            val builder = LatLngBounds.builder()
+            for (point in polyline) {
+                builder.include(point)
+            }
+            val bounds = builder.build()
+
+
+// Step 2: Adjust Camera Position
+            val padding = 50 // Adjust this value as needed
+
+            // Animate the camera to fit the bounds and center the polyline
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            googleMap.moveCamera(cameraUpdate)
+
+            // Animate the camera to the center position with an appropriate zoom level
+//        googleMap.animateCamera(
+//            CameraUpdateFactory.newLatLngZoom(centerPosition, 10f)
+//        )
+        }
+
+
     }
 
     override fun onLocationChanged(p0: Location) {
+    }
+
+    var locationPermissionGranted = true
+
+    private fun getDeviceLocation() {
+        try {
+            if (locationPermissionGranted) {
+
+                fusedLocationClient =
+                    LocationServices.getFusedLocationProviderClient(requireActivity())
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    if (it != null) {
+                        Timber.tag("TAG")
+                            .d("onCreate:latitude${it.latitude}longitude${it.longitude} ")
+                    }
+                }
+                locationRequest = LocationRequest()
+                locationRequest?.interval = 10
+                locationRequest?.fastestInterval = 10
+                locationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest!!, object : LocationCallback() {
+
+                    }, Looper.getMainLooper()
+                )
+
+                val locationResult = fusedLocationClient.lastLocation
+                locationResult.addOnCompleteListener(requireActivity()) { task ->
+                    if (task.isSuccessful) {
+                        // Set the map's camera position to the current location of the device.
+                        val lastKnownLocation = task.result
+                        if (lastKnownLocation != null) {
+
+                            originLatitude = lastKnownLocation.latitude
+                            originLongitude = lastKnownLocation.longitude
+
+
+                            Timber.tag("lastKnownLocation").d(
+                                "Current location is . Using defaults. ${lastKnownLocation.latitude}  ${lastKnownLocation.longitude}"
+                            )
+
+
+                        }
+                    } else {
+                        Timber.tag("TAG").d("Current location is null. Using defaults.")
+                        Timber.tag("TAG").d("Exception:   ${task.exception}")
+                        HomeFragment.mMap?.uiSettings?.isMyLocationButtonEnabled = false
+                    }
+                }
+            }
+
+
+        } catch (e: SecurityException) {
+            Timber.tag("Exception: %s").e(e, e.message)
+        }
     }
 
 

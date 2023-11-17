@@ -34,26 +34,29 @@ class IncomingParcelAdapter(
             val trimmedDrop = dropoff.substringBefore("\n")
             holder.binding.pickup.address.text = trimmedPickup
             holder.binding.pickup.textView13.text = trimmedDrop
-/*
-            val inputString = list.pickup.formattedAddress
 
-            val streetAddressRegex = Regex("Street Address: (.*?),")
-            val localityRegex = Regex("Locality: (.*?),")
+            holder.binding.ordername.text = list.parcel.details.item
 
-            val streetAddressMatch = streetAddressRegex.find(inputString)
-            val localityMatch = localityRegex.find(inputString)
+            /*
+                        val inputString = list.pickup.formattedAddress
 
-            if (streetAddressMatch != null && localityMatch != null) {
-                val streetAddress = streetAddressMatch.groupValues[1]
-                val locality = localityMatch.groupValues[1]
+                        val streetAddressRegex = Regex("Street Address: (.*?),")
+                        val localityRegex = Regex("Locality: (.*?),")
 
-                // Combine street address and locality into a single string
-                val combinedAddress = "$streetAddress, $locality"
-                holder.binding.pickup.textView13.text = combinedAddress
+                        val streetAddressMatch = streetAddressRegex.find(inputString)
+                        val localityMatch = localityRegex.find(inputString)
 
-            } else {
-                println("Street address and/or locality not found in the input string.")
-            }*/
+                        if (streetAddressMatch != null && localityMatch != null) {
+                            val streetAddress = streetAddressMatch.groupValues[1]
+                            val locality = localityMatch.groupValues[1]
+
+                            // Combine street address and locality into a single string
+                            val combinedAddress = "$streetAddress, $locality"
+                            holder.binding.pickup.textView13.text = combinedAddress
+
+                        } else {
+                            println("Street address and/or locality not found in the input string.")
+                        }*/
 
 
 

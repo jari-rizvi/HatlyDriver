@@ -91,5 +91,9 @@ class MainRepository @Inject constructor(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.acceptRejectOrder(id, param)
 
+ suspend fun pickedDispatchOrder(
+        @Path("id") id: String, @Body param: JsonObject
+    ) = apiService.pickedDispatchOrder(id, param)
+
 
 }

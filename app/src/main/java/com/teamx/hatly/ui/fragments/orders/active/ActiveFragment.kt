@@ -1,10 +1,14 @@
 package com.teamx.hatly.ui.fragments.orders.active
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.JsonObject
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
@@ -13,6 +17,7 @@ import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentActiveParcelBinding
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONException
 
 @AndroidEntryPoint
 class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel>() {
@@ -24,7 +29,7 @@ class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
+    var id: String = ""
     lateinit var activeOrderAdapter: ActiveAdapter
 
     lateinit var activeOrderArrayList: ArrayList<Doc>
@@ -43,7 +48,7 @@ class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel
         }
 
         try {
-            mViewModel.getPastOrders(1,10,"accepted")
+            mViewModel.getPastOrders(1, 10, "accepted")
         } catch (e: Exception) {
 
         }
@@ -58,6 +63,18 @@ class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
+                            try {
+                                id = data.docs[0]._id
+                                if (data.docs[0].status == "picked") {
+                                    mViewDataBinding.txtOrderConfoirm.visibility = View.GONE
+                                    mViewDataBinding.btnTrack.visibility = View.VISIBLE
+
+                                }
+
+                                Log.d("TAG", "onViewCreated121212: $id")
+                            } catch (e: Exception) {
+                            }
+                            Log.d("TAG", "onViewCreated121212: $id")
                             data.docs.forEach {
                                 activeOrderArrayList.add(it)
                             }
@@ -85,12 +102,28 @@ class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel
         }
 
 
+        mViewDataBinding.btnTrack.setOnClickListener {
+            navController = Navigation.findNavController(
+                requireActivity(),
+                R.id.nav_host_fragment
+            )
+            navController.navigate(R.id.trackFragment, null, options)
+        }
 
-/*
-        mViewModel.getActiveOrder("accepted", "order")
 
-        if (!mViewModel.getActiveOrderResponse.hasActiveObservers()) {
-            mViewModel.getActiveOrderResponse.observe(requireActivity()) {
+        mViewDataBinding.txtOrderConfoirm.setOnClickListener {
+
+            val params = JsonObject()
+            try {
+                params.addProperty("status", "picked")
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+
+            mViewModel.pickedDispatchOrder(id, params)
+
+            mViewModel.pickedDispatchOrderResponse.observe(requireActivity(), Observer {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
@@ -99,31 +132,63 @@ class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            data.docs.forEach {
-                                activeOrderArrayList.add(it)
-                            }
-
-                            activeOrderAdapter.notifyDataSetChanged()
-
-
+                            navController = Navigation.findNavController(
+                                requireActivity(),
+                                R.id.nav_host_fragment
+                            )
+                            navController.navigate(R.id.trackFragment, null, options)
+                            showToast(data.message)
                         }
                     }
 
                     Resource.Status.ERROR -> {
                         loadingDialog.dismiss()
-                        DialogHelperClass.errorDialog(
-                            requireContext(),
-                            it.message!!
-                        )
+                        DialogHelperClass.errorDialog(requireContext(), it.message!!)
                     }
                 }
-                if (isAdded) {
-                    mViewModel.getActiveOrderResponse.removeObservers(
-                        viewLifecycleOwner
-                    )
-                }
-            }
-        }*/
+            })
+
+        }
+
+
+        /*
+                mViewModel.getActiveOrder("accepted", "order")
+
+                if (!mViewModel.getActiveOrderResponse.hasActiveObservers()) {
+                    mViewModel.getActiveOrderResponse.observe(requireActivity()) {
+                        when (it.status) {
+                            Resource.Status.LOADING -> {
+                                loadingDialog.show()
+                            }
+
+                            Resource.Status.SUCCESS -> {
+                                loadingDialog.dismiss()
+                                it.data?.let { data ->
+                                    data.docs.forEach {
+                                        activeOrderArrayList.add(it)
+                                    }
+
+                                    activeOrderAdapter.notifyDataSetChanged()
+
+
+                                }
+                            }
+
+                            Resource.Status.ERROR -> {
+                                loadingDialog.dismiss()
+                                DialogHelperClass.errorDialog(
+                                    requireContext(),
+                                    it.message!!
+                                )
+                            }
+                        }
+                        if (isAdded) {
+                            mViewModel.getActiveOrderResponse.removeObservers(
+                                viewLifecycleOwner
+                            )
+                        }
+                    }
+                }*/
 
 
 

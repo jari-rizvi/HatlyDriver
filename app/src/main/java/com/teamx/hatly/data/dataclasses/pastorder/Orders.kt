@@ -14,7 +14,7 @@ data class Orders(
     val specialNote: String,
     val status: String,
     val subTotal: Int,
-    val tax: Int,
+    val tax: Any,
     val total: Double,
     val updatedAt: String,
     val useWallet: Boolean,

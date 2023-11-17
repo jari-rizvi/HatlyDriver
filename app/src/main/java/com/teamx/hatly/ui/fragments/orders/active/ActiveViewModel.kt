@@ -3,9 +3,11 @@ package com.teamx.hatly.ui.fragments.orders.active
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.teamx.hatly.baseclasses.BaseViewModel
 import com.teamx.hatly.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatly.data.dataclasses.pastorder.PastOrdersData
+import com.teamx.hatly.data.dataclasses.sucess.SuccessData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -97,6 +99,38 @@ class ActiveViewModel @Inject constructor(
                     _getPastParcelsResponse.postValue(Resource.error("${e.message}", null))
                 }
             } else _getPastParcelsResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
+    private val _pickedDispatchOrderResponse = MutableLiveData<Resource<SuccessData>>()
+    val pickedDispatchOrderResponse: LiveData<Resource<SuccessData>>
+        get() = _pickedDispatchOrderResponse
+
+    fun pickedDispatchOrder(id: String, param: JsonObject) {
+        viewModelScope.launch {
+            _pickedDispatchOrderResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.pickedDispatchOrder(id, param).let {
+                        if (it.isSuccessful) {
+                            _pickedDispatchOrderResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _pickedDispatchOrderResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            _pickedDispatchOrderResponse.postValue(
+                                Resource.error(
+                                    "Some thing went wrong",
+                                    null
+                                )
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    _pickedDispatchOrderResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _pickedDispatchOrderResponse.postValue(Resource.error("No internet connection", null))
         }
     }
 
