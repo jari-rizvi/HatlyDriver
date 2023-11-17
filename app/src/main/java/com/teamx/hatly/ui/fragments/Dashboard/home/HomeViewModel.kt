@@ -10,6 +10,7 @@ import com.teamx.hatly.data.dataclasses.fcmmodel.FcmModel
 import com.teamx.hatly.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatly.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
+import com.teamx.hatly.data.dataclasses.totalEarning.TotalEarningData
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.data.remote.reporitory.MainRepository
 import com.teamx.hatly.utils.NetworkHelper
@@ -24,6 +25,35 @@ class HomeViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val networkHelper: NetworkHelper
 ) : BaseViewModel() {
+
+
+    private val _totalEarningsResponse = MutableLiveData<Resource<TotalEarningData>>()
+    val totalEarningsResponse: LiveData<Resource<TotalEarningData>>
+        get() = _totalEarningsResponse
+
+    fun getTotalEarnings(filterBy: String) {
+        viewModelScope.launch {
+            _totalEarningsResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.getTotalEarning(filterBy).let {
+                        if (it.isSuccessful) {
+                            _totalEarningsResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _totalEarningsResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _totalEarningsResponse.postValue(Resource.error(jsonObj.getString("message")))
+//                            _totalEarningsResponse.postValue(Resource.error(it.message(), null))
+                        }
+                    }
+                } catch (e: Exception) {
+                    _totalEarningsResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _totalEarningsResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
 
 
     private val _acceptRejectResponse = MutableLiveData<Resource<SuccessData>>()
@@ -91,14 +121,14 @@ class HomeViewModel @Inject constructor(
     val getPastOrdersResponse: LiveData<Resource<PastOrdersData>>
         get() = _getPastOrdersResponse
 
-    fun getPastOrders(page: Int, limit: Int,status:String) {
+    fun getPastOrders(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastOrdersResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastOrders(page, limit,status).let {
+                    mainRepository.getPastOrders(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastOrdersResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
@@ -131,14 +161,14 @@ class HomeViewModel @Inject constructor(
     val getPastParcelsResponse: LiveData<Resource<GetPastParcelsData>>
         get() = _getPastParcelsResponse
 
-    fun getPastParcels(page: Int, limit: Int,status:String) {
+    fun getPastParcels(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastParcelsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastParcels(page, limit,status).let {
+                    mainRepository.getPastParcels(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastParcelsResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())

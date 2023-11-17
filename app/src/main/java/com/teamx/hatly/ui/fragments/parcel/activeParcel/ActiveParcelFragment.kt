@@ -14,17 +14,17 @@ import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.dataclasses.pastParcels.Doc
 import com.teamx.hatly.data.remote.Resource
-import com.teamx.hatly.databinding.FragmentActiveBinding
+import com.teamx.hatly.databinding.FragmentActiveParcelBinding
 import com.teamx.hatly.ui.fragments.orders.active.ActiveViewModel
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 
 @AndroidEntryPoint
-class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
+class ActiveParcelFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel>() {
 
     override val layoutId: Int
-        get() = R.layout.fragment_active
+        get() = R.layout.fragment_active_parcel
     override val viewModel: Class<ActiveViewModel>
         get() = ActiveViewModel::class.java
     override val bindingVariable: Int
@@ -71,6 +71,11 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
                         it.data?.let { data ->
                             try {
                                 id = data.docs[0]._id
+                                if (data.docs[0].status == "picked") {
+                                    mViewDataBinding.txtOrderConfoirm.visibility = View.GONE
+                                    mViewDataBinding.btnTrack.visibility = View.VISIBLE
+
+                                }
                                 Log.d("TAG", "onViewCreated121212: $id")
                             } catch (e: Exception) {
                             }
@@ -100,7 +105,16 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
             }
         }
 
+        mViewDataBinding.btnTrack.setOnClickListener {
+            navController = Navigation.findNavController(
+                requireActivity(),
+                R.id.nav_host_fragment
+            )
+            navController.navigate(R.id.trackFragment, null, options)
+        }
+
         mViewDataBinding.txtOrderConfoirm.setOnClickListener {
+
             val params = JsonObject()
             try {
                 params.addProperty("status", "picked")
@@ -108,7 +122,9 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
                 e.printStackTrace()
             }
 
+
             mViewModel.pickedDispatchOrder(id, params)
+
             mViewModel.pickedDispatchOrderResponse.observe(requireActivity(), Observer {
                 when (it.status) {
                     Resource.Status.LOADING -> {
@@ -135,6 +151,7 @@ class ActiveParcelFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel
             })
 
         }
+
 
 
         ActiveParcelRecyclerview()

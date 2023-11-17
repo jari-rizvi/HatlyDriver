@@ -42,6 +42,9 @@ class MainRepository @Inject constructor(
         @Query("limit") limit: Int,
         @Query("page") page: Int
     ) = apiService.getTransactionHistory(limit, page)
+  suspend fun getTotalEarning(
+        @Query("filterBy") filterBy: String,
+    ) = apiService.getTotalEarning(filterBy)
 
     suspend fun setDetachCredCards(
         @Body params: JsonObject

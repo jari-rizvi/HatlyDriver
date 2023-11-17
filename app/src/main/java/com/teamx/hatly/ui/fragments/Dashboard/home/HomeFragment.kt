@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -14,6 +15,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -57,7 +60,7 @@ import timber.log.Timber
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
-    onAcceptRejectSocket,onAcceptRejectParcel {
+    onAcceptRejectSocket, onAcceptRejectParcel {
 
     override val layoutId: Int
         get() = com.teamx.hatly.R.layout.fragment_home
@@ -96,6 +99,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -146,6 +150,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
+
+
         OrderRecyclerview()
         ParcelRecyclerview()
         PastOrderRecyclerview()
@@ -158,8 +164,33 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         seekBar.isClickable = false
 
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 seekBar.isEnabled = true
+                var previousProgress = 0
+
+/*
+                if (progress > previousProgress) {
+                    // If progressing to the right, set the progress to the maximum value
+                    seekBar.progress = seekBar.max
+
+                    DialogHelperClass.confirmLocation(
+                        requireContext(), this@HomeFragment, true
+                    )
+
+                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
+                    statusText.text = "Go Offline"
+                } else if (progress < previousProgress) {
+                    seekBar.progress = seekBar.min
+                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
+                    RiderSocketClass.disconnect()
+                    // Hide "Go Online" text
+                    statusText.text = "Go Online"
+                }
+                previousProgress = progress // Update the previous progress valu
+*/
+
+
                 // Check if the SeekBar is fully swiped
                 if (progress == seekBar.max) {
 
@@ -214,6 +245,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
+                Log.d("TAG", "onItemSelected: $selectedItem")
+                mViewModel.getTotalEarnings(selectedItem)
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -223,8 +257,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     }
 
-    fun apiCalls(){
-        mViewModel.getPastParcels(1, 5,"delivered")
+    fun apiCalls() {
+        mViewModel.getPastParcels(1, 5, "delivered")
 
         if (!mViewModel.getPastParcelsResponse.hasActiveObservers()) {
             mViewModel.getPastParcelsResponse.observe(requireActivity()) {
@@ -258,8 +292,36 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
+        if (!mViewModel.totalEarningsResponse.hasActiveObservers()) {
+            mViewModel.totalEarningsResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
 
-        mViewModel.getPastOrders(1, 5,"delivered")
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+            }
+        }
+
+
+
+
+        mViewModel.getPastOrders(1, 5, "delivered")
 
 
         if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
@@ -336,7 +398,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
 
-        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList,this)
+        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList, this)
         mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
 
     }
@@ -467,12 +529,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 this
             )
 
-           /* Firebase.initialize(requireContext())
-            FirebaseApp.initializeApp(requireContext())
+            /* Firebase.initialize(requireContext())
+             FirebaseApp.initializeApp(requireContext())
 
-            if (!mViewModel.fcmResponse.hasActiveObservers()) {
-                askNotificationPermission()
-            }*/
+             if (!mViewModel.fcmResponse.hasActiveObservers()) {
+                 askNotificationPermission()
+             }*/
 
             /*DialogHelperClass.confirmLocation(
                 requireContext(), this@HomeFragment, true*/
@@ -572,6 +634,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
 
                         showToast(data.message)
+                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.orderFragment, null, options)
                         incomingOrderAdapter.notifyDataSetChanged()
                     }
                 }
@@ -624,7 +688,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         showToast(data.message)
                         incomingOrderAdapter.notifyDataSetChanged()
 
-                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         navController.navigate(R.id.orderFragment, null, options)
 
 
@@ -643,38 +708,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Firebase.initialize(requireContext())
+            FirebaseApp.initializeApp(requireContext())
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("123123", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
 
+                val token = task.result
+                val params = JsonObject()
+                params.addProperty("fcmToken", token)
 
-    private fun getFcmToken() {
-        Log.d("fcmToken", "askNotificationPermission")
+                mViewModel.fcm(params)
+//                val msg = getString(R.string.about_us, token)
+                Log.d("123123111", token.toString())
+            })
 
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("123123", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-//            fcmToken = task.result
-            val params = JsonObject()
-            params.addProperty("fcmToken", task.result)
-
-
-            mViewModel.fcm(params)
-            Log.d("fcmToken", "gaya ${params}")
-
-
-        })
-        // FCM SDK (and your app) can post notifications.
-//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//                Log.d("fcmToken", "POST_NOTIFICATIONS")
-//            } else {
-//                Log.d("fcmToken", "else")
-//            }
-//        }
+        } else {
+        }
     }
 
+    private fun getFcmToken() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        Log.w("123123", "Fetching FCM registration token failed", task.exception)
+                        return@OnCompleteListener
+                    }
+
+                    val token = task.result
+                    val params = JsonObject()
+                    params.addProperty("fcmToken", token)
+
+                    mViewModel.fcm(params)
+                    Timber.tag("123123").d(token.toString())
+                })
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
 
     override fun onAcceptClick(position: Int) {
@@ -714,7 +799,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         showToast(data.message)
                         incomingParcelAdapter.notifyDataSetChanged()
 
-                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         navController.navigate(R.id.parcelFragment, null, options)
                     }
                 }

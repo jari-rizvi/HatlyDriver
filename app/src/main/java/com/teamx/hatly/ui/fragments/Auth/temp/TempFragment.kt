@@ -1,12 +1,7 @@
 package com.teamx.hatly.ui.fragments.Auth.temp
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.teamx.hatly.BR
@@ -70,7 +65,7 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 
         }
 
-        askNotificationPermission()
+//        askNotificationPermission()
 
 
 //        Handler(Looper.getMainLooper()).postDelayed({
@@ -83,7 +78,7 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
     }
 
 
-    private val requestPermissionLauncher = registerForActivityResult(
+ /*   private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
@@ -115,7 +110,7 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
-    }
+    }*/
 
 
     private fun loginListener() {

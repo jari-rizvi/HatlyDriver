@@ -14,16 +14,16 @@ import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.dataclasses.pastorder.Doc
 import com.teamx.hatly.data.remote.Resource
-import com.teamx.hatly.databinding.FragmentActiveParcelBinding
+import com.teamx.hatly.databinding.FragmentActiveBinding
 import com.teamx.hatly.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
 
 @AndroidEntryPoint
-class ActiveFragment : BaseFragment<FragmentActiveParcelBinding, ActiveViewModel>() {
+class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
 
     override val layoutId: Int
-        get() = R.layout.fragment_active_parcel
+        get() = R.layout.fragment_active
     override val viewModel: Class<ActiveViewModel>
         get() = ActiveViewModel::class.java
     override val bindingVariable: Int

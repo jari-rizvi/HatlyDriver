@@ -38,6 +38,7 @@ class IncomingOrderSocketAdapter(
 
             holder.binding.pickup.textView13.text = trimmedAddress1
             holder.binding.pickup.address.text = trimmedAddress2
+//            holder.binding.ordername.text = list.order.
 
 
         /*    holder.binding.pickup.address.text = list.dropOff.address

@@ -88,6 +88,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
     lateinit var handler: Handler
     lateinit var runnable: Runnable
+    lateinit var reqid: String
     lateinit var id: String
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -304,11 +305,12 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                 destinitionLatitude = data.docs[0].dropOff.lat
                                 destinitionLongitude = data.docs[0].dropOff.lng
 
-                                id = data.docs[0].requestId
+                                reqid = data.docs[0].requestId
+                                id = data.docs[0]._id
 
                                 TrackSocketClass.connectRiderTrack(
                                     NetworkCallPoints.TOKENER,
-                                    id
+                                    reqid
                                 )
 
                                 handler.postDelayed(runnable, 3000)

@@ -15,6 +15,7 @@ import com.teamx.hatly.data.dataclasses.modelUploadImages.ModelUploadImages
 import com.teamx.hatly.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatly.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatly.data.dataclasses.sucess.SuccessData
+import com.teamx.hatly.data.dataclasses.totalEarning.TotalEarningData
 import com.teamx.hatly.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatly.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatly.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
@@ -83,12 +84,19 @@ interface ApiService {
     suspend fun me(
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<MeModel>
- @GET(NetworkCallPoints.TRANSACTION_HISTORY)
+
+    @GET(NetworkCallPoints.TRANSACTION_HISTORY)
     suspend fun getTransactionHistory(
-     @Query("limit") limit: Int,
-     @Query("page") page: Int,
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<TransactionHistoryData>
+
+    @GET(NetworkCallPoints.TOTAL_EARNING)
+    suspend fun getTotalEarning(
+        @Query("filterBy") filterBy: String,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<TotalEarningData>
 
     @GET(NetworkCallPoints.CREDS_CARDS)
     suspend fun getCredCards(
@@ -126,12 +134,13 @@ interface ApiService {
         @Query("status") status: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<PastOrdersData>
- @GET(NetworkCallPoints.GET_PAST_PARCELS)
+
+    @GET(NetworkCallPoints.GET_PAST_PARCELS)
     suspend fun getPastParcels(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
         @Query("status") status: String,
-     @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<GetPastParcelsData>
 
     @GET(NetworkCallPoints.GET_ORDERS_BYSTATUS)
