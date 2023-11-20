@@ -7,8 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.animation.LinearInterpolator
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -22,9 +24,13 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.Projection
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.gson.JsonObject
@@ -488,11 +494,32 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
 
 // Step 2: Adjust Camera Position
-            val padding = 50 // Adjust this value as needed
+
+
+            /*      // Animate the camera to fit the bounds and center the polyline
+                  val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                  googleMap.moveCamera(cameraUpdate)*/
+
+
+            val padding = 100 // Adjust this value as needed
+
+            googleMap.addMarker(MarkerOptions().position(startPosition).title("Start Marker"))
+            val marker = googleMap.addMarker(
+                MarkerOptions().position(endPosition)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_man))
+            )
+
+
+//            googleMap.addMarker(MarkerOptions().position(endPosition).title("End Marker"))
+
+            if (marker != null) {
+                animateMarker(marker, endPosition, false)
+            }
 
             // Animate the camera to fit the bounds and center the polyline
             val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
             googleMap.moveCamera(cameraUpdate)
+
 
             // Animate the camera to the center position with an appropriate zoom level
 //        googleMap.animateCamera(
@@ -502,6 +529,33 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
 
     }
+
+
+    private fun animateMarker(marker: Marker, toPosition: LatLng, hideMarker: Boolean) {
+        val handler = Handler()
+        val start = SystemClock.uptimeMillis()
+        val proj: Projection = googleMap.projection
+        val startPoint = proj.toScreenLocation(marker.position)
+        val startLatLng = proj.fromScreenLocation(startPoint)
+        val duration: Long = 500
+        val interpolator: LinearInterpolator = LinearInterpolator()
+        handler.post(object : Runnable {
+            override fun run() {
+                val elapsed = SystemClock.uptimeMillis() - start
+                val t: Float = interpolator.getInterpolation(elapsed.toFloat() / duration)
+                val lng = t * toPosition.longitude + (1 - t) * startLatLng.longitude
+                val lat = t * toPosition.latitude + (1 - t) * startLatLng.latitude
+                marker.position = LatLng(lat, lng)
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16)
+                } else {
+                    marker.isVisible = !hideMarker
+                }
+            }
+        })
+    }
+
 
     override fun onLocationChanged(p0: Location) {
     }

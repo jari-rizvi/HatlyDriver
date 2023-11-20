@@ -31,12 +31,12 @@ class HomeViewModel @Inject constructor(
     val totalEarningsResponse: LiveData<Resource<TotalEarningData>>
         get() = _totalEarningsResponse
 
-    fun getTotalEarnings(filterBy: String) {
+    fun getTotalEarnings(filterBy: String,filterFor: String) {
         viewModelScope.launch {
             _totalEarningsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
-                    mainRepository.getTotalEarning(filterBy).let {
+                    mainRepository.getTotalEarning(filterBy,filterFor).let {
                         if (it.isSuccessful) {
                             _totalEarningsResponse.postValue(Resource.success(it.body()!!))
                         } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {

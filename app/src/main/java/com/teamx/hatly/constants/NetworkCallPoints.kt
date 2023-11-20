@@ -50,7 +50,7 @@ class NetworkCallPoints {
 
 
 
-        const val TOTAL_EARNING = "incoming-requests/earnings"
+        const val TOTAL_EARNING = "incoming-requests/stat"
 
 
 

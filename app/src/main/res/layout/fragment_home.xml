@@ -188,7 +188,7 @@
 
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="@dimen/_60sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/card_border_green"
                 app:layout_constraintBottom_toTopOf="@+id/textView15"
@@ -239,11 +239,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintOrders"
             android:layout_width="@dimen/_120sdp"
-            android:layout_height="0dp"
+            android:layout_height="@dimen/_100sdp"
             android:background="@drawable/card_background_green"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_1sdp"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintEarnings"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/constraintEarnings"
@@ -251,18 +252,19 @@
 
             <Spinner
                 android:id="@+id/spinner1"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_height="@dimen/_15sdp"
-                android:background="@drawable/card_border_green"
-                app:layout_constraintBottom_toTopOf="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@drawable/card_border_green"
+                app:layout_constraintBottom_toTopOf="@+id/textView16"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="8dp" />
 
             <TextView
                 android:id="@+id/textView16"
-                android:layout_width="0dp"
+                android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders"
                 android:textSize="@dimen/_9ssp"
@@ -271,18 +273,20 @@
                 app:layout_constraintStart_toStartOf="@+id/spinner1"
                 app:layout_constraintTop_toBottomOf="@+id/spinner1" />
 
+
             <TextView
                 android:id="@+id/totalorders"
                 style="@style/open_sans_white_bold_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50"
+                android:text="0"
+                app:layout_constraintHorizontal_bias="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textView43"
+                app:layout_constraintEnd_toEndOf="@+id/textView16"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView16" />
-
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -294,6 +298,32 @@
                 app:layout_constraintTop_toBottomOf="@+id/spinner1"
                 app:srcCompat="@drawable/total_orders" />
 
+            <TextView
+                android:id="@+id/textView43"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_9ssp"
+                android:text="Total Parcels"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintBottom_toTopOf="@+id/totalParcels"
+                app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintStart_toStartOf="@+id/textView16"
+                app:layout_constraintTop_toBottomOf="@+id/totalorders" />
+
+            <TextView
+                android:id="@+id/totalParcels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11ssp"
+                style="@style/open_sans_white_bold_medium"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintStart_toStartOf="@+id/textView16"
+                app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -304,7 +334,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintEarnings">
+            app:layout_constraintTop_toBottomOf="@+id/constraintOrders">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout

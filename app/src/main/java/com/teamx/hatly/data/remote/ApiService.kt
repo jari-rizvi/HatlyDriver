@@ -95,6 +95,7 @@ interface ApiService {
     @GET(NetworkCallPoints.TOTAL_EARNING)
     suspend fun getTotalEarning(
         @Query("filterBy") filterBy: String,
+        @Query("filterFor") filterFor: String,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<TotalEarningData>
 

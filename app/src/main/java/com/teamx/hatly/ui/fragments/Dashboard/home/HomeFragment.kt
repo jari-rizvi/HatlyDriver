@@ -63,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     onAcceptRejectSocket, onAcceptRejectParcel {
 
     override val layoutId: Int
-        get() = com.teamx.hatly.R.layout.fragment_home
+        get() = R.layout.fragment_home
     override val viewModel: Class<HomeViewModel>
         get() = HomeViewModel::class.java
     override val bindingVariable: Int
@@ -91,12 +91,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     var type: String = ""
 
-
     lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
     lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
     lateinit var incomingOrderSocketArrayList: ArrayList<IncomingOrderSocketData>
     lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
-
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
@@ -148,7 +146,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         if (!mViewModel.fcmResponse.hasActiveObservers()) {
             getFcmToken()
         }
-
 
 
 
@@ -221,6 +218,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
         val spinner = mViewDataBinding.spinner
+        val spinner1 = mViewDataBinding.spinner1
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         val adapter = ArrayAdapter.createFromResource(
@@ -234,6 +232,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         // Apply the adapter to the spinner
         spinner.adapter = adapter
+        spinner1.adapter = adapter
 
         // Set a selection listener to handle item selection
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -246,7 +245,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 val selectedItem = parent.getItemAtPosition(position) as String
 
                 Log.d("TAG", "onItemSelected: $selectedItem")
-                mViewModel.getTotalEarnings(selectedItem)
+                mViewModel.getTotalEarnings(selectedItem,"earning")
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
+
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent.getItemAtPosition(position) as String
+
+                Log.d("TAG", "onItemSelected: $selectedItem")
+                mViewModel.getTotalEarnings(selectedItem,"order")
 
             }
 
@@ -303,6 +321,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
+                            mViewDataBinding.totalorders.text = data.totalOrder.toString()
+                            mViewDataBinding.totalParcels.text = data.totalParcels.toString()
 
                         }
                     }
