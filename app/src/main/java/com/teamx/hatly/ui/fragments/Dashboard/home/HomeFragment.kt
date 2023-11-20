@@ -43,7 +43,7 @@ import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentHomeBinding
 import com.teamx.hatly.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatly.ui.fragments.chat.socket.RiderSocketClass
-import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
+import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrdersSocketData
 import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatly.ui.fragments.orders.Incoming.onAcceptReject
 import com.teamx.hatly.utils.DialogHelperClass
@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
     lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
-    lateinit var incomingOrderSocketArrayList: ArrayList<IncomingOrderSocketData>
+    lateinit var incomingOrderSocketArrayList: ArrayList<com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
     lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
@@ -166,26 +166,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 seekBar.isEnabled = true
                 var previousProgress = 0
 
-/*
-                if (progress > previousProgress) {
-                    // If progressing to the right, set the progress to the maximum value
-                    seekBar.progress = seekBar.max
+                /*
+                                if (progress > previousProgress) {
+                                    // If progressing to the right, set the progress to the maximum value
+                                    seekBar.progress = seekBar.max
 
-                    DialogHelperClass.confirmLocation(
-                        requireContext(), this@HomeFragment, true
-                    )
+                                    DialogHelperClass.confirmLocation(
+                                        requireContext(), this@HomeFragment, true
+                                    )
 
-                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    statusText.text = "Go Offline"
-                } else if (progress < previousProgress) {
-                    seekBar.progress = seekBar.min
-                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    RiderSocketClass.disconnect()
-                    // Hide "Go Online" text
-                    statusText.text = "Go Online"
-                }
-                previousProgress = progress // Update the previous progress valu
-*/
+                                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
+                                    statusText.text = "Go Offline"
+                                } else if (progress < previousProgress) {
+                                    seekBar.progress = seekBar.min
+                                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
+                                    RiderSocketClass.disconnect()
+                                    // Hide "Go Online" text
+                                    statusText.text = "Go Online"
+                                }
+                                previousProgress = progress // Update the previous progress valu
+                */
 
 
                 // Check if the SeekBar is fully swiped
@@ -245,7 +245,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 val selectedItem = parent.getItemAtPosition(position) as String
 
                 Log.d("TAG", "onItemSelected: $selectedItem")
-                mViewModel.getTotalEarnings(selectedItem,"earning")
+                mViewModel.getTotalEarnings(selectedItem, "earning")
 
             }
 
@@ -264,7 +264,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 val selectedItem = parent.getItemAtPosition(position) as String
 
                 Log.d("TAG", "onItemSelected: $selectedItem")
-                mViewModel.getTotalEarnings(selectedItem,"order")
+                mViewModel.getTotalEarnings(selectedItem, "order")
 
             }
 
@@ -601,16 +601,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
-    override fun onIncomingOrderRecieve(incomingOrderSocketData: IncomingOrderSocketData) {
-        incomingOrderSocketArrayList.clear()
-        GlobalScope.launch(Dispatchers.Main) {
+    override fun onIncomingOrderRecieve(incomingOrderSocketData: com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc) {
+    /*    incomingOrderSocketArrayList.clear()*/
 
-            incomingOrderSocketArrayList.add(incomingOrderSocketData)
+        Log.d("TAG", "onIncomingOrderRecieveSinglre:")
+        GlobalScope.launch(Dispatchers.Main) {
+            Log.d("TAG", "onIncomingOrderRecieveSinglre:")
+
+            incomingOrderSocketArrayList.add(0,incomingOrderSocketData)
 
 
             mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
         }
     }
+
+    override fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
+        incomingOrderSocketArrayList.clear()
+        Log.d("TAG", "onIncomingOrderRecieveAll:")
+
+        GlobalScope.launch(Dispatchers.Main) {
+
+            incomingOrderSocketArrayList.addAll(incomingOrderSocketData.docs)
+            Log.d("TAG", "onIncomingOrderRecieveAll:")
+
+
+
+            mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
+        }
+
+    }
+
+    override fun onGetAllParcelRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
+        TODO("Not yet implemented")
+    }
+
 
     override fun onIncomingParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
         incomingParcelSocketArrayList.clear()
@@ -654,7 +678,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
 
                         showToast(data.message)
-                        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         navController.navigate(R.id.orderFragment, null, options)
                         incomingOrderAdapter.notifyDataSetChanged()
                     }

@@ -2,7 +2,7 @@ package com.teamx.hatly.data.dataclasses.pastParcels
 
 data class Doc(
     val _id: String,
-    val estimatedDeliveryTime: Int,
+    val estimatedDeliveryTime: Any,
     val parcel: Parcel,
     val requestFor: String,
     val requestId: String,

@@ -456,6 +456,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 .color(requireActivity().getColor(R.color.red))
                 .width(10f) // Line width
 
+            googleMap.clear()
             googleMap.addPolyline(polylineOptions)
             animateCameraAlongPolyline(polyline)
         } catch (e: Exception) {

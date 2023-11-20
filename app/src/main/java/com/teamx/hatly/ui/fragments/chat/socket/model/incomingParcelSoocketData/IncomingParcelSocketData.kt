@@ -4,7 +4,7 @@ data class IncomingParcelSocketData(
     val _id: String,
     val charges: Int,
     val createdAt: String,
-    val estimatedDeliveryTime: Int,
+    val estimatedDeliveryTime: Any,
     val parcel: Parcel,
     val requestFor: String,
     val requestId: String,

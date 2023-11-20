@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.databinding.ItemIncomingListBinding
-import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrderSocketData
+import com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc
 
 
 class IncomingOrderSocketAdapter(
-    val arrayList: ArrayList<IncomingOrderSocketData>,
+    val arrayList: ArrayList<Doc>,
     private val onAcceptRejectSocket: onAcceptRejectSocket
 ) : RecyclerView.Adapter<IncomingOrderSocketAdapter.TopProductViewHolder>() {
 
@@ -24,7 +24,7 @@ class IncomingOrderSocketAdapter(
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
-        val list: IncomingOrderSocketData = arrayList[position]
+        val list: Doc = arrayList[position]
 
         try {
 
@@ -66,6 +66,7 @@ class IncomingOrderSocketAdapter(
 
 
             holder.binding.pickup.price.text = list.total.toString()
+            holder.binding.ordername.text = list.orders.products[0].productName
         }
         catch (e:Exception){
 
