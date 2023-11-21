@@ -66,32 +66,17 @@ object RiderSocketClass {
             }
 
 
-            riderSocket?.on("GET_ALL_ORDERS") { args ->
-                Timber.tag("MessageSocketClass").d("GET_ALL_ORDERS: }${args.get(0)}")
-
-                try {
-                    Timber.tag("ChatSocketClass").d("GET_ALL_ORDERS: ${args.get(0)}")
-                    val exception12 =
-                        gson.fromJson(args[0].toString(), IncomingOrdersSocketData::class.java)
-                    incomingOrderCallBack.onGetAllOrderRecieve(exception12)
-                } catch (e: java.lang.Exception) {
-                    Timber.tag("ChatSocketClass").d("ExceptionData: ${args[0]}")
-                }
-            }
-
-
-
 
             riderSocket?.on("INCOMING_PARCEL") { args ->
                 Timber.tag("MessageSocketClass").d("INCOMING_PARCEL: }${args.get(0)}")
 
                 try {
-                    Timber.tag("ChatSocketClass").d("Get_ALL_CHATS: ${args.get(0)}")
+                    Timber.tag("ChatSocketClass").d("INCOMING_PARCEL: ${args.get(0)}")
                     val exception1 =
-                        gson.fromJson(args[0].toString(), IncomingParcelSocketData::class.java)
+                        gson.fromJson(args[0].toString(), com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc::class.java)
                     incomingOrderCallBack.onIncomingParcelRecieve(exception1)
                 } catch (e: java.lang.Exception) {
-                    Timber.tag("ChatSocketClass").d("ExceptionData: ${args[0]}")
+                    Timber.tag("ChatSocketClass").d("INCOMING_PARCEL: ${args[0]}")
                 }
             }
 
@@ -102,9 +87,23 @@ object RiderSocketClass {
                     Timber.tag("ChatSocketClass").d("GET_ALL_PARCELS: ${args.get(0)}")
                     val exception1 =
                         gson.fromJson(args[0].toString(), IncomingParcelSocketData::class.java)
-                    incomingOrderCallBack.onIncomingParcelRecieve(exception1)
+                    incomingOrderCallBack.onGetAllParcelRecieve(exception1)
                 } catch (e: java.lang.Exception) {
                     Timber.tag("ChatSocketClass").d("GET_ALL_PARCELS: ${args[0]}")
+                }
+            }
+
+
+            riderSocket?.on("GET_ALL_ORDERS") { args ->
+                Timber.tag("MessageSocketClass").d("GET_ALL_ORDERS: }${args.get(0)}")
+
+                try {
+                    Timber.tag("ChatSocketClass").d("GET_ALL_ORDERS: ${args.get(0)}")
+                    val exception12 =
+                        gson.fromJson(args[0].toString(), IncomingOrdersSocketData::class.java)
+                    incomingOrderCallBack.onGetAllOrderRecieve(exception12)
+                } catch (e: java.lang.Exception) {
+                    Timber.tag("ChatSocketClass").d("GET_ALL_ORDERS: ${args[0]}")
                 }
             }
 
@@ -124,6 +123,8 @@ object RiderSocketClass {
         }
 
     }
+
+
 
 
     val gson = Gson()
@@ -210,6 +211,6 @@ object RiderSocketClass {
 interface IncomingOrderCallBack {
     fun onIncomingOrderRecieve(incomingOrderSocketData: Doc)
     fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData)
-    fun onGetAllParcelRecieve(incomingOrderSocketData: IncomingOrdersSocketData)
-    fun onIncomingParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData)
+    fun onGetAllParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData)
+    fun onIncomingParcelRecieve(incomingParcelSocketData: com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc)
 }

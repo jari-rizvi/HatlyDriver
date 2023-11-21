@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatly.databinding.ItemIncomingListBinding
-import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
+import com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc
 
 
-class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketData>,
+class IncomingParcelSocketAdapter(val arrayList: ArrayList<Doc>,
                                   private val onAcceptRejectParcel: onAcceptRejectParcel) : RecyclerView.Adapter<IncomingParcelSocketAdapter.TopProductViewHolder>() {
 
 
@@ -22,7 +22,7 @@ class IncomingParcelSocketAdapter(val arrayList: ArrayList<IncomingParcelSocketD
 
     override fun onBindViewHolder(holder: TopProductViewHolder, position: Int) {
 
-        val list: IncomingParcelSocketData = arrayList[position]
+        val list: Doc = arrayList[position]
 
         try {
 

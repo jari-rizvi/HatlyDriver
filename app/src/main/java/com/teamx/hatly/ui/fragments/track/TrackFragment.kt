@@ -397,6 +397,118 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         }
 
 
+
+        try {
+            mViewModel.getPastParcels(1, 10, "accepted")
+        } catch (e: Exception) {
+
+        }
+
+        if (!mViewModel.getPastParcelsResponse.hasActiveObservers()) {
+            mViewModel.getPastParcelsResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            try {
+                                mViewDataBinding.bottomSheetLayout.textView27.text =
+                                    data.docs[0].parcel.details.item
+
+
+                             /*   destinitionLatitude = data.docs[0].dropOff.lat
+                                destinitionLongitude = data.docs[0].dropOff.lng
+*/
+                                reqid = data.docs[0].requestId
+                                id = data.docs[0]._id
+
+                                TrackSocketClass.connectRiderTrack(
+                                    NetworkCallPoints.TOKENER,
+                                    reqid
+                                )
+
+                                handler.postDelayed(runnable, 3000)
+
+                                bundle.putString("orderId", data.docs[0].requestId)
+
+                               mViewDataBinding.bottomSheetLayout.layout1.visibility = View.GONE
+
+
+                      /*          try {
+                                    Picasso.get().load(data.docs[0].orders.customer.profileImage)
+                                        .into(mViewDataBinding.bottomSheetLayout.imgAvatar)
+
+                                } catch (e: Exception) {
+
+                                }
+*/
+
+
+
+                                val address1 = data.docs[0].parcel.senderLocation.location.address
+                                val address2 = data.docs[0].parcel.receiverLocation.location.address
+
+                                val trimmedAddress1 = address1.substringBefore("\n")
+                                val trimmedAddress2 = address2.substringBefore("\n")
+
+
+                                mViewDataBinding.bottomSheetLayout.textView33.text =
+                                    trimmedAddress1
+
+                                mViewDataBinding.bottomSheetLayout.textView24.text =
+                                    trimmedAddress2
+
+                                mViewDataBinding.bottomSheetLayout.textView25.text = "Parcel Summery"
+
+
+                                mViewDataBinding.bottomSheetLayout.textView27.text =
+                                    data.docs[0].parcel.details.item
+                                mViewDataBinding.bottomSheetLayout.textView29.text =
+                                    data.docs[0].parcel.fare.toString()
+
+                                mViewDataBinding.bottomSheetLayout.textView28.text =
+                                    data.docs[0].parcel.fare.toString() + " AED"
+
+                                mViewDataBinding.bottomSheetLayout.textView31.text =
+                                    data.docs[0].parcel.fare.toString()
+
+                               /* mViewDataBinding.bottomSheetLayout.textView32.text =
+                                    data.docs[0].orders.customer.name
+
+                                mViewDataBinding.bottomSheetLayout.textView35.text =
+                                    data.docs[0].orders.specialNote*/
+
+                            } catch (e: Exception) {
+
+                            }
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        DialogHelperClass.errorDialog(
+                            requireContext(),
+                            it.message!!
+                        )
+                    }
+                }
+                if (isAdded) {
+                    mViewModel.getPastParcelsResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
+            }
+        }
+
+
+
+
+
     }
 
     override fun onMapReady(p0: GoogleMap) {

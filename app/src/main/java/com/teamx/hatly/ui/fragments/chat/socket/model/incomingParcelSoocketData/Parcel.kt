@@ -6,7 +6,7 @@ data class Parcel(
     val details: Details,
     val fare: Double,
     val receiverLocation: ReceiverLocation,
-    val senderId: String,
+    val senderId: SenderId,
     val senderLocation: SenderLocation,
     val status: String,
     val trackingNumber: String,

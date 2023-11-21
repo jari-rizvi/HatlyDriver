@@ -94,7 +94,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
     lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
     lateinit var incomingOrderSocketArrayList: ArrayList<com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
-    lateinit var incomingParcelSocketArrayList: ArrayList<IncomingParcelSocketData>
+    lateinit var incomingParcelSocketArrayList: ArrayList<com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc>
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
@@ -132,7 +132,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, null, options)
         }
+
+        mViewDataBinding.textView18.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.parcelFragment, null, options)
+        }
+
         mViewDataBinding.btnPastOrderAll.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.orderFragment, null, options)
+        }
+
+        mViewDataBinding.textView20.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, null, options)
         }
@@ -602,13 +613,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onIncomingOrderRecieve(incomingOrderSocketData: com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc) {
-    /*    incomingOrderSocketArrayList.clear()*/
+        /*    incomingOrderSocketArrayList.clear()*/
 
         Log.d("TAG", "onIncomingOrderRecieveSinglre:")
         GlobalScope.launch(Dispatchers.Main) {
             Log.d("TAG", "onIncomingOrderRecieveSinglre:")
 
-            incomingOrderSocketArrayList.add(0,incomingOrderSocketData)
+            incomingOrderSocketArrayList.add(0, incomingOrderSocketData)
 
 
             mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
@@ -616,7 +627,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
-        incomingOrderSocketArrayList.clear()
+//        incomingOrderSocketArrayList.clear()
         Log.d("TAG", "onIncomingOrderRecieveAll:")
 
         GlobalScope.launch(Dispatchers.Main) {
@@ -631,16 +642,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     }
 
-    override fun onGetAllParcelRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun onIncomingParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
+    override fun onGetAllParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
         incomingParcelSocketArrayList.clear()
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingParcelSocketArrayList.add(incomingParcelSocketData)
+            incomingParcelSocketArrayList.addAll(incomingParcelSocketData.docs)
+
+
+            mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
+
+        }
+    }
+
+
+    override fun onIncomingParcelRecieve(incomingParcelSocketData: com.teamx.hatly.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc) {
+        incomingParcelSocketArrayList.clear()
+        GlobalScope.launch(Dispatchers.Main) {
+
+            incomingParcelSocketArrayList.add(0, incomingParcelSocketData)
 
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()

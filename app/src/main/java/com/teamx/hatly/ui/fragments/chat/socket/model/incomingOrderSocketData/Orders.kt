@@ -1,6 +1,7 @@
 package com.teamx.hatly.ui.fragments.chat.socket.model.incomingOrderSocketData
 
-data class Orders(
+data class
+Orders(
     val __v: Int,
     val _id: String,
     val createdAt: String,

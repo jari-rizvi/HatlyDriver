@@ -115,15 +115,17 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout2"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="@dimen/_120sdp"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+
                 android:layout_marginTop="@dimen/_15sdp"
                 android:background="@drawable/card_background_green"
                 android:backgroundTint="@color/white"
                 android:elevation="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/layout1"
                 app:layout_constraintEnd_toEndOf="@+id/layout1"
-                app:layout_constraintStart_toStartOf="@+id/layout1"
-                app:layout_constraintTop_toBottomOf="@+id/layout1">
+                app:layout_constraintStart_toStartOf="@+id/layout1">
 
                 <TextView
                     android:id="@+id/textView25"
