@@ -52,7 +52,7 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
 
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, null, options)
+            navController.navigate(R.id.homeFragment, arguments, options)
         }
 
 

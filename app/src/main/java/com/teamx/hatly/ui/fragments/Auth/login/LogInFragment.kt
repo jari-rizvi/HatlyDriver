@@ -101,9 +101,14 @@ class LogInFragment :
                             it.data?.let { data ->
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     dataStoreProvider.saveUserToken(data.token)
+
+                                    val bundle = Bundle()
+                                    bundle.putString("userimg",data.profileImage)
+                                    bundle.putString("username",data.name)
+
                                     navController =
                                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                    navController.navigate(R.id.homeFragment, null, options)
+                                    navController.navigate(R.id.homeFragment, bundle, options)
                                 }
 
                                 PrefHelper.getInstance(requireActivity()).setUserData(data)

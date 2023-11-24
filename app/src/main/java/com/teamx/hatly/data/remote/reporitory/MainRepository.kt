@@ -42,10 +42,11 @@ class MainRepository @Inject constructor(
         @Query("limit") limit: Int,
         @Query("page") page: Int
     ) = apiService.getTransactionHistory(limit, page)
-  suspend fun getTotalEarning(
+
+    suspend fun getTotalEarning(
         @Query("filterBy") filterBy: String,
         @Query("filterFor") filterFor: String,
-    ) = apiService.getTotalEarning(filterBy,filterFor)
+    ) = apiService.getTotalEarning(filterBy, filterFor)
 
     suspend fun setDetachCredCards(
         @Body params: JsonObject
@@ -66,17 +67,20 @@ class MainRepository @Inject constructor(
         @Body params: JsonObject,
     ) = apiService.updateProfile(params)
 
+    suspend fun logout(
+    ) = apiService.logout()
+
     suspend fun getPastOrders(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
         @Query("status") status: String
-    ) = apiService.getPastOrders(page, limit,status)
+    ) = apiService.getPastOrders(page, limit, status)
 
     suspend fun getPastParcels(
         @Query("page") page: Int,
         @Query("limit") limit: Int,
         @Query("status") status: String
-    ) = apiService.getPastParcels(page, limit,status)
+    ) = apiService.getPastParcels(page, limit, status)
 
     suspend fun fcm(@Body param: JsonObject) = apiService.fcm(param)
 
@@ -95,7 +99,7 @@ class MainRepository @Inject constructor(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.acceptRejectOrder(id, param)
 
- suspend fun pickedDispatchOrder(
+    suspend fun pickedDispatchOrder(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.pickedDispatchOrder(id, param)
 

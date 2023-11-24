@@ -131,7 +131,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, null, options)
+            navController.navigate(R.id.homeFragment, arguments, options)
             RiderSocketClass.disconnect()
 
         }
@@ -419,9 +419,8 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                     data.docs[0].parcel.details.item
 
 
-                             /*   destinitionLatitude = data.docs[0].dropOff.lat
-                                destinitionLongitude = data.docs[0].dropOff.lng
-*/
+                              destinitionLatitude = data.docs[0].parcel.senderId.coordinates.lat
+                                destinitionLongitude = data.docs[0].parcel.senderId.coordinates.lng
                                 reqid = data.docs[0].requestId
                                 id = data.docs[0]._id
 
@@ -475,11 +474,11 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                 mViewDataBinding.bottomSheetLayout.textView31.text =
                                     data.docs[0].parcel.fare.toString()
 
-                               /* mViewDataBinding.bottomSheetLayout.textView32.text =
-                                    data.docs[0].orders.customer.name
+                                mViewDataBinding.bottomSheetLayout.textView32.text =
+                                    data.docs[0].parcel.senderId.name
 
-                                mViewDataBinding.bottomSheetLayout.textView35.text =
-                                    data.docs[0].orders.specialNote*/
+//                                mViewDataBinding.bottomSheetLayout.textView35.text =
+//                                    data.docs[0].orders.specialNote
 
                             } catch (e: Exception) {
 

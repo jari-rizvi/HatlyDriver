@@ -3,6 +3,7 @@ package com.teamx.hatly.ui.fragments.wallet
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,14 +42,18 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
             }
         }
 
+        mViewDataBinding.imgBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         mViewDataBinding.imgTopUp.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.topUpFragment, null, options)
+            navController.navigate(R.id.topUpFragment, arguments, options)
         }
 
         mViewDataBinding.textView39.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.transcationHistoryFragment, null, options)
+            navController.navigate(R.id.transcationHistoryFragment, arguments, options)
         }
 
         TransactionRecyclerview()

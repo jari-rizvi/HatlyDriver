@@ -61,6 +61,10 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<LoginData>
+  @POST(NetworkCallPoints.LOGOUT)
+    suspend fun logout(
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
 
 
     @GET(NetworkCallPoints.NOTIFICATION_LIST)

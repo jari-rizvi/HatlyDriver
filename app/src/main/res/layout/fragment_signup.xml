@@ -194,12 +194,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
             app:layout_constraintVertical_bias="0.05">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPhone"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/mobile_number"
@@ -234,7 +233,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/password"

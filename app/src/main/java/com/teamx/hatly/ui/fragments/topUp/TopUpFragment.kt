@@ -102,7 +102,7 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
             if (isAdded) {
 //                findNavController().navigate(R.id.action_topUpFragment_to_paymentMethodFragment)
                 navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                navController.navigate(R.id.paymentMethodFragment, null, options)
+                navController.navigate(R.id.paymentMethodFragment, arguments, options)
             }
         }
 

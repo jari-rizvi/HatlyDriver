@@ -6,6 +6,7 @@ class NetworkCallPoints {
         const val SIGN_UP = "driver/auth/signup";
         const val UPDATE_PROFILE = "user/update"
         const val ME = "auth/me"
+        const val LOGOUT = "auth/logout"
 
 
 

@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.WindowManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatly.R
 import kotlinx.coroutines.Job
 
@@ -176,14 +176,15 @@ class DialogHelperClass {
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
             )
 
-            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
+//            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
 
 
             val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
+            val reason = dialog.findViewById<EditText>(R.id.reason)
 
 //            AddReviewBtn.text = context.getString(R.string.add_review)
             AddReviewBtn.setOnClickListener {
-                val desc = tvTitleText.text
+          /*      val desc = tvTitleText.text
                 if (desc.isBlank()) {
                     Snackbar.make(
                         AddReviewBtn,
@@ -191,9 +192,9 @@ class DialogHelperClass {
                         Snackbar.LENGTH_LONG
                     )
                     return@setOnClickListener
-                }
+                }*/
                 if (boo) {
-                    reasonDialog.onSubmitClick(status, desc.toString())
+                    reasonDialog.onSubmitClick(status,reason.text.toString())
                 } else {
                     reasonDialog.onCancelClick()
                 }

@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/keyboard_arrow_right/baseline_keyboard_arrow_right_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/person/baseline_person_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,9 +33,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="color" value="fa6109" />
-                            <entry key="outputName" value="top_up" />
+                            <entry key="color" value="a09b9b" />
+                            <entry key="outputName" value="baseline_person" />
                             <entry key="sourceFile" value="D:\top_up.svg" />
                           </map>
                         </option>

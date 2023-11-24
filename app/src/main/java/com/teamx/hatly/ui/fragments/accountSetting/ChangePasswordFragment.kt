@@ -42,6 +42,10 @@ class ChangePasswordFragment :
             mViewModel.changePassword(createJson())
         }
 
+        mViewDataBinding.imgBack.setOnClickListener {
+            popUpStack()
+        }
+
 
         if (!mViewModel.changePasswordResponse.hasActiveObservers()) {
             mViewModel.changePasswordResponse.observe(requireActivity()) {

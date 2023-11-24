@@ -1,8 +1,6 @@
 package com.teamx.hatly.ui.fragments.Auth.singup
 
 import android.os.Bundle
-import android.util.Log
-import android.util.Patterns
 import android.view.View
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
@@ -26,7 +24,6 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    private var userEmail: String? = null
     private var password: String? = null
     private var name: String? = null
     private var userNumber: String? = null
@@ -65,7 +62,6 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
 
     private fun initialization() {
         name = mViewDataBinding.etName.text.toString().trim()
-        userEmail = mViewDataBinding.etEmail.text.toString().trim()
         password = mViewDataBinding.etPass.text.toString().trim()
         userNumber = mViewDataBinding.etPhone.text.toString().trim()
 
@@ -75,15 +71,13 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
 
         initialization()
 
-        if (userNumber!!.isNotEmpty() || password!!.isNotEmpty() || name!!.isNotEmpty() || userEmail!!.isEmpty()) {
+        if (userNumber!!.isNotEmpty() || password!!.isNotEmpty() || name!!.isNotEmpty()) {
 
             val params = JsonObject()
             try {
                 params.addProperty("name", name.toString())
                 params.addProperty("contact", userNumber.toString())
                 params.addProperty("password", password.toString())
-                params.addProperty("email", userEmail.toString())
-                Log.e("UserData", params.toString())
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
@@ -101,6 +95,7 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
 
                             val bundle = Bundle()
                             bundle.putString("phone", data.contact)
+                            bundle.putString("username",data.name)
 
                             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                             navController.navigate(R.id.otpFragment, bundle, options)
@@ -135,16 +130,7 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
             mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.name_maximum))
             return false
         }
-        if (mViewDataBinding.etEmail.text.toString().trim().isEmpty()) {
-            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_email))
-            return false
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(mViewDataBinding.etEmail.text.toString().trim())
-                .matches()
-        ) {
-            mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.invalid_email))
-            return false
-        }
+
         if (mViewDataBinding.etPhone.text.toString().trim().isEmpty()) {
             mViewDataBinding.root.snackbar(getString(com.teamx.hatly.R.string.enter_your_password))
             return false

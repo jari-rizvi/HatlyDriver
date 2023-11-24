@@ -14,7 +14,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_height="@dimen/_60sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -47,13 +47,15 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Hello"
+                android:maxLines="1"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_18ssp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/constraintLayout1"
                 app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintStart_toEndOf="@+id/constraintLayout"
                 app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
@@ -102,7 +104,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:padding="@dimen/_5sdp"
-                    android:src="@drawable/done"
+                    android:src="@drawable/baseline_person"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

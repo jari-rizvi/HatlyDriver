@@ -35,6 +35,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
+import com.squareup.picasso.Picasso
 import com.teamx.hatly.BR
 import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
@@ -90,6 +91,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     var type: String = ""
+    var userimg: String = ""
+    var username: String = ""
 
     lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
     lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
@@ -98,7 +101,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mViewDataBinding.lifecycleOwner = viewLifecycleOwner
@@ -112,40 +115,54 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
+
+        var bundle = arguments
+        if (bundle == null) {
+            bundle = Bundle()
+        }
+        userimg = bundle?.getString("userimg").toString()
+        username = bundle?.getString("username").toString()
+
+        mViewDataBinding.name.text = "Hello " + username
+        mViewDataBinding.userProfile
+        Picasso.get().load(userimg).resize(500, 500)
+            .into(mViewDataBinding.profilePicture)
+
         apiCalls()
 
 
-        mViewDataBinding.profilePicture.setOnClickListener {
+        mViewDataBinding.userProfile.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.trackFragment, null, options)
+            navController.navigate(R.id.editProfileFragment, arguments, options)
         }
+
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.notificaitonFragment, null, options)
+            navController.navigate(R.id.notificaitonFragment, arguments, options)
         }
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.editProfileFragment, null, options)
+            navController.navigate(R.id.profileFragment, arguments, options)
         }
 
         mViewDataBinding.btnPastParcelAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.parcelFragment, null, options)
+            navController.navigate(R.id.parcelFragment, arguments, options)
         }
 
         mViewDataBinding.textView18.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.parcelFragment, null, options)
+            navController.navigate(R.id.parcelFragment, arguments, options)
         }
 
         mViewDataBinding.btnPastOrderAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.orderFragment, null, options)
+            navController.navigate(R.id.orderFragment, arguments, options)
         }
 
         mViewDataBinding.textView20.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.orderFragment, null, options)
+            navController.navigate(R.id.orderFragment, arguments, options)
         }
 
 
@@ -255,7 +272,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
-                Log.d("TAG", "onItemSelected: $selectedItem")
                 mViewModel.getTotalEarnings(selectedItem, "earning")
 
             }
@@ -274,7 +290,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
-                Log.d("TAG", "onItemSelected: $selectedItem")
                 mViewModel.getTotalEarnings(selectedItem, "order")
 
             }

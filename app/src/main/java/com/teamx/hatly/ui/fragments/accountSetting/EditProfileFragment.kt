@@ -15,7 +15,6 @@ import com.teamx.hatly.R
 import com.teamx.hatly.baseclasses.BaseFragment
 import com.teamx.hatly.data.remote.Resource
 import com.teamx.hatly.databinding.FragmentEditProfileBinding
-import com.teamx.hatly.utils.PrefHelper
 import com.teamx.hatly.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -56,25 +55,55 @@ class EditProfileFragment :
 
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, null, options)
-        }
+            navController.navigate(R.id.homeFragment, arguments, options)        }
 
         mViewDataBinding.etPhone.isEnabled = false
         mViewDataBinding.etPhone.isFocusable = false
         mViewDataBinding.etPhone.isFocusableInTouchMode = false
 
-        val userData = PrefHelper.getInstance(requireActivity()).getUserData()
+        /*  val userData = PrefHelper.getInstance(requireActivity()).getUserData()
 
-        mViewDataBinding.etName.setText(userData?.name)
-        mViewDataBinding.etPhone.setText(userData?.contact)
-        Picasso.get().load(userData?.profileImage).resize(500, 500).into(mViewDataBinding.hatlyIcon)
+          mViewDataBinding.etName.setText(userData?.name)
+          mViewDataBinding.etPhone.setText(userData?.contact)
+          Picasso.get().load(userData?.profileImage).resize(500, 500).into(mViewDataBinding.hatlyIcon)*/
+
+
+        mViewModel.me()
+        if (!mViewModel.meResponse.hasActiveObservers()) {
+            mViewModel.meResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            imageUrl = data.profileImage
+                            mViewDataBinding.etName.setText(data.name)
+                            mViewDataBinding.etPhone.setText(data.contact)
+                            Picasso.get().load(data.profileImage).resize(500, 500)
+                                .into(mViewDataBinding.hatlyIcon)
+
+
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        mViewDataBinding.root.snackbar(it.message!!)
+                    }
+                }
+            }
+        }
 
 
 
         mViewDataBinding.btnChangePass.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.changePasswordFragment, null, options)
+            navController.navigate(R.id.changePasswordFragment, arguments, options)
         }
+
 
 
         mViewDataBinding.btnSave.setOnClickListener {
@@ -110,9 +139,7 @@ class EditProfileFragment :
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             if (data.isNotEmpty()) {
-                                Log.d("uploadReviewIm", "onViewCreated: ${data[0]}")
                                 if (data.isNotEmpty()) {
-                                    imageUrl = data[0]
                                     Picasso.get().load(imageUrl).resize(500, 500)
                                         .into(mViewDataBinding.hatlyIcon)
                                 }
@@ -144,13 +171,25 @@ class EditProfileFragment :
                         it.data?.let { data ->
                             Picasso.get().load(data.profileImage).resize(500, 500)
                                 .into(mViewDataBinding.hatlyIcon)
-                            val userData = PrefHelper.getInstance(requireActivity()).getUserData()
+                            mViewDataBinding.etName.setText(data.name)
+                          /*  val userData = PrefHelper.getInstance(requireActivity()).getUserData()
                             userData!!.name = data.name
                             userData!!.profileImage = data.profileImage
-                            PrefHelper.getInstance(requireActivity()).setUserData(userData)
+                            PrefHelper.getInstance(requireActivity()).setUserData(userData)*/
                             mViewDataBinding.root.snackbar("Profile updated")
 
-                            mViewDataBinding.etName.setText(data.name)
+
+                            val bundle = arguments
+                            if (bundle != null) {
+                                bundle.putString("userimg", data.profileImage)
+                                bundle.putString("username", data.name)
+                            }
+
+
+                            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            navController.navigate(R.id.homeFragment, arguments, options)
+
+
                         }
                     }
 
