@@ -3,6 +3,7 @@ package com.teamx.hatly.ui.fragments.parcel
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,6 +42,17 @@ ParcelFragment : BaseFragment<FragmentParcelBinding, OrdersViewModel>() {
             findNavController().navigate(R.id.action_parcelFragment_to_homeFragment)
 
         }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event here
+                    findNavController().navigate(R.id.action_orderFragment_to_homeFragment)
+
+
+
+                }
+            })
 
         setupViewPager()
         setupTabLayout()

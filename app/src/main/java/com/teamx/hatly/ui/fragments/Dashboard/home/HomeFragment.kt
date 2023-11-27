@@ -101,6 +101,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -108,25 +109,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         incomingOrderArrayList = ArrayList()
         options = navOptions {
             anim {
-                enter = com.teamx.hatly.R.anim.enter_from_left
-                exit = com.teamx.hatly.R.anim.exit_to_left
-                popEnter = com.teamx.hatly.R.anim.nav_default_pop_enter_anim
-                popExit = com.teamx.hatly.R.anim.nav_default_pop_exit_anim
+                enter = R.anim.enter_from_left
+                exit = R.anim.exit_to_left
+                popEnter = R.anim.nav_default_pop_enter_anim
+                popExit = R.anim.nav_default_pop_exit_anim
             }
         }
 
 
-        var bundle = arguments
-        if (bundle == null) {
-            bundle = Bundle()
-        }
-        userimg = bundle?.getString("userimg").toString()
-        username = bundle?.getString("username").toString()
+        try {
 
-        mViewDataBinding.name.text = "Hello " + username
-        mViewDataBinding.userProfile
-        Picasso.get().load(userimg).resize(500, 500)
-            .into(mViewDataBinding.profilePicture)
+            var bundle = arguments
+            if (bundle == null) {
+                bundle = Bundle()
+            }
+            userimg = bundle?.getString("userimg").toString()
+            username = bundle?.getString("username").toString()
+
+            mViewDataBinding.name.text = "Hello " + username
+            mViewDataBinding.userProfile
+            Picasso.get().load(userimg).resize(500, 500)
+                .into(mViewDataBinding.profilePicture)
+        }
+        catch (e:Exception){}
 
         apiCalls()
 
@@ -182,6 +187,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         PastOrderRecyclerview()
         PastParcelRecyclerview()
 
+
         seekBar = mViewDataBinding.slider
         statusText = mViewDataBinding.statusText
 
@@ -225,10 +231,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
                     statusText.text = "Go Offline"
+                    Log.d("TAG", "onProgressChanged11: ")
+                    Log.d("TAG", "Online: ")
+
 
                 } else {
                     // Reset thumb color to the default
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
+                    Log.d("TAG", "Offilne: ")
+                    Log.d("TAG", "onProgressChanged12: ")
+
+
                     RiderSocketClass.disconnect()
                     // Hide "Go Online" text
                     statusText.text = "Go Online"
@@ -270,27 +283,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 position: Int,
                 id: Long
             ) {
-                val selectedItem = parent.getItemAtPosition(position) as String
+                    val selectedItem = parent.getItemAtPosition(position) as String
+                    mViewModel.getTotalEarnings(selectedItem, "earning")
 
-                mViewModel.getTotalEarnings(selectedItem, "earning")
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
-
-        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent.getItemAtPosition(position) as String
-
-                mViewModel.getTotalEarnings(selectedItem, "order")
 
             }
 
@@ -298,6 +293,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
             }
         }
+
+            spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedItem = parent.getItemAtPosition(position) as String
+
+                    mViewModel.getTotalEarnings(selectedItem, "order")
+
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+
+                }
+            }
+
 
     }
 
@@ -537,7 +552,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     override fun onConfirmLocation() {
         requestPermission()
-        Log.d("121212121", "Click Chala: ")
+
 
     }
 
@@ -551,11 +566,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            /* RiderSocketClass.connectRider(
-                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-                 originLatitude,
-                 originLongitude
-             )*/
 
             // Show an explanation to the user *asynchronously*
             // why the permission is needed and why the user should grant it
@@ -604,6 +614,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 originLatitude,
                 originLongitude, this
             )
+
+
         } else {
             val snackbar = Snackbar.make(
                 mViewDataBinding.root, "Permission required to proceed..", Snackbar.LENGTH_SHORT

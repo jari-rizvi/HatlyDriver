@@ -35,6 +35,7 @@
             app:layout_constraintVertical_bias="0.97"
             android:paddingVertical="@dimen/_10sdp"
             android:text="Picked"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="@dimen/_15ssp"
             app:layout_constraintBottom_toBottomOf="parent"

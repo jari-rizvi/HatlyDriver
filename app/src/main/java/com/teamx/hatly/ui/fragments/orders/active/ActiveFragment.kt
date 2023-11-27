@@ -68,8 +68,11 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
                                 if (data.docs[0].status == "picked") {
                                     mViewDataBinding.txtOrderConfoirm.visibility = View.GONE
                                     mViewDataBinding.btnTrack.visibility = View.VISIBLE
-
                                 }
+
+                                    mViewDataBinding.txtOrderConfoirm.visibility = View.VISIBLE
+
+
 
                                 Log.d("TAG", "onViewCreated121212: $id")
                             } catch (e: Exception) {

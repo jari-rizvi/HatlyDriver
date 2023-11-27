@@ -2,6 +2,7 @@ package com.teamx.hatly.ui.fragments.accountSetting
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
 import com.teamx.hatly.BR
@@ -46,6 +47,13 @@ class ChangePasswordFragment :
             popUpStack()
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+
+                }
+            })
 
         if (!mViewModel.changePasswordResponse.hasActiveObservers()) {
             mViewModel.changePasswordResponse.observe(requireActivity()) {

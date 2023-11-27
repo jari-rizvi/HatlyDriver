@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
@@ -56,6 +57,18 @@ class EditProfileFragment :
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.homeFragment, arguments, options)        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event here
+                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.homeFragment, arguments, options)
+
+
+                }
+            })
 
         mViewDataBinding.etPhone.isEnabled = false
         mViewDataBinding.etPhone.isFocusable = false

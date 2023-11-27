@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/open_sans_regular"
             android:textStyle="bold"
-            android:text="2 hours ago"
+            android:text=""
             android:textColor="#C1C1C1"
             app:layout_constraintBottom_toBottomOf="@+id/textView16"
             app:layout_constraintEnd_toEndOf="parent"

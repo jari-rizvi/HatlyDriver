@@ -1,7 +1,9 @@
 package com.teamx.hatly.ui.fragments.orders.Incoming
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +50,9 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+
+
+
 
 
         try {
@@ -143,6 +148,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
     }
 
     override fun onRejectClick(position: Int) {
+        id = incomingOrderArrayList[position]._id
 
 
         DialogHelperClass.submitReason(

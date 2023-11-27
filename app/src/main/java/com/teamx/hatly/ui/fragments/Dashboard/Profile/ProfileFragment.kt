@@ -2,6 +2,7 @@ package com.teamx.hatly.ui.fragments.Dashboard.Profile
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.squareup.picasso.Picasso
@@ -41,35 +42,46 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.homeFragment, arguments, options)
         }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.homeFragment, arguments, options)
+
+
+                }
+            })
 
         mViewDataBinding.btnLogout.setOnClickListener {
-        /* mViewModel.logout()
-            if (!mViewModel.logoutResponse.hasActiveObservers()) {
-                mViewModel.logoutResponse.observe(requireActivity()) {
-                    when (it.status) {
-                        Resource.Status.LOADING -> {
-                            loadingDialog.show()
-                        }
-
-                        Resource.Status.SUCCESS -> {
-                            loadingDialog.dismiss()
-                            it.data?.let { data ->
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    dataStoreProvider.removeAll()
-                                }
-
-                                navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                navController.navigate(R.id.tempFragment, arguments, options)
-                                }
+            /* mViewModel.logout()
+                if (!mViewModel.logoutResponse.hasActiveObservers()) {
+                    mViewModel.logoutResponse.observe(requireActivity()) {
+                        when (it.status) {
+                            Resource.Status.LOADING -> {
+                                loadingDialog.show()
                             }
 
-                        Resource.Status.ERROR -> {
-                            loadingDialog.dismiss()
-                            mViewDataBinding.root.snackbar(it.message!!)
+                            Resource.Status.SUCCESS -> {
+                                loadingDialog.dismiss()
+                                it.data?.let { data ->
+                                    CoroutineScope(Dispatchers.Main).launch {
+                                        dataStoreProvider.removeAll()
+                                    }
+
+                                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                                    navController.navigate(R.id.tempFragment, arguments, options)
+                                    }
+                                }
+
+                            Resource.Status.ERROR -> {
+                                loadingDialog.dismiss()
+                                mViewDataBinding.root.snackbar(it.message!!)
+                            }
                         }
                     }
-                }
-            }*/
+                }*/
 
         }
 

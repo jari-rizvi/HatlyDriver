@@ -33,11 +33,12 @@ class NotificationAdapter(
             ""
         }
 
-//        holder.bind.textView17.text = try {
-////            arrayData.createdAt
-//        }catch (e:Exception){
-//            ""
-//        }
+        holder.bind.textView17.text = try {
+            arrayData.createdAt
+        }catch (e:Exception){
+            ""
+        }
+
     }
 
     override fun getItemCount(): Int {

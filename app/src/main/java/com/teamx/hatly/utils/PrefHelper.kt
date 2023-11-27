@@ -12,6 +12,10 @@ class PrefHelper private constructor() {
         private val sharePref = PrefHelper()
         private lateinit var sharedPreferences: SharedPreferences
         private const val USER_DATA = "USERDATA"
+        private const val RIDER_ONLINE = "riderOnline"
+        private const val STRIPE_ID = "STRIPE_ID"
+        private const val NOTIFICATION_ENABLE = "notificationEnable"
+
 
 
 
@@ -27,7 +31,6 @@ class PrefHelper private constructor() {
             return sharePref
         }
     }
-
 
     fun getUserData(): LoginData? {
         val gson = Gson()

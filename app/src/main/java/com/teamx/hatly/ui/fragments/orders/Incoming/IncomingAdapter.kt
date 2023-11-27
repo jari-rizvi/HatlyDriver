@@ -29,33 +29,46 @@ class IncomingAdapter(
 
 
             holder.binding.pickup.address.text = list.dropOff.address
+            holder.binding.pickup.textView13.text = list.pickup.formattedAddress
+
+            val address1 = list.dropOff.address
+            val address2 = list.pickup.formattedAddress
+
+            val trimmedAddress1 = address1.substringBefore("\n")
+            val trimmedAddress2 = address2.substringBefore("\n")
+
+
+            holder.binding.pickup.textView13.text = trimmedAddress2
+            holder.binding.pickup.address.text = trimmedAddress1
+
+
+
             holder.binding.ordername.text = list.orders.products[0].productName
 
-            val inputString = list.pickup.formattedAddress
+            /*  val inputString = list.pickup.formattedAddress
 
-            val streetAddressRegex = Regex("Street Address: (.*?),")
-            val localityRegex = Regex("Locality: (.*?),")
+              val streetAddressRegex = Regex("Street Address: (.*?),")
+              val localityRegex = Regex("Locality: (.*?),")
 
-            val streetAddressMatch = streetAddressRegex.find(inputString)
-            val localityMatch = localityRegex.find(inputString)
+              val streetAddressMatch = streetAddressRegex.find(inputString)
+              val localityMatch = localityRegex.find(inputString)
 
-            if (streetAddressMatch != null && localityMatch != null) {
-                val streetAddress = streetAddressMatch.groupValues[1]
-                val locality = localityMatch.groupValues[1]
+              if (streetAddressMatch != null && localityMatch != null) {
+                  val streetAddress = streetAddressMatch.groupValues[1]
+                  val locality = localityMatch.groupValues[1]
 
-                // Combine street address and locality into a single string
-                val combinedAddress = "$streetAddress, $locality"
-                holder.binding.pickup.textView13.text = combinedAddress
+                  // Combine street address and locality into a single string
+                  val combinedAddress = "$streetAddress, $locality"
+                  holder.binding.pickup.textView13.text = combinedAddress
 
-            } else {
-                println("Street address and/or locality not found in the input string.")
-            }
+              } else {
+                  println("Street address and/or locality not found in the input string.")
+              }*/
 
 
 
             holder.binding.pickup.price.text = list.charges.toString() + "AED"
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
 
@@ -79,7 +92,7 @@ class IncomingAdapter(
     }
 }
 
-interface onAcceptReject{
+interface onAcceptReject {
     fun onAcceptClick(position: Int)
     fun onRejectClick(position: Int)
 

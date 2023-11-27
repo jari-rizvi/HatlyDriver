@@ -111,7 +111,7 @@
             style="@style/open_sans_secondary_medium_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+923442535191"
+            android:text=""
             app:layout_constraintBottom_toTopOf="@+id/pinView"
             app:layout_constraintEnd_toEndOf="@+id/textView4"
             app:layout_constraintHorizontal_bias="0.0"

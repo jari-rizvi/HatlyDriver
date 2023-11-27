@@ -3,6 +3,7 @@ package com.teamx.hatly.ui.fragments.Dashboard.notification
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
@@ -49,6 +50,19 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Handle the back button event here
+                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.homeFragment, arguments, options)
+
+
+                }
+            })
 
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)

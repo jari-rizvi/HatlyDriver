@@ -1,5 +1,6 @@
 package com.teamx.hatly.ui.fragments.chat.socket
 
+import android.util.Log
 import com.google.gson.Gson
 import com.teamx.hatly.constants.AppConstants.ApiConfiguration.Companion.BASE_URL_CHAT
 import com.teamx.hatly.data.models.socket_models.ExceptionData
@@ -195,6 +196,7 @@ object RiderSocketClass {
             Timber.tag("MessageSocketClass")
                 .d("EVENT_DISCONNECT: ${riderSocket?.connected()}")
         }
+        Log.d("TAG", "disconnect: ")
     }
 
 
