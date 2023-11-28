@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tempFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.temp.TempFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.temp.TempFragment"
         android:label="TempFragment"
         tools:layout="@layout/fragment_temp">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/logInFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.login.LogInFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.login.LogInFragment"
         android:label="LogInFragment">
         <action
             android:id="@+id/action_logInFragment_to_signupFragment"
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.singup.SignupFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.singup.SignupFragment"
         android:label="SignupFragment" >
         <action
             android:id="@+id/action_signupFragment_to_forgotFragment"
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/createNewPassFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.newPassword.CreateNewPassFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.newPassword.CreateNewPassFragment"
         android:label="CreateNewPassFragment" >
         <action
             android:id="@+id/action_createNewPassFragment_to_homeFragment"
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.forgot.ForgotFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.forgot.ForgotFragment"
         android:label="ForgotFragment" >
         <action
             android:id="@+id/action_forgotFragment_to_otpFragment"
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/otpFragment"
-        android:name="com.teamx.hatly.ui.fragments.Auth.otp.OtpFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Auth.otp.OtpFragment"
         android:label="OtpFragment" >
         <action
             android:id="@+id/action_otpFragment_to_createNewPassFragment"
@@ -63,7 +63,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.teamx.hatly.ui.fragments.Dashboard.home.HomeFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Dashboard.home.HomeFragment"
         android:label="HomeFragment" >
         <action
             android:id="@+id/action_homeFragment_to_orderFragment"
@@ -72,7 +72,7 @@
 
     <fragment
         android:id="@+id/orderFragment"
-        android:name="com.teamx.hatly.ui.fragments.orders.OrdersFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.orders.OrdersFragment"
         android:label="OrderFragment" >
         <action
             android:id="@+id/action_orderFragment_to_homeFragment"
@@ -80,43 +80,43 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.teamx.hatly.ui.fragments.chat.ChatFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.chat.ChatFragment"
         android:label="ChatFragment" />
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.teamx.hatly.ui.fragments.accountSetting.ChangePasswordFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.accountSetting.ChangePasswordFragment"
         android:label="ChangePasswordFragment" />
     <fragment
         android:id="@+id/notificaitonFragment"
-        android:name="com.teamx.hatly.ui.fragments.Dashboard.notification.NotificaitonFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.NotificaitonFragment"
         android:label="NotificaitonFragment" />
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.teamx.hatly.ui.fragments.accountSetting.EditProfileFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.accountSetting.EditProfileFragment"
         android:label="EditProfileFragment" />
     <fragment
         android:id="@+id/paymentMethodFragment"
-        android:name="com.teamx.hatly.ui.fragments.payments.paymentmethod.PaymentMethodFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.PaymentMethodFragment"
         android:label="PaymentMethodFragment" />
     <fragment
         android:id="@+id/topUpFragment"
-        android:name="com.teamx.hatly.ui.fragments.topUp.TopUpFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.topUp.TopUpFragment"
         android:label="TopUpFragment" />
     <fragment
         android:id="@+id/walletFragment"
-        android:name="com.teamx.hatly.ui.fragments.wallet.WalletFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.WalletFragment"
         android:label="WalletFragment" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.teamx.hatly.ui.fragments.Dashboard.Profile.ProfileFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.Dashboard.Profile.ProfileFragment"
         android:label="ProfileFragment" />
     <fragment
         android:id="@+id/transcationHistoryFragment"
-        android:name="com.teamx.hatly.ui.fragments.wallet.TranscationHistoryFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.TranscationHistoryFragment"
         android:label="TranscationHistoryFragment" />
     <fragment
         android:id="@+id/parcelFragment"
-        android:name="com.teamx.hatly.ui.fragments.parcel.ParcelFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.parcel.ParcelFragment"
         android:label="ParcelFragment" >
         <action
             android:id="@+id/action_parcelFragment_to_homeFragment"
@@ -124,7 +124,7 @@
     </fragment>
     <fragment
         android:id="@+id/trackFragment"
-        android:name="com.teamx.hatly.ui.fragments.track.TrackFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.track.TrackFragment"
         android:label="TrackFragment" />
 
 

@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.teamx.hatly.ui.activity.mainActivity.MainViewModel" />
+            type="com.teamx.hatlyDriver.ui.activity.mainActivity.MainViewModel" />
 
     </data>
 

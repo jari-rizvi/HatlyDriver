@@ -19,7 +19,7 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId "com.teamx.hatly"
+        applicationId "com.teamx.hatlyDriver"
         minSdkVersion 23
         targetSdkVersion 33
         versionCode 18
@@ -60,7 +60,7 @@ android {
             buildConfigField("String", "BASE_URL", "\"\"")
         }
     }
-    namespace 'com.teamx.hatly'
+    namespace 'com.teamx.hatlyDriver'
 }
 
 dependencies {
