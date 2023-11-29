@@ -58,44 +58,60 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
             })
 
         mViewDataBinding.btnLogout.setOnClickListener {
-             mViewModel.logout()
-                if (!mViewModel.logoutResponse.hasActiveObservers()) {
-                    mViewModel.logoutResponse.observe(requireActivity()) {
-                        when (it.status) {
-                            Resource.Status.LOADING -> {
-                                loadingDialog.show()
-                            }
+            mViewModel.logout()
+            if (!mViewModel.logoutResponse.hasActiveObservers()) {
+                mViewModel.logoutResponse.observe(requireActivity()) {
+                    when (it.status) {
+                        Resource.Status.LOADING -> {
+                            loadingDialog.show()
+                        }
 
-                            Resource.Status.AUTH -> {
-                                loadingDialog.dismiss()
-                                onToSignUpPage()
-                            }
+                        Resource.Status.AUTH -> {
+                            loadingDialog.dismiss()
+                            onToSignUpPage()
+                        }
 
-                            Resource.Status.SUCCESS -> {
-                                loadingDialog.dismiss()
-                                it.data?.let { data ->
-                                    CoroutineScope(Dispatchers.Main).launch {
-                                        dataStoreProvider.removeAll()
-                                    }
-
-                                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                    navController.navigate(R.id.tempFragment, arguments, options)
-                                    }
+                        Resource.Status.SUCCESS -> {
+                            loadingDialog.dismiss()
+                            it.data?.let { data ->
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    dataStoreProvider.removeAll()
                                 }
 
-                            Resource.Status.ERROR -> {
-                                loadingDialog.dismiss()
-                                mViewDataBinding.root.snackbar(it.message!!)
+                                navController = Navigation.findNavController(
+                                    requireActivity(),
+                                    R.id.nav_host_fragment
+                                )
+                                navController.navigate(R.id.logInFragment, arguments, options)
                             }
+                        }
+
+                        Resource.Status.ERROR -> {
+                            loadingDialog.dismiss()
+                            mViewDataBinding.root.snackbar(it.message!!)
                         }
                     }
                 }
+            }
 
         }
 
         mViewDataBinding.btnAccountSettings.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.editProfileFragment, arguments, options)
+        }
+
+        mViewDataBinding.btnHelpCentre.setOnClickListener {
+            showToast("Coming Soon")
+        }
+        mViewDataBinding.btnPrivacy.setOnClickListener {
+            showToast("Coming Soon")
+        }
+        mViewDataBinding.btnTerms.setOnClickListener {
+            showToast("Coming Soon")
+        }
+        mViewDataBinding.btnContactUs.setOnClickListener {
+            showToast("Coming Soon")
         }
 
         mViewDataBinding.btnWallet.setOnClickListener {
@@ -115,7 +131,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    }
+
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
                     }

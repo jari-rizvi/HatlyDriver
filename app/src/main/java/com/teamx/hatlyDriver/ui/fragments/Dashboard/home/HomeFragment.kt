@@ -60,6 +60,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
+    DialogHelperClass.Companion.OfflineReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
     onAcceptRejectSocket, onAcceptRejectParcel {
 
@@ -71,8 +72,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         get() = BR.viewModel
 
     lateinit var id: String
+    lateinit var Activityid: String
 
-    private lateinit var seekBar: SeekBar
+    var earning: String = "earning"
+
+    private lateinit var seekBar1: SeekBar
     private lateinit var statusText: TextView
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -117,21 +121,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
-     /*   try {
+        /*   try {
 
-            var bundle = arguments
-            if (bundle == null) {
-                bundle = Bundle()
-            }
-            userimg = bundle?.getString("userimg").toString()
-            username = bundle?.getString("username").toString()
+               var bundle = arguments
+               if (bundle == null) {
+                   bundle = Bundle()
+               }
+               userimg = bundle?.getString("userimg").toString()
+               username = bundle?.getString("username").toString()
 
-            mViewDataBinding.name.text = "Hello " + username
-            mViewDataBinding.userProfile
-            Picasso.get().load(userimg).resize(500, 500)
-                .into(mViewDataBinding.profilePicture)
-        } catch (e: Exception) {
-        }*/
+               mViewDataBinding.name.text = "Hello " + username
+               mViewDataBinding.userProfile
+               Picasso.get().load(userimg).resize(500, 500)
+                   .into(mViewDataBinding.profilePicture)
+           } catch (e: Exception) {
+           }*/
 
         apiCalls()
 
@@ -218,13 +222,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         PastParcelRecyclerview()
 
 
-        seekBar = mViewDataBinding.slider
+        seekBar1 = mViewDataBinding.slider
         statusText = mViewDataBinding.statusText
 
 
-        seekBar.isClickable = false
+        seekBar1.isClickable = false
 
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 seekBar.isEnabled = true
@@ -253,6 +257,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
                 // Check if the SeekBar is fully swiped
+
+                Log.d("seekBarseekBar", "max: ${seekBar.max}")
+                Log.d("seekBarseekBar", "min: ${seekBar.min}")
+                Log.d("seekBarseekBar", "fromUser: ${fromUser}")
+
+
                 if (progress == seekBar.max) {
 
                     DialogHelperClass.confirmLocation(
@@ -261,15 +271,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
                     statusText.text = "Go Offline"
-                    Log.d("TAG", "onProgressChanged11: ")
-                    Log.d("TAG", "Online: ")
 
 
                 } else {
                     // Reset thumb color to the default
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    Log.d("TAG", "Offilne: ")
-                    Log.d("TAG", "onProgressChanged12: ")
+
 
 
                     RiderSocketClass.disconnect()
@@ -283,7 +290,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Not needed for this example
+                if (seekBar1.progress > 50) {
+                    seekBar1.progress = seekBar.max
+                } else {
+                    seekBar1.progress = seekBar.min
+                    DialogHelperClass.submitOfflineReason(
+                        requireContext(), this@HomeFragment, true, "", ""
+                    )
+                }
             }
         })
 
@@ -314,7 +328,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 id: Long
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
-                mViewModel.getTotalEarnings(selectedItem, "earning")
+                earning = "earning"
+                mViewModel.getTotalEarnings(selectedItem, earning)
 
 
             }
@@ -333,7 +348,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
-                mViewModel.getTotalEarnings(selectedItem, "order")
+                earning = "order"
+
+                mViewModel.getTotalEarnings(selectedItem, earning)
 
 
             }
@@ -401,13 +418,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
-                            mViewDataBinding.totalorders.text = data.totalOrder.toString()
-                            mViewDataBinding.totalParcels.text = data.totalParcel.toString()
-                            mViewDataBinding.hours.text = data.spentTime.hours.toString()+" hrs"
-                            mViewDataBinding.name.text = "Hello " + data.riderDetail.name as String
-                            Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
-                                .into(mViewDataBinding.profilePicture)
+
+                            try {
+                                mViewDataBinding.hours.text =
+                                    data.spentTime.hours.toString() + " hrs"
+                                mViewDataBinding.name.text =
+                                    "Hello " + data.riderDetail.name as String
+                                Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
+                                    .into(mViewDataBinding.profilePicture)
+                                Activityid = data.riderDetail.activity._id
+
+                            } catch (e: Exception) {
+                            }
+
+                            if (earning == "earning") {
+                                mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
+//                                return@observe
+                            }
+
+                            if (earning == "order"){
+                                mViewDataBinding.totalorders.text = data.totalOrder.toString()
+                                mViewDataBinding.totalParcels.text = data.totalParcel.toString()
+                            }
 
 
 
@@ -743,6 +775,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -797,6 +830,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -895,6 +929,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -947,5 +982,48 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             Log.d("fcmToken", "granted else")
         }
     }
+
+    override fun onSubmitoflineClick(status: String, rejectionReason: String) {
+        val params = JsonObject()
+        try {
+            params.addProperty("offlineReason", rejectionReason)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        mViewModel.offlineReason(Activityid, params)
+
+        mViewModel.offlineReasonResponse.observe(requireActivity(), Observer {
+            when (it.status) {
+                Resource.Status.LOADING -> {
+                    loadingDialog.show()
+                }
+
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
+
+                Resource.Status.SUCCESS -> {
+                    loadingDialog.dismiss()
+                    it.data?.let { data ->
+
+                        dialog?.dismiss()
+
+                    }
+                }
+
+                Resource.Status.ERROR -> {
+                    loadingDialog.dismiss()
+                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+                }
+            }
+        })
+    }
+
+    override fun onCanceloflineClick() {
+
+    }
+
 
 }

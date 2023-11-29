@@ -226,6 +226,8 @@
             app:boxStrokeColor="@color/textSecondaryColor"
             app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:passwordToggleDrawable="@drawable/show_password_selector"
+            app:passwordToggleEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout3"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"

@@ -95,6 +95,43 @@ class HomeViewModel @Inject constructor(
     }
 
 
+
+    private val _offlineReasonResponse = MutableLiveData<Resource<SuccessData>>()
+    val offlineReasonResponse: LiveData<Resource<SuccessData>>
+        get() = _offlineReasonResponse
+
+    fun offlineReason(id: String, param: JsonObject) {
+        viewModelScope.launch {
+            _offlineReasonResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.offlineReason(id, param).let {
+                        if (it.isSuccessful) {
+                            _offlineReasonResponse.postValue(Resource.success(it.body()!!))
+                        }
+                        else if (it.code() == 401) {
+                            _offlineReasonResponse.postValue(Resource.unAuth("", null))
+                        }
+                        else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _offlineReasonResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            _offlineReasonResponse.postValue(
+                                Resource.error(
+                                    "Some thing went wrong",
+                                    null
+                                )
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    _offlineReasonResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _offlineReasonResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
     private val _fcmResponse = MutableLiveData<Resource<FcmModel>>()
     val fcmResponse: LiveData<Resource<FcmModel>>
         get() = _fcmResponse

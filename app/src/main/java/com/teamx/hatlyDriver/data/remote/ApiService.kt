@@ -61,7 +61,8 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<LoginData>
-  @POST(NetworkCallPoints.LOGOUT)
+
+    @POST(NetworkCallPoints.LOGOUT)
     suspend fun logout(
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
@@ -77,6 +78,13 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<ModelDefaultCredCards>
+
+    @POST(NetworkCallPoints.OFFLINE_REASON)
+    suspend fun offlineReason(
+        @Path("id") id: String,
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
 
     @POST(NetworkCallPoints.DETACH_CREDS_CARDS)
     suspend fun setDetachCredCards(

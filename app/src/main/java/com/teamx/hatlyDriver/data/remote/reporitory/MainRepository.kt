@@ -37,6 +37,11 @@ class MainRepository @Inject constructor(
         @Body params: JsonObject
     ) = apiService.setDefaultCredCards(params)
 
+    suspend fun offlineReason(
+        @Path("id") id: String,
+        @Body param: JsonObject,
+    ) = apiService.offlineReason(id,param)
+
     suspend fun me() = apiService.me()
     suspend fun getTransactionHistory(
         @Query("limit") limit: Int,

@@ -82,7 +82,7 @@ class DialogHelperClass {
 //            return dialog
 //        }
 
-        fun wallettDialog(context: Context, topPrice : String, contactUs: ContactUs): Dialog {
+        fun wallettDialog(context: Context, topPrice: String, contactUs: ContactUs): Dialog {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.wallet_dialog)
 
@@ -97,7 +97,7 @@ class DialogHelperClass {
 
             txtDialogPrice.text = try {
                 "$topPrice Aed"
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 "null"
             }
 
@@ -117,7 +117,6 @@ class DialogHelperClass {
         }
 
 
-
         fun errorDialog(context: Context, errorMessage: String) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_layout_error)
@@ -131,7 +130,6 @@ class DialogHelperClass {
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
         }
-
 
 
         interface ChangePasswordDialog {
@@ -156,10 +154,10 @@ class DialogHelperClass {
                 dialogCallBack.onLoginButton()
                 dialog.dismiss()
             }
-                val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView19)
-                cancelBtn.setOnClickListener {
-                    dialog.dismiss()
-                }
+            val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView19)
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
 
 
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -189,10 +187,15 @@ class DialogHelperClass {
         }
 
 
-
         interface ReasonDialog {
-            fun onSubmitClick(status:String, rejectionReason:String)
+            fun onSubmitClick(status: String, rejectionReason: String)
             fun onCancelClick()
+        }
+
+
+        interface OfflineReasonDialog {
+            fun onSubmitoflineClick(status: String, rejectionReason: String)
+            fun onCanceloflineClick()
         }
 
 
@@ -214,17 +217,17 @@ class DialogHelperClass {
 
 //            AddReviewBtn.text = context.getString(R.string.add_review)
             AddReviewBtn.setOnClickListener {
-          /*      val desc = tvTitleText.text
-                if (desc.isBlank()) {
-                    Snackbar.make(
-                        AddReviewBtn,
-                        "Please enter some text",
-                        Snackbar.LENGTH_LONG
-                    )
-                    return@setOnClickListener
-                }*/
+                /*      val desc = tvTitleText.text
+                      if (desc.isBlank()) {
+                          Snackbar.make(
+                              AddReviewBtn,
+                              "Please enter some text",
+                              Snackbar.LENGTH_LONG
+                          )
+                          return@setOnClickListener
+                      }*/
                 if (boo) {
-                    reasonDialog.onSubmitClick(status,reason.text.toString())
+                    reasonDialog.onSubmitClick(status, reason.text.toString())
                 } else {
                     reasonDialog.onCancelClick()
                 }
@@ -240,6 +243,49 @@ class DialogHelperClass {
             dialog.show()
         }
 
+        fun submitOfflineReason(
+            context: Context, oflinereasonDialog: OfflineReasonDialog, boo: Boolean, status: String,
+            rejectionReason: String
+        ) {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_reason)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+//            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
+
+
+            val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
+            val reason1 = dialog.findViewById<EditText>(R.id.reason)
+
+//            AddReviewBtn.text = context.getString(R.string.add_review)
+            AddReviewBtn.setOnClickListener {
+                /*      val desc = tvTitleText.text
+                      if (desc.isBlank()) {
+                          Snackbar.make(
+                              AddReviewBtn,
+                              "Please enter some text",
+                              Snackbar.LENGTH_LONG
+                          )
+                          return@setOnClickListener
+                      }*/
+                if (boo) {
+                    oflinereasonDialog.onSubmitoflineClick(status, reason1.text.toString())
+                } else {
+                    oflinereasonDialog.onCanceloflineClick()
+                }
+                dialog.dismiss()
+            }
+            val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
+
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
 
 
     }
