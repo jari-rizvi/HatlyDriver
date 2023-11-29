@@ -11,6 +11,7 @@ import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -122,6 +123,24 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
             navController.navigate(R.id.chatFragment, bundle, options)
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    navController =
+                        Navigation.findNavController(
+                            requireActivity(),
+                            R.id.nav_host_fragment
+                        )
+                    navController.navigate(
+                        R.id.homeFragment,
+                        arguments,
+                        options
+                    )
+
+
+                }
+            })
 
 
         try {

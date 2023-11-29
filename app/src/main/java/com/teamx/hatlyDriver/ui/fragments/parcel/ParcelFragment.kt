@@ -40,8 +40,16 @@ ParcelFragment : BaseFragment<FragmentParcelBinding, OrdersViewModel>() {
         }
 
         mViewDataBinding.imgBack.setOnClickListener {
-            findNavController().navigate(R.id.action_parcelFragment_to_homeFragment)
-
+            navController =
+                Navigation.findNavController(
+                    requireActivity(),
+                    R.id.nav_host_fragment
+                )
+            navController.navigate(
+                R.id.homeFragment,
+                arguments,
+                options
+            )
         }
 
         mViewDataBinding.imgNotification.setOnClickListener {
@@ -63,8 +71,16 @@ ParcelFragment : BaseFragment<FragmentParcelBinding, OrdersViewModel>() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     // Handle the back button event here
-                    findNavController().navigate(R.id.action_orderFragment_to_homeFragment)
-
+                    navController =
+                        Navigation.findNavController(
+                            requireActivity(),
+                            R.id.nav_host_fragment
+                        )
+                    navController.navigate(
+                        R.id.homeFragment,
+                        arguments,
+                        options
+                    )
 
 
                 }

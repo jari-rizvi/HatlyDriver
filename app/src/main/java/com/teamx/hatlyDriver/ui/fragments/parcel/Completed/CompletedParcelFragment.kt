@@ -27,7 +27,7 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
         get() = BR.viewModel
 
 
-    lateinit var pastOrderAdapter: PastParcelAdapter
+    lateinit var pastOrderAdapter: CompleteParcelAdapter
     lateinit var pastOrderArrayList: ArrayList<Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,7 +89,7 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.pastRecyclerView.layoutManager = linearLayoutManager
 
-        pastOrderAdapter = PastParcelAdapter(pastOrderArrayList)
+        pastOrderAdapter = CompleteParcelAdapter(pastOrderArrayList)
         mViewDataBinding.pastRecyclerView.adapter = pastOrderAdapter
 
     }

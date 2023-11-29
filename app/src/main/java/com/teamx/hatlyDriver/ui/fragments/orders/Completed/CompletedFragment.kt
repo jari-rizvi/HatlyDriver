@@ -25,7 +25,7 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
         get() = BR.viewModel
 
 
-    lateinit var pastOrderAdapter: PastOrderAdapter
+    lateinit var pastOrderAdapter: CompleteOrderAdapter
     lateinit var pastOrderArrayList: ArrayList<com.teamx.hatlyDriver.data.dataclasses.pastorder.Doc>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -132,7 +132,7 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.pastRecyclerView.layoutManager = linearLayoutManager
 
-        pastOrderAdapter = PastOrderAdapter(pastOrderArrayList)
+        pastOrderAdapter = CompleteOrderAdapter(pastOrderArrayList)
         mViewDataBinding.pastRecyclerView.adapter = pastOrderAdapter
 
     }
