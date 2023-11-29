@@ -39,6 +39,8 @@ import com.squareup.picasso.Picasso
 import com.teamx.hatlyDriver.BR
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
+import com.teamx.hatlyDriver.constants.NetworkCallPoints
+import com.teamx.hatlyDriver.constants.NetworkCallPoints.Companion.TOKENER
 import com.teamx.hatlyDriver.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentHomeBinding
@@ -72,7 +74,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         get() = BR.viewModel
 
     lateinit var id: String
-    lateinit var Activityid: String
+     var Activityid: String =""
 
     var earning: String = "earning"
 
@@ -214,6 +216,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
+        Log.d("TAG", "TOKENER11111: $TOKENER")
 
 
         OrderRecyclerview()
@@ -427,6 +430,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                                 Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
                                     .into(mViewDataBinding.profilePicture)
                                 Activityid = data.riderDetail.activity._id
+                                Log.d("TAG", "Activityid: $Activityid")
 
                             } catch (e: Exception) {
                             }
@@ -641,11 +645,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         } else {
             // Permission has already been granted
             RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                NetworkCallPoints.TOKENER,
                 originLatitude,
                 originLongitude,
                 this
             )
+
+            Log.d("TAG", "TOKENER11111: $TOKENER")
 
             /* Firebase.initialize(requireContext())
              FirebaseApp.initializeApp(requireContext())
@@ -672,7 +678,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
               navController.navigate(R.id.dashboard, null, options)*/
 
             RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                NetworkCallPoints.TOKENER,
                 originLatitude,
                 originLongitude, this
             )

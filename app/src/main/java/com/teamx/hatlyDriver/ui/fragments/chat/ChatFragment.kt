@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatlyDriver.BR
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
+import com.teamx.hatlyDriver.constants.NetworkCallPoints
 import com.teamx.hatlyDriver.data.dataclasses.recievemessage.RecieveMessage
 import com.teamx.hatlyDriver.databinding.FragmentChatBinding
 import com.teamx.hatlyDriver.ui.fragments.chat.adapter.MessageAdapter
@@ -76,7 +77,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     // Handle the back button event here
-                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                     navController.navigate(R.id.homeFragment, arguments, options)
                     MessageSocketClass.disconnect()
 
@@ -92,8 +94,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
 
 //        MessageSocketClass.connect("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI4MDBmYjA4ODFjNGUzYTBiNjdkZmNmMmZhYWRkY2YiLCJpYXQiOjE2OTc0NTQxMzIsImV4cCI6MTAzMzc0NTQxMzJ9.ADKHPgvmRMsAu6EiNZHsLYLAVbhQokpgnhG335SsJ0s","6511befda128e070ad313243")
         MessageSocketClass.connect2(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-            orderId, this, this
+            NetworkCallPoints.TOKENER, orderId, this, this
         )
         mViewDataBinding.imgSend.setOnClickListener {
             val text: String = mViewDataBinding.inpChat.text.toString()
