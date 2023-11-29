@@ -171,7 +171,10 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
-
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
@@ -320,6 +323,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -428,6 +434,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

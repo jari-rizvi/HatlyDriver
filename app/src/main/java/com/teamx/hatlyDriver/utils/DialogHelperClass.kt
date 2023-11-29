@@ -24,6 +24,36 @@ class DialogHelperClass {
         }
 
 
+        interface DialogCallBackSignIn {
+            fun onSignInClick1()
+            fun onSignUpClick1()
+        }
+
+        fun signUpLoginDialog(context: Context, dialogCallBack: DialogCallBackSignIn): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.signup_signin_dialog)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+            dialog.setCancelable(false)
+            val signIn = dialog.findViewById<TextView>(R.id.signIn)
+            val signUp = dialog.findViewById<TextView>(R.id.signUp)
+
+            signUp.setOnClickListener {
+                dialogCallBack.onSignUpClick1()
+                dialog.dismiss()
+            }
+            signIn.setOnClickListener {
+                dialogCallBack.onSignInClick1()
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+            return dialog
+        }
+
+
         interface ContactUs {
             fun onBackToHome()
         }

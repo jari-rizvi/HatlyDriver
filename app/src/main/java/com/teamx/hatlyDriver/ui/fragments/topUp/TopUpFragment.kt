@@ -113,7 +113,10 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
-
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
@@ -124,6 +127,9 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
                         }
                         if (data.default?.id?.isNotEmpty() == true) {
                             paymentMethodid = data.default.id
+                        }
+                        else{
+                            paymentMethodid = ""
                         }
                     }
                 }
@@ -140,6 +146,9 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -212,8 +221,8 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
     }
 
     override fun onBackToHome() {
-//        findNavController().popBackStack(R.id.homeFragment, false)
-//        popUpStack()
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+        navController.navigate(R.id.homeFragment, arguments, options)
     }
 
     enum class PaymentMethod {

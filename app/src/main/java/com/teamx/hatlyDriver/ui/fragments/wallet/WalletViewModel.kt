@@ -26,6 +26,7 @@ class WalletViewModel @Inject constructor(
     private val _meResponse = MutableLiveData<Resource<MeModel>>()
     val meResponse: LiveData<Resource<MeModel>>
         get() = _meResponse
+
     fun me() {
         viewModelScope.launch {
             _meResponse.postValue(Resource.loading(null))
@@ -54,14 +55,17 @@ class WalletViewModel @Inject constructor(
     private val transactionHistoryeResponse = MutableLiveData<Resource<TransactionHistoryData>>()
     val transactionHistoryResponse: LiveData<Resource<TransactionHistoryData>>
         get() = transactionHistoryeResponse
+
     fun trancationHisotory(limit: Int, page: Int) {
         viewModelScope.launch {
             transactionHistoryeResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
-                    mainRepository.getTransactionHistory(limit,page).let {
+                    mainRepository.getTransactionHistory(limit, page).let {
                         if (it.isSuccessful) {
                             transactionHistoryeResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 401) {
+                            transactionHistoryeResponse.postValue(Resource.unAuth("", null))
                         } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
                             transactionHistoryeResponse.postValue(Resource.error(jsonObj.getString("message")))
@@ -74,7 +78,12 @@ class WalletViewModel @Inject constructor(
                 } catch (e: Exception) {
                     transactionHistoryeResponse.postValue(Resource.error("${e.message}", null))
                 }
-            } else transactionHistoryeResponse.postValue(Resource.error("No internet connection", null))
+            } else transactionHistoryeResponse.postValue(
+                Resource.error(
+                    "No internet connection",
+                    null
+                )
+            )
         }
     }
 

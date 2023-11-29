@@ -66,6 +66,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
                                 loadingDialog.show()
                             }
 
+                            Resource.Status.AUTH -> {
+                                loadingDialog.dismiss()
+                                onToSignUpPage()
+                            }
+
                             Resource.Status.SUCCESS -> {
                                 loadingDialog.dismiss()
                                 it.data?.let { data ->
@@ -110,6 +115,9 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

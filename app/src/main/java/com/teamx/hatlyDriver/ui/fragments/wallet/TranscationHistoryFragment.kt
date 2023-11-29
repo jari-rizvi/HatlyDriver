@@ -57,6 +57,9 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

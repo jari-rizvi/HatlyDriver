@@ -27,17 +27,19 @@ class ActiveViewModel @Inject constructor(
     val getPastOrdersResponse: LiveData<Resource<PastOrdersData>>
         get() = _getPastOrdersResponse
 
-    fun getPastOrders(page: Int, limit: Int,status:String) {
+    fun getPastOrders(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastOrdersResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastOrders(page, limit,status).let {
+                    mainRepository.getPastOrders(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastOrdersResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
+                        } else if (it.code() == 401) {
+                            _getPastOrdersResponse.postValue(Resource.unAuth("", null))
                         } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400) {
                             Timber.tag("87878787887").d("secoonnddd")
 
@@ -67,17 +69,19 @@ class ActiveViewModel @Inject constructor(
     val getPastParcelsResponse: LiveData<Resource<GetPastParcelsData>>
         get() = _getPastParcelsResponse
 
-    fun getPastParcels(page: Int, limit: Int,status:String) {
+    fun getPastParcels(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastParcelsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastParcels(page, limit,status).let {
+                    mainRepository.getPastParcels(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastParcelsResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
+                        } else if (it.code() == 401) {
+                            _getPastParcelsResponse.postValue(Resource.unAuth("", null))
                         } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400) {
                             Timber.tag("87878787887").d("secoonnddd")
 
@@ -115,9 +119,17 @@ class ActiveViewModel @Inject constructor(
                     mainRepository.pickedDispatchOrder(id, param).let {
                         if (it.isSuccessful) {
                             _pickedDispatchOrderResponse.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 401) {
+                            _pickedDispatchOrderResponse.postValue(Resource.unAuth("", null))
                         } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
-                            _pickedDispatchOrderResponse.postValue(Resource.error(jsonObj.getString("message")))
+                            _pickedDispatchOrderResponse.postValue(
+                                Resource.error(
+                                    jsonObj.getString(
+                                        "message"
+                                    )
+                                )
+                            )
                         } else {
                             _pickedDispatchOrderResponse.postValue(
                                 Resource.error(
@@ -130,7 +142,12 @@ class ActiveViewModel @Inject constructor(
                 } catch (e: Exception) {
                     _pickedDispatchOrderResponse.postValue(Resource.error("${e.message}", null))
                 }
-            } else _pickedDispatchOrderResponse.postValue(Resource.error("No internet connection", null))
+            } else _pickedDispatchOrderResponse.postValue(
+                Resource.error(
+                    "No internet connection",
+                    null
+                )
+            )
         }
     }
 

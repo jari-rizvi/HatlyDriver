@@ -62,6 +62,9 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -126,7 +129,10 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
-
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
@@ -169,7 +175,10 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
-
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->

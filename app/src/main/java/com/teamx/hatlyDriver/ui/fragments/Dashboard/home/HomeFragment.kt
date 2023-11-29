@@ -117,7 +117,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
-        try {
+     /*   try {
 
             var bundle = arguments
             if (bundle == null) {
@@ -130,8 +130,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             mViewDataBinding.userProfile
             Picasso.get().load(userimg).resize(500, 500)
                 .into(mViewDataBinding.profilePicture)
-        }
-        catch (e:Exception){}
+        } catch (e: Exception) {
+        }*/
 
         apiCalls()
 
@@ -188,6 +188,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }
+
+                    Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -308,8 +313,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 position: Int,
                 id: Long
             ) {
-                    val selectedItem = parent.getItemAtPosition(position) as String
-                    mViewModel.getTotalEarnings(selectedItem, "earning")
+                val selectedItem = parent.getItemAtPosition(position) as String
+                mViewModel.getTotalEarnings(selectedItem, "earning")
 
 
             }
@@ -319,24 +324,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
-            spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View,
-                    position: Int,
-                    id: Long
-                ) {
-                    val selectedItem = parent.getItemAtPosition(position) as String
+        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
+                val selectedItem = parent.getItemAtPosition(position) as String
 
-                    mViewModel.getTotalEarnings(selectedItem, "order")
+                mViewModel.getTotalEarnings(selectedItem, "order")
 
 
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>) {
-
-                }
             }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+
+            }
+        }
 
 
     }
@@ -349,6 +354,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }
+
+                    Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -383,12 +393,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         loadingDialog.show()
                     }
 
+                    Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
+                    }
+
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
                             mViewDataBinding.totalorders.text = data.totalOrder.toString()
-                            mViewDataBinding.totalParcels.text = data.totalParcels.toString()
+                            mViewDataBinding.totalParcels.text = data.totalParcel.toString()
+                            mViewDataBinding.hours.text = data.spentTime.hours.toString()+" hrs"
+                            mViewDataBinding.name.text = "Hello " + data.riderDetail.name as String
+                            Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
+                                .into(mViewDataBinding.profilePicture)
+
+
+
 
                         }
                     }
@@ -417,6 +439,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         loadingDialog.show()
                     }
 
+                    Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
+                    }
+
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
@@ -440,7 +467,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 }
             }
         }
-
 
 
     }
@@ -717,6 +743,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
 
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
@@ -767,6 +797,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
 
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
@@ -803,7 +837,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
-
     private fun getFcmToken() {
         Log.d("fcmToken", "askNotificationPermission")
         // This is only necessary for API level >= 33 (TIRAMISU)
@@ -838,10 +871,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
 
-
-
-
-
     override fun onAcceptClick(position: Int) {
     }
 
@@ -865,6 +894,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
+                }
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
                 }
 
                 Resource.Status.SUCCESS -> {

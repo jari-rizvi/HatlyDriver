@@ -39,7 +39,10 @@ class EditProfileViewModel @Inject constructor(
                     mainRepository.me().let {
                         if (it.isSuccessful) {
                             _meResponse.postValue(Resource.success(it.body()!!))
-                        } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                        }
+                        else if (it.code() == 401) {
+                            _meResponse.postValue(Resource.unAuth("", null))
+                        }else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
                             _meResponse.postValue(Resource.error(jsonObj.getString("message")))
                         } else {

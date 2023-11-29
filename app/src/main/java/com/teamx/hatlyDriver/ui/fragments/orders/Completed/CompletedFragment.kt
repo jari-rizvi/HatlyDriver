@@ -53,6 +53,9 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -92,6 +95,9 @@ class CompletedFragment : BaseFragment<FragmentCompletedBinding, CompletedViewMo
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

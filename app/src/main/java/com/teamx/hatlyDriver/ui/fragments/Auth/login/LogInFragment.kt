@@ -95,6 +95,11 @@ class LogInFragment :
                             loadingDialog.show()
                         }
 
+                        Resource.Status.AUTH -> {
+                            loadingDialog.dismiss()
+                            onToSignUpPage()
+                        }
+
                         Resource.Status.SUCCESS -> {
                             loadingDialog.dismiss()
 

@@ -1,18 +1,14 @@
 package com.teamx.hatlyDriver.ui.fragments.Auth.temp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.teamx.hatlyDriver.BR
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.constants.NetworkCallPoints.Companion.TOKENER
-import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentTempBinding
-import com.teamx.hatlyDriver.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,138 +66,142 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
                         registerListener()
                     }
                 } else {
-                 /*   navController =
+                    navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.homeFragment, null, options)*/
+                    navController.navigate(R.id.homeFragment, arguments, options)
 
-                    if (mViewModel.meResponse.isInitialized) {
-                        Log.d("123123", "onViewCreated2222:true ")
-                    } else {
-                        Log.d("123123", "onViewCreated2222:false ")
-
-                    }
-                    var bundle = arguments
-
-
-                    mViewModel.me()
-
-                    if (!mViewModel.meResponse.hasActiveObservers()) {
-
-                        if (isAdded) {
-                            mViewModel.meResponse.observe(
-                                requireActivity(),
-                                Observer {
-                                    when (it.status) {
-                                        Resource.Status.LOADING -> {
-                                            loadingDialog.show()
-                                            Timber.tag("343434").d("start")
-                                        }
-
-                                        Resource.Status.SUCCESS -> {
-                                            loadingDialog.dismiss()
-                                            it.data.let {
-                                                it?.let {
+//                    if (mViewModel.meResponse.isInitialized) {
+//                        Log.d("123123", "onViewCreated2222:true ")
+//                    } else {
+//                        Log.d("123123", "onViewCreated2222:false ")
 //
-                                                    if (bundle != null) {
-
-                                                        bundle?.putString(
-                                                            "userimg",
-                                                            "${it.profileImage}"
-                                                        ).toString()
-                                                        bundle?.putString(
-                                                            "username",
-                                                            "${it.name}"
-                                                        ).toString()
-                                                    } else {
-                                                        bundle = Bundle()
-
-                                                        bundle?.putString(
-                                                            "userimg",
-                                                            "${it.profileImage}"
-                                                        ).toString()
-                                                        bundle?.putString(
-                                                            "username",
-                                                            "${it.name}"
-                                                        ).toString()
-                                                    }
-
-
-                                                    navController =
-                                                        Navigation.findNavController(
-                                                            requireActivity(),
-                                                            R.id.nav_host_fragment
-                                                        )
-                                                    navController.navigate(
-                                                        R.id.homeFragment,
-                                                        bundle,
-                                                        options
-                                                    )
-
-
-//                                                    if (isAdded) {
-//
-//                                                        if (ActivityCompat.checkSelfPermission(
-//                                                                requireContext(),
-//                                                                Manifest.permission.ACCESS_FINE_LOCATION
-//                                                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                                                                requireContext(),
-//                                                                Manifest.permission.ACCESS_COARSE_LOCATION
-//                                                            ) != PackageManager.PERMISSION_GRANTED
-//                                                        ) {
-//                                                          /*  navController =
-//                                                                Navigation.findNavController(
-//                                                                    requireActivity(),
-//                                                                    R.id.nav_host_fragment
-//                                                                )
-//                                                            navController.navigate(
-//                                                                R.id.allowLocationFragment,
-//                                                                bundle,
-//                                                                options
-//                                                            )*/
-//
-//                                                            DialogHelperClass.confirmLocation(
-//                                                                requireContext(), this@TempFragment, true
-//                                                            )
-//
-//                                                        } else {
-//                                                            navController =
-//                                                                Navigation.findNavController(
-//                                                                    requireActivity(),
-//                                                                    R.id.nav_host_fragment
-//                                                                )
-//                                                            navController.navigate(
-//                                                                R.id.dashboard,
-//                                                                bundle,
-//                                                                options
-//                                                            )
-//                                                        }
+//                    }
+//                    var bundle = arguments
 //
 //
+//                    mViewModel.me()
+//
+//                    if (!mViewModel.meResponse.hasActiveObservers()) {
+//
+//                        if (isAdded) {
+//                            mViewModel.meResponse.observe(
+//                                requireActivity(),
+//                                Observer {
+//                                    when (it.status) {
+//                                        Resource.Status.LOADING -> {
+//                                            loadingDialog.show()
+//                                            Timber.tag("343434").d("start")
+//                                        }
+//                                        Resource.Status.AUTH -> {
+//                                            loadingDialog.dismiss()
+//                                            onToSignUpPage()
+//                                        }
+//
+//                                        Resource.Status.SUCCESS -> {
+//                                            loadingDialog.dismiss()
+//                                            it.data.let {
+//                                                it?.let {
+////
+//                                                    if (bundle != null) {
+//
+//                                                        bundle?.putString(
+//                                                            "userimg",
+//                                                            "${it.profileImage}"
+//                                                        ).toString()
+//                                                        bundle?.putString(
+//                                                            "username",
+//                                                            "${it.name}"
+//                                                        ).toString()
+//                                                    } else {
+//                                                        bundle = Bundle()
+//
+//                                                        bundle?.putString(
+//                                                            "userimg",
+//                                                            "${it.profileImage}"
+//                                                        ).toString()
+//                                                        bundle?.putString(
+//                                                            "username",
+//                                                            "${it.name}"
+//                                                        ).toString()
 //                                                    }
-
-
-                                                }
-
-
-                                            }
-                                        }
-
-                                        Resource.Status.ERROR -> {
-                                            loadingDialog.dismiss()
-                                            Timber.tag("343434").d("end")
-
-                                            DialogHelperClass.errorDialog(
-                                                requireContext(),
-                                                it.message!!
-                                            )
-                                        }
-                                    }
-                                    if (isAdded) {
-//                mViewModel.meResponse.removeObservers(viewLifecycleOwner)
-                                    }
-                                })
-                        }
-                    }
+//
+//
+//                                                    navController =
+//                                                        Navigation.findNavController(
+//                                                            requireActivity(),
+//                                                            R.id.nav_host_fragment
+//                                                        )
+//                                                    navController.navigate(
+//                                                        R.id.homeFragment,
+//                                                        bundle,
+//                                                        options
+//                                                    )
+//
+//
+////                                                    if (isAdded) {
+////
+////                                                        if (ActivityCompat.checkSelfPermission(
+////                                                                requireContext(),
+////                                                                Manifest.permission.ACCESS_FINE_LOCATION
+////                                                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+////                                                                requireContext(),
+////                                                                Manifest.permission.ACCESS_COARSE_LOCATION
+////                                                            ) != PackageManager.PERMISSION_GRANTED
+////                                                        ) {
+////                                                          /*  navController =
+////                                                                Navigation.findNavController(
+////                                                                    requireActivity(),
+////                                                                    R.id.nav_host_fragment
+////                                                                )
+////                                                            navController.navigate(
+////                                                                R.id.allowLocationFragment,
+////                                                                bundle,
+////                                                                options
+////                                                            )*/
+////
+////                                                            DialogHelperClass.confirmLocation(
+////                                                                requireContext(), this@TempFragment, true
+////                                                            )
+////
+////                                                        } else {
+////                                                            navController =
+////                                                                Navigation.findNavController(
+////                                                                    requireActivity(),
+////                                                                    R.id.nav_host_fragment
+////                                                                )
+////                                                            navController.navigate(
+////                                                                R.id.dashboard,
+////                                                                bundle,
+////                                                                options
+////                                                            )
+////                                                        }
+////
+////
+////                                                    }
+//
+//
+//                                                }
+//
+//
+//                                            }
+//                                        }
+//
+//                                        Resource.Status.ERROR -> {
+//                                            loadingDialog.dismiss()
+//                                            Timber.tag("343434").d("end")
+//
+//                                            DialogHelperClass.errorDialog(
+//                                                requireContext(),
+//                                                it.message!!
+//                                            )
+//                                        }
+//                                    }
+//                                    if (isAdded) {
+////                mViewModel.meResponse.removeObservers(viewLifecycleOwner)
+//                                    }
+//                                })
+//                        }
+//                    }
 
 
 

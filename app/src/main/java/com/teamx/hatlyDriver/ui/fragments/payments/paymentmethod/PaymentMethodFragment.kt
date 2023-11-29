@@ -60,6 +60,10 @@ class PaymentMethodFragment : BaseFragment<FragmentPaymentMethodBinding, Payment
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
 
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
@@ -88,6 +92,9 @@ class PaymentMethodFragment : BaseFragment<FragmentPaymentMethodBinding, Payment
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {
@@ -112,6 +119,9 @@ class PaymentMethodFragment : BaseFragment<FragmentPaymentMethodBinding, Payment
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

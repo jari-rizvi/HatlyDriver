@@ -88,6 +88,9 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()

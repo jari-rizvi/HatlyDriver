@@ -11,7 +11,6 @@ import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.data.dataclasses.pastParcels.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentCompletedBinding
-import com.teamx.hatlyDriver.ui.fragments.Dashboard.home.PastParcelAdapter
 import com.teamx.hatlyDriver.ui.fragments.orders.Completed.CompletedViewModel
 import com.teamx.hatlyDriver.utils.DialogHelperClass
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +49,10 @@ class CompletedParcelFragment : BaseFragment<FragmentCompletedBinding, Completed
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
+                }
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
                 }
 
                 Resource.Status.SUCCESS -> {

@@ -67,6 +67,9 @@ class CreateNewPassFragment : BaseFragment<FragmentNewPassBinding, CreateNewPass
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
+                    }  Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
                     }
 
                     Resource.Status.SUCCESS -> {

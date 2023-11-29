@@ -3,6 +3,7 @@ package com.teamx.hatlyDriver.baseclasses
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 
 abstract class
 BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fragment(),
-    UnAuthorizedCallback {
+    UnAuthorizedCallback,DialogHelperClass.Companion.DialogCallBackSignIn {
 
     lateinit var sharedViewModel: SharedViewModel
     lateinit var navController: NavController
@@ -137,7 +138,28 @@ BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fra
         navController.popBackStack()
 
     }
+    var dialog: Dialog? = null
+
     override fun onToSignUpPage() {
+        if (isAdded) {
+            Log.d("123123", "onToSignUpPage: ")
+
+            if (dialog == null) {
+                dialog = DialogHelperClass.signUpLoginDialog(requireContext(), this@BaseFragment)
+
+                dialog?.show()
+                dialog?.setOnDismissListener {
+                    dialog = null
+                }
+            } else {
+                dialog?.dismiss()
+                dialog = null
+            }
+
+        }
+    }
+
+    override fun onSignInClick1() {
         mViewModel.viewModelScope.launch {
             dataStoreProvider.saveUserToken("")
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -145,6 +167,18 @@ BaseFragment<T : ViewDataBinding, V : BaseViewModel> : androidx.fragment.app.Fra
 
         }
     }
+
+    override fun onSignUpClick1() {
+        mViewModel.viewModelScope.launch {
+            dataStoreProvider.saveUserToken("")
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.signupFragment, null)
+
+        }
+    }
+
+
+
 
 
 }

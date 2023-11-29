@@ -28,37 +28,36 @@ class TopUpModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-/*    private val _acceptRejectResponse = MutableLiveData<Resource<SuccessData>>()
-    val acceptRejectResponse: LiveData<Resource<SuccessData>>
-        get() = _acceptRejectResponse
+    /*    private val _acceptRejectResponse = MutableLiveData<Resource<SuccessData>>()
+        val acceptRejectResponse: LiveData<Resource<SuccessData>>
+            get() = _acceptRejectResponse
 
-    fun acceptReject(id: String, param: JsonObject) {
-        viewModelScope.launch {
-            _acceptRejectResponse.postValue(Resource.loading(null))
-            if (networkHelper.isNetworkConnected()) {
-                try {
-                    mainRepository.acceptRejectOrder(id, param).let {
-                        if (it.isSuccessful) {
-                            _acceptRejectResponse.postValue(Resource.success(it.body()!!))
-                        } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
-                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
-                            _acceptRejectResponse.postValue(Resource.error(jsonObj.getString("message")))
-                        } else {
-                            _acceptRejectResponse.postValue(
-                                Resource.error(
-                                    "Some thing went wrong",
-                                    null
+        fun acceptReject(id: String, param: JsonObject) {
+            viewModelScope.launch {
+                _acceptRejectResponse.postValue(Resource.loading(null))
+                if (networkHelper.isNetworkConnected()) {
+                    try {
+                        mainRepository.acceptRejectOrder(id, param).let {
+                            if (it.isSuccessful) {
+                                _acceptRejectResponse.postValue(Resource.success(it.body()!!))
+                            } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                                val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                                _acceptRejectResponse.postValue(Resource.error(jsonObj.getString("message")))
+                            } else {
+                                _acceptRejectResponse.postValue(
+                                    Resource.error(
+                                        "Some thing went wrong",
+                                        null
+                                    )
                                 )
-                            )
+                            }
                         }
+                    } catch (e: Exception) {
+                        _acceptRejectResponse.postValue(Resource.error("${e.message}", null))
                     }
-                } catch (e: Exception) {
-                    _acceptRejectResponse.postValue(Resource.error("${e.message}", null))
-                }
-            } else _acceptRejectResponse.postValue(Resource.error("No internet connection", null))
-        }
-    }*/
-
+                } else _acceptRejectResponse.postValue(Resource.error("No internet connection", null))
+            }
+        }*/
 
 
     private val _pickedDispatchOrderResponse = MutableLiveData<Resource<SuccessData>>()
@@ -75,7 +74,13 @@ class TopUpModel @Inject constructor(
                             _pickedDispatchOrderResponse.postValue(Resource.success(it.body()!!))
                         } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
-                            _pickedDispatchOrderResponse.postValue(Resource.error(jsonObj.getString("message")))
+                            _pickedDispatchOrderResponse.postValue(
+                                Resource.error(
+                                    jsonObj.getString(
+                                        "message"
+                                    )
+                                )
+                            )
                         } else {
                             _pickedDispatchOrderResponse.postValue(
                                 Resource.error(
@@ -88,7 +93,12 @@ class TopUpModel @Inject constructor(
                 } catch (e: Exception) {
                     _pickedDispatchOrderResponse.postValue(Resource.error("${e.message}", null))
                 }
-            } else _pickedDispatchOrderResponse.postValue(Resource.error("No internet connection", null))
+            } else _pickedDispatchOrderResponse.postValue(
+                Resource.error(
+                    "No internet connection",
+                    null
+                )
+            )
         }
     }
 
@@ -96,14 +106,14 @@ class TopUpModel @Inject constructor(
     val getPastOrdersResponse: LiveData<Resource<PastOrdersData>>
         get() = _getPastOrdersResponse
 
-    fun getPastOrders(page: Int, limit: Int,status:String) {
+    fun getPastOrders(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastOrdersResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastOrders(page, limit,status).let {
+                    mainRepository.getPastOrders(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastOrdersResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
@@ -136,14 +146,14 @@ class TopUpModel @Inject constructor(
     val getPastParcelsResponse: LiveData<Resource<GetPastParcelsData>>
         get() = _getPastParcelsResponse
 
-    fun getPastParcels(page: Int, limit: Int,status:String) {
+    fun getPastParcels(page: Int, limit: Int, status: String) {
         viewModelScope.launch {
             _getPastParcelsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
                     Timber.tag("87878787887").d("starta")
 
-                    mainRepository.getPastParcels(page, limit,status).let {
+                    mainRepository.getPastParcels(page, limit, status).let {
                         if (it.isSuccessful) {
                             _getPastParcelsResponse.postValue(Resource.success(it.body()!!))
                             Timber.tag("87878787887").d(it.body()!!.toString())
@@ -175,6 +185,7 @@ class TopUpModel @Inject constructor(
     private val _credCardsGoogle = MutableLiveData<Resource<ModelCredCards>>()
     val credCardsResponse: LiveData<Resource<ModelCredCards>>
         get() = _credCardsGoogle
+
     fun credCards() {
         viewModelScope.launch {
             _credCardsGoogle.postValue(Resource.loading(null))
@@ -183,6 +194,8 @@ class TopUpModel @Inject constructor(
                     mainRepository.getCredCards().let {
                         if (it.isSuccessful) {
                             _credCardsGoogle.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 401) {
+                            _credCardsGoogle.postValue(Resource.unAuth("", null))
                         } else if (it.code() == 500 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
                             _credCardsGoogle.postValue(Resource.error(jsonObj.getString("message")))
@@ -203,6 +216,7 @@ class TopUpModel @Inject constructor(
     private val _topUpSavedResponse = MutableLiveData<Resource<ModelSavedCard>>()
     val topUpSavedResponse: LiveData<Resource<ModelSavedCard>>
         get() = _topUpSavedResponse
+
     fun topUpSaved(params: JsonObject) {
         viewModelScope.launch {
             _topUpSavedResponse.postValue(Resource.loading(null))
