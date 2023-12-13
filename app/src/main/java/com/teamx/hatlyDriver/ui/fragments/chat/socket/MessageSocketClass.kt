@@ -372,7 +372,6 @@ object MessageSocketClass {
     ) {
         val data = JSONObject().put("limit", 5).put("page",4)
 
-        Timber.tag("MessageSocketClass").d("getallmessage:$data ")
         userMessageSocket?.emit("ALL_CHAT", data, object : Ack {
             override fun call(vararg args: Any?) {
                 Timber.tag("MessageSocketClass").d("Recieve12121212")

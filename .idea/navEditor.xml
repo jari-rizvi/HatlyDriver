@@ -107,6 +107,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="languageFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="74" />
+                            <option name="y" value="-810" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="logInFragment">
                     <value>
                       <LayoutPositions>

@@ -170,7 +170,7 @@ interface ApiService {
     ): Response<GetActiveOrderData>
 
 
-    @POST(NetworkCallPoints.ACCEPT_REJECT_ORDER)
+    @PUT(NetworkCallPoints.ACCEPT_REJECT_ORDER)
     suspend fun acceptRejectOrder(
         @Path("id") id: String,
         @Body params: JsonObject?,
@@ -178,7 +178,7 @@ interface ApiService {
     ): Response<SuccessData>
 
 
-    @POST(NetworkCallPoints.PICKED_DISPATCH_ORDER)
+    @PUT(NetworkCallPoints.PICKED_DISPATCH_ORDER)
     suspend fun pickedDispatchOrder(
         @Path("id") id: String,
         @Body params: JsonObject?,

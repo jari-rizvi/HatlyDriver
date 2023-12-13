@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="You need to login or signup to\nmove further"
+        android:text="@string/you_need_to_login_or_signup_to_nmove_further"
         android:textSize="@dimen/_13ssp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -5,7 +5,7 @@ data class Doc(
     val charges: Double,
     val createdAt: String,
     val dropOff: DropOff,
-    val estimatedDeliveryTime: Any,
+    val estimatedDeliveryTime: Double,
     val orders: Orders,
     val pickup: Pickup,
     val requestFor: String,

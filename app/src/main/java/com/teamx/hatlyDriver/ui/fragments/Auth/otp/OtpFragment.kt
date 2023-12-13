@@ -16,7 +16,6 @@ import com.teamx.hatlyDriver.databinding.FragmentOtpBinding
 import com.teamx.hatlyDriver.utils.PrefHelper
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,15 +80,29 @@ class OtpFragment : BaseFragment<FragmentOtpBinding, OtpViewModel>() {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             Log.d("verifySignupO", "onViewCreated: $data")
-                            CoroutineScope(Dispatchers.Main).launch {
-                                data.token.let { it1 ->
-                                    dataStoreProvider.saveUserToken(it1)
-                                }
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                data.token.let { it1 ->
+//                                    dataStoreProvider.saveUserToken(it1)
+//                                }
+//                                navController =
+//                                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+//                                navController.navigate(R.id.homeFragment, bundle, options)
+//                            }
+
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                dataStoreProvider.saveUserToken(data.token)
+
+                                navController =
+                                    Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                                navController.navigate(R.id.homeFragment, arguments, options)
                             }
+
+
                             PrefHelper.getInstance(requireActivity()).setUserData(data)
 
-                            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                            navController.navigate(R.id.homeFragment, bundle, options)
+                         /*   navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                            navController.navigate(R.id.homeFragment, bundle, options)*/
 
                         }
                     }

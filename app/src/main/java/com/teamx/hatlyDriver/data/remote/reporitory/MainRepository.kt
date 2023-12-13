@@ -89,7 +89,6 @@ class MainRepository @Inject constructor(
 
     suspend fun fcm(@Body param: JsonObject) = apiService.fcm(param)
 
-
     suspend fun getOrdersByStatus(
         @Query("status") status: String
     ) = apiService.getOrdersByStatus(status)

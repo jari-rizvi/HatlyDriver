@@ -2,7 +2,7 @@ package com.teamx.hatlyDriver.data.dataclasses.pastorder
 
 data class Pickup(
     val city: String,
-    val coordinates: List<Double>,
+//    val coordinates: Coordinates,
     val country: String,
     val formattedAddress: String,
     val lat: Double,

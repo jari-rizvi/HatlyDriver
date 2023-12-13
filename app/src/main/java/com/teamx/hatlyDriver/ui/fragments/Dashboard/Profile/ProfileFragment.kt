@@ -104,6 +104,11 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
         mViewDataBinding.btnHelpCentre.setOnClickListener {
             showToast("Coming Soon")
         }
+
+        mViewDataBinding.btnLanguage.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.languageFragment, arguments, options)
+        }
         mViewDataBinding.btnPrivacy.setOnClickListener {
             showToast("Coming Soon")
         }

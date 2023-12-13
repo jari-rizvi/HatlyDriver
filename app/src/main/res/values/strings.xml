@@ -59,6 +59,46 @@
     <string name="change_password">Change Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
+    <string name="allow_location">Allow Location</string>
+    <string name="we_need_to_know_your_location_to_find_orders_near_you">We need to know your location to find orders near you.</string>
+    <string name="thank_you">Thank You!</string>
+    <string name="thank_you_for_contacting_us_we_ll_nbe_in_touch_very_soon">Thank you for contacting us, we’ll\nbe in touch very soon.</string>
+    <string name="back_to_home">Back to home</string>
+    <string name="order_summery">Order Summery</string>
+    <string name="special_instruction">Special Instruction</string>
+    <string name="order_complete">Order Complete</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="reason">Reason</string>
+    <string name="write_a_valid_reason_for_going_offline">Write a valid reason for going offline.</string>
+    <string name="submit">Submit</string>
+    <string name="current_password">Current Password</string>
+    <string name="parcel_summery">Parcel Summery</string>
+    <string name="chat_with_customer">Chat with Customer</string>
+    <string name="languages">Languages</string>
+    <string name="otp">OTP</string>
+    <string name="enter_the_6_digit_verification_code_nsent_on_your_mobile_number">Enter the 6-digit verification code,\nsent on your mobile number.</string>
+    <string name="special">Special</string>
+    <string name="select_card">Select Card</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password">Password</string>
+    <string name="set_as_default">Set As Default</string>
+    <string name="detach_card">Detach Card</string>
+    <string name="by_creating_your_account_you_agree_to_our">By creating your account, you agree to our</string>
+    <string name="register">Register</string>
+    <string name="top_up">Top-up</string>
+    <string name="how_much_amount_would_you_like_to_transfer">How much amount would you like to transfer?</string>
+    <string name="top_up_amount">Top-up Amount</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="add_new_card">Add New Card</string>
+    <string name="confirm">Confirm</string>
+    <string name="change">Change</string>
+    <string name="order_completed">Order Completed</string>
+    <string name="password_changed_successfully">Password Changed Successfully!</string>
+    <string name="use_your_new_password_to_login">Use your new password to login.</string>
+    <string name="you_need_to_login_or_signup_to_nmove_further">You need to login or signup to\nmove further</string>
+    <string name="top_up_success">Top-up Success</string>
+    <string name="your_top_up_has_been_successfully_done">Your top-up has been successfully done</string>
+    <string name="top_up_more_amount">Top-up more amount</string>
 
 
 </resources>

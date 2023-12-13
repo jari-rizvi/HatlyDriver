@@ -77,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="Top up"
+                android:text="@string/top_up"
                 android:textAlignment="center"
                 app:layout_constraintHorizontal_bias="0.01"
                 android:textColor="@color/white"

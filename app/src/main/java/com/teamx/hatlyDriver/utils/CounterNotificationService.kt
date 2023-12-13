@@ -21,9 +21,6 @@ class CounterNotificationService(
 
     fun showNotification1(title: String, description: String, type: String, orderID: String) {
 
-
-//        val notificationManager = NotificationManagerCompat.from(context)
-
 // Step 1: Create Notification Channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Step 1: Create Notification Channel
@@ -66,9 +63,6 @@ class CounterNotificationService(
                 "View",
                 incrementIntent
             )
-
-// Set channel only if it is not null (i.e., for Oreo and higher)
-
 
         val notification = notificationBuilder.build()
 

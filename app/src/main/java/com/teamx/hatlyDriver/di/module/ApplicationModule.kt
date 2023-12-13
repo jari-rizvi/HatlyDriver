@@ -1,16 +1,16 @@
 package com.teamx.hatlyDriver.di.module
 
 import android.content.Context
-import com.teamx.hatlyDriver.constants.AppConstants
-import com.teamx.hatlyDriver.data.local.datastore.DataStoreProvider
-import com.teamx.hatlyDriver.data.local.db.AppDatabase
-import com.teamx.hatlyDriver.data.remote.ApiService
-import com.teamx.hatlyDriver.data.remote.reporitory.MainRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.teamx.hatlyDriver.data.local.db.AppDao
-import com.teamx.hatlyDriver.data.local.dbModel.CartDao
 import com.teamx.hatlyDriver.BuildConfig
+import com.teamx.hatlyDriver.constants.AppConstants
+import com.teamx.hatlyDriver.data.local.datastore.DataStoreProvider
+import com.teamx.hatlyDriver.data.local.db.AppDao
+import com.teamx.hatlyDriver.data.local.db.AppDatabase
+import com.teamx.hatlyDriver.data.local.dbModel.CartDao
+import com.teamx.hatlyDriver.data.remote.ApiService
+import com.teamx.hatlyDriver.data.remote.reporitory.MainRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

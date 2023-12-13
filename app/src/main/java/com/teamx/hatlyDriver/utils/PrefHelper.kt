@@ -13,9 +13,10 @@ class PrefHelper private constructor() {
         private lateinit var sharedPreferences: SharedPreferences
         private const val USER_DATA = "USERDATA"
         private const val RIDER_ONLINE = "riderOnline"
-        private const val STRIPE_ID = "STRIPE_ID"
+        private const val MAX_PROGRESS = "MAX_PROGRESS"
+        private const val MAX_PROGRESS_TEXT = "MAX_PROGRESS_TEXT"
         private const val NOTIFICATION_ENABLE = "notificationEnable"
-
+        private val LANGTYPE = "lang_type"
 
 
 
@@ -32,6 +33,13 @@ class PrefHelper private constructor() {
         }
     }
 
+    fun saveLANGTYPE(lang_type: String) {
+        sharedPreferences.edit().putString(LANGTYPE, lang_type).apply()
+    }
+
+    val langType: String?
+        get() = sharedPreferences.getString(LANGTYPE, "en")
+
     fun getUserData(): LoginData? {
         val gson = Gson()
         return gson.fromJson(
@@ -44,5 +52,23 @@ class PrefHelper private constructor() {
         val str = gson.toJson(shippingAddress)
         sharedPreferences.edit().putString(USER_DATA, str).apply()
     }
+
+
+    val getMax: Int?
+        get() = sharedPreferences.getInt(MAX_PROGRESS, 0)
+
+
+    fun isMax(isMax: Int) {
+        sharedPreferences.edit().putInt(MAX_PROGRESS, isMax).apply()
+    }
+
+    val getSeekbarText: String?
+        get() = sharedPreferences.getString(MAX_PROGRESS_TEXT, "")
+
+
+    fun saveSeekbarText(isMax: String) {
+        sharedPreferences.edit().putString(MAX_PROGRESS_TEXT, isMax).apply()
+    }
+
 
 }

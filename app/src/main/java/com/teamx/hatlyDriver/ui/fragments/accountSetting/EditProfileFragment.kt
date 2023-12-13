@@ -139,6 +139,7 @@ class EditProfileFragment :
             }
 
         }
+
         mViewDataBinding.imgGallery.setOnClickListener {
             fetchImageFromGallery()
         }

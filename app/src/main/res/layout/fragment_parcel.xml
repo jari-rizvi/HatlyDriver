@@ -49,7 +49,7 @@
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
-            android:text="Special"
+            android:text="@string/special"
             android:textColor="#0A0001"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"

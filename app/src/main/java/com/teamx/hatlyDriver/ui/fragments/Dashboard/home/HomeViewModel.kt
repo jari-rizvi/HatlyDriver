@@ -188,6 +188,7 @@ class HomeViewModel @Inject constructor(
                             Timber.tag("87878787887").d("secoonnddd")
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
                             _getPastOrdersResponse.postValue(Resource.error(jsonObj.getString("message")))
+
                         } else {
 //                            _getPastOrdersResponse.postValue(
                                /* Resource.error(
@@ -200,7 +201,10 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     _getPastOrdersResponse.postValue(Resource.error("${e.message}", null))
+                    Timber.tag("87878787887error").d(e.message)
+
                 }
             } else _getPastOrdersResponse.postValue(Resource.error("No internet connection", null))
         }
@@ -230,6 +234,7 @@ class HomeViewModel @Inject constructor(
 
 //                            _getPastParcelsResponse.postValue(Resource.error(it.message(), null))
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+
 //                            _getPastParcelsResponse.postValue(Resource.error(jsonObj.getString("message")))
                         } else {
                             /*_getPastParcelsResponse.postValue(
@@ -244,6 +249,8 @@ class HomeViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     _getPastParcelsResponse.postValue(Resource.error("${e.message}", null))
+                    Timber.tag("87878787887error").d(e.message)
+
                 }
             } else _getPastParcelsResponse.postValue(Resource.error("No internet connection", null))
         }

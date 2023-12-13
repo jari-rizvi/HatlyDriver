@@ -104,19 +104,26 @@ class LogInFragment :
                             loadingDialog.dismiss()
 
                             it.data?.let { data ->
-                                lifecycleScope.launch(Dispatchers.Main) {
-                                    dataStoreProvider.saveUserToken(data.token)
 
-                                    val bundle = Bundle()
-                                    bundle.putString("userimg",data.profileImage)
-                                    bundle.putString("username",data.name)
+                                if(data.role == "driver"){
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        dataStoreProvider.saveUserToken(data.token)
 
-                                    navController =
-                                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                                    navController.navigate(R.id.homeFragment, bundle, options)
+                                        val bundle = Bundle()
+                                        bundle.putString("userimg",data.profileImage)
+                                        bundle.putString("username",data.name)
+
+                                        navController =
+                                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                                        navController.navigate(R.id.homeFragment, bundle, options)
+                                    }
+
+                                    PrefHelper.getInstance(requireActivity()).setUserData(data)
+                                }
+                                else{
+                                    showToast("You're not authentic")
                                 }
 
-                                PrefHelper.getInstance(requireActivity()).setUserData(data)
 
                             }
 

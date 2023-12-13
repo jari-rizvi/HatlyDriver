@@ -139,7 +139,7 @@
             android:textStyle="bold"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/_5sdp"
-            android:text="Wallet"
+            android:text="@string/wallet"
             android:textColor="@color/black"
             app:drawableStartCompat="@drawable/top_up"
             app:drawableTint="@color/redd"
@@ -174,6 +174,32 @@
             app:layout_constraintTop_toBottomOf="@+id/btnWallet"
            android:layout_marginTop="@dimen/_10sdp" />
 
+
+        <TextView
+            android:id="@+id/btnLanguage"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginHorizontal="@dimen/_25sdp"
+            android:background="@drawable/card_background_green"
+            android:backgroundTint="@color/white"
+            android:drawablePadding="@dimen/_8sdp"
+            android:elevation="@dimen/_2sdp"
+            android:fontFamily="@font/open_sans_regular"
+            android:textStyle="bold"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/_5sdp"
+            android:text="@string/languages"
+            android:textColor="@color/black"
+            app:drawableStartCompat="@drawable/internet"
+            app:drawableTint="@color/redd"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnHelpCentre"
+            android:layout_marginTop="@dimen/_10sdp" />
+
+
         <TextView
             android:id="@+id/btnPrivacy"
             android:layout_width="0dp"
@@ -195,7 +221,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnHelpCentre"
+            app:layout_constraintTop_toBottomOf="@+id/btnLanguage"
            android:layout_marginTop="@dimen/_10sdp" />
 
         <TextView

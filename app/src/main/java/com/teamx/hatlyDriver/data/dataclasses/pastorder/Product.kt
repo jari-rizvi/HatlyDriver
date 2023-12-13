@@ -8,5 +8,4 @@ data class Product(
     val productName: String,
     val quantity: Int,
     val shopId: String,
-    val veriations: Any
 )
