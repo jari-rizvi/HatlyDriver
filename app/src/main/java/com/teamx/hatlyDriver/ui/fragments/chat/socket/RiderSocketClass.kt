@@ -17,6 +17,7 @@ object RiderSocketClass {
 
     var riderSocket: Socket? = null
 
+
     fun connectRider(
         token: String,
         lat: String,
@@ -47,6 +48,7 @@ object RiderSocketClass {
 
         riderSocket?.connect()
         Timber.tag("MessageSocketClass").d("EVENT_CONNECT: ${riderSocket?.connected()}")
+
 
         riderSocket?.on(Socket.EVENT_CONNECT) {
             onListenerEverything()
@@ -190,6 +192,29 @@ object RiderSocketClass {
     }
 
 
+    fun goOffline(reason: String) {
+        val data = JSONObject().put("reason", reason)
+        Timber.tag("MessageSocketClass").d("GO_OFFLINE:$data ")
+        riderSocket?.emit("GO_OFFLINE", data, object : Ack {
+            override fun call(vararg args: Any?) {
+                riderSocket?.on(Socket.EVENT_DISCONNECT) {
+                    Timber.tag("MessageSocketClass")
+                        .d("EVENT_DISCONNECT: ${riderSocket?.connected()}")
+                }
+                riderSocket?.disconnect()
+                Timber.tag("MessageSocketClass").d("GO_OFFLINE: ")
+            }
+        })
+    }
+
+
+    fun disconnetRider(reason: String){
+        goOffline(reason)
+
+    }
+
+
+
     fun disconnect() {
         riderSocket?.disconnect()
         riderSocket?.on(Socket.EVENT_DISCONNECT) {
@@ -209,7 +234,6 @@ object RiderSocketClass {
 
 
 }
-
 interface IncomingOrderCallBack {
     fun onIncomingOrderRecieve(incomingOrderSocketData: Doc)
     fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData)

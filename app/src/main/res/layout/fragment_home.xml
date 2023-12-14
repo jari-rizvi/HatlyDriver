@@ -49,10 +49,10 @@
                 android:id="@+id/name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Hello"
-                android:maxLines="1"
-                android:textColor="@color/black"
                 android:layout_marginHorizontal="@dimen/_10sdp"
+                android:maxLines="1"
+                android:text="Hello"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toStartOf="@+id/constraintLayout1"
@@ -246,22 +246,22 @@
             android:background="@drawable/card_background_green"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_1sdp"
-            app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/constraintLayout3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/constraintEarnings"
-            app:layout_constraintTop_toTopOf="@+id/constraintEarnings">
+            app:layout_constraintTop_toTopOf="@+id/constraintEarnings"
+            app:layout_constraintVertical_bias="0">
 
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
                 android:background="@drawable/card_border_green"
                 app:layout_constraintBottom_toTopOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="8dp" />
 
@@ -276,6 +276,19 @@
                 app:layout_constraintStart_toStartOf="@+id/spinner1"
                 app:layout_constraintTop_toBottomOf="@+id/spinner1" />
 
+            <TextView
+                android:id="@+id/textView161"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_orders_earning"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.2"
+                app:layout_constraintStart_toEndOf="@+id/textView16"
+                app:layout_constraintTop_toTopOf="@+id/textView16"
+                app:layout_constraintVertical_bias="0" />
+
 
             <TextView
                 android:id="@+id/totalorders"
@@ -283,11 +296,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                app:layout_constraintHorizontal_bias="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toTopOf="@+id/textView43"
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
@@ -296,12 +309,15 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="0.0"
-                android:textSize="@dimen/_9ssp"
-                app:layout_constraintBottom_toBottomOf="@+id/totalorders"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/totalorders"
-                app:layout_constraintTop_toTopOf="@+id/totalorders" />
+                style="@style/open_sans_white_bold_medium"
 
+                app:layout_constraintHorizontal_bias="0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/totalorders"
+                app:layout_constraintEnd_toEndOf="@+id/textView161"
+                app:layout_constraintStart_toStartOf="@+id/textView161"
+                app:layout_constraintTop_toTopOf="@+id/totalorders" />
 
 
             <ImageView
@@ -319,25 +335,37 @@
                 android:id="@+id/textView43"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_9ssp"
                 android:text="Total Parcels"
-                app:layout_constraintHorizontal_bias="0"
+                android:textSize="@dimen/_9ssp"
                 app:layout_constraintBottom_toTopOf="@+id/totalParcels"
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/totalorders" />
 
             <TextView
+                android:id="@+id/textView433"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Parcels Earning"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView43"
+                app:layout_constraintEnd_toEndOf="@+id/textView161"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/textView161"
+                app:layout_constraintTop_toTopOf="@+id/textView43" />
+
+            <TextView
                 android:id="@+id/totalParcels"
+                style="@style/open_sans_white_bold_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
-                style="@style/open_sans_white_bold_medium"
-                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
@@ -346,11 +374,37 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="0.0"
-                android:textSize="@dimen/_9ssp"
+                android:textColor="@color/black"
+                style="@style/open_sans_white_bold_medium"
+                android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/totalParcels"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/totalParcels"
+                app:layout_constraintEnd_toEndOf="@+id/textView433"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/textView433"
                 app:layout_constraintTop_toTopOf="@+id/totalParcels" />
+
+            <TextView
+                android:id="@+id/textView44"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Earnings"
+                app:layout_constraintBottom_toBottomOf="@+id/textView161"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView161"
+                app:layout_constraintTop_toTopOf="@+id/textView161" />
+
+            <TextView
+                android:id="@+id/totalEarning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textColor="@color/black"
+                style="@style/open_sans_white_bold_medium"
+                android:textSize="@dimen/_11ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textView44"
+                app:layout_constraintStart_toStartOf="@+id/textView44"
+                app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -650,7 +704,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/slideToUnlock"
                     app:layout_constraintEnd_toEndOf="@+id/slideToUnlock"
                     app:layout_constraintStart_toStartOf="@+id/slideToUnlock"
-                    app:layout_constraintTop_toBottomOf="@+id/slideToUnlock"
                     app:layout_constraintVertical_bias="0.2"
                     app:srcCompat="@drawable/go_offline" />
 

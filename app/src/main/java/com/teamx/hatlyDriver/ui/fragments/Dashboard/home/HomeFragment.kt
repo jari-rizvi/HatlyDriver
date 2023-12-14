@@ -260,7 +260,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     // Reset thumb color to the default
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
 
-                    RiderSocketClass.disconnect()
+//                    RiderSocketClass.disconnect()
                     // Hide "Go Online" text
                     statusText.text = "Go Online"
                     PrefHelper.getInstance(requireContext())
@@ -279,6 +279,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         .isMax(seekBar.max)
                     PrefHelper.getInstance(requireContext())
                         .saveSeekbarText(statusText.text.toString())
+                    RiderSocketClass.connectRider(
+                        NetworkCallPoints.TOKENER,
+                        originLatitude,
+                        originLongitude,
+                        this@HomeFragment
+                    )
+
 
                 } else {
                     seekBar1.progress = seekBar.min
@@ -295,8 +302,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         })
 
 
-        val spinner = mViewDataBinding.spinner
-        val spinner1 = mViewDataBinding.spinner1
+        val spinner = mViewDataBinding.spinner1
+//        val spinner1 = mViewDataBinding.spinner1
 
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -308,7 +315,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
         spinner.adapter = adapter
-        spinner1.adapter = adapter
+//        spinner1.adapter = adapter
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -338,35 +345,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
-        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent.getItemAtPosition(position) as String
-
-//                earning = "order"
-
-                val params = JsonObject()
-                try {
-                    params.addProperty("filterBy", selectedItem)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-                mViewModel.getTotalEarnings(params)
-
-
-//                mViewModel.getTotalEarnings(selectedItem, earning)
-
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
+//        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>,
+//                view: View,
+//                position: Int,
+//                id: Long
+//            ) {
+//                val selectedItem = parent.getItemAtPosition(position) as String
+//
+////                earning = "order"
+//
+//                val params = JsonObject()
+//                try {
+//                    params.addProperty("filterBy", selectedItem)
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+//                mViewModel.getTotalEarnings(params)
+//
+//
+////                mViewModel.getTotalEarnings(selectedItem, earning)
+//
+//
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>) {
+//
+//            }
+//        }
 
 
     }
@@ -435,15 +442,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                                 Picasso.get().load(data.userId.profileImage).resize(500, 500)
                                     .into(mViewDataBinding.profilePicture)
 
-                                mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
+                                mViewDataBinding.totalEarning.text = data.totalEarning.toString()
                                 mViewDataBinding.totalorders.text = data.totalOrders.toString()
                                 mViewDataBinding.totalParcels.text = data.totalParcels.toString()
+                                mViewDataBinding.totalOrderEarning.text =
+                                    data.totalOrdersEarning.toString()
+                                mViewDataBinding.totalParcelsEarning.text =
+                                    data.totalParcelsEarning.toString()
 
 
                             } catch (e: Exception) {
                             }
-
-
 
 
                         }
@@ -957,6 +966,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onSubmitoflineClick(status: String, rejectionReason: String) {
+
+        RiderSocketClass.disconnetRider(rejectionReason)
+
+
 //        val params = JsonObject()
 //        try {
 //            params.addProperty("offlineReason", rejectionReason)

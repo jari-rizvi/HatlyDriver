@@ -27,6 +27,7 @@
     <string name="incoming_orders">Incoming Orders</string>
     <string name="your_earnings">Your Earnings</string>
     <string name="total_orders">Total Orders</string>
+    <string name="total_orders_earning">Total Orders Earning</string>
     <string name="pick_up">Pick Up</string>
     <string name="dropoff">Dropoff</string>
     <string name="accept">Accept</string>
