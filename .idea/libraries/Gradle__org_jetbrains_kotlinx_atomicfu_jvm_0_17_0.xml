@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: org.jetbrains.kotlinx:atomicfu-jvm:0.17.0">
+  <library name="Gradle: org.jetbrains.kotlinx:atomicfu-jvm:0.17.0" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/atomicfu-jvm/0.17.0/d3d2e380b6ee28231118101d09ae6dd06a1db1cb/atomicfu-jvm-0.17.0.jar!/" />
     </CLASSES>

@@ -10,7 +10,7 @@ import com.teamx.hatlyDriver.data.dataclasses.fcmmodel.FcmModel
 import com.teamx.hatlyDriver.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatlyDriver.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
-import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningData
+import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.data.remote.reporitory.MainRepository
 import com.teamx.hatlyDriver.utils.NetworkHelper
@@ -27,16 +27,16 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val _totalEarningsResponse = MutableLiveData<Resource<TotalEarningData>>()
-    val totalEarningsResponse: LiveData<Resource<TotalEarningData>>
+    private val _totalEarningsResponse = MutableLiveData<Resource<TotalEarningsData>>()
+    val totalEarningsResponse: LiveData<Resource<TotalEarningsData>>
         get() = _totalEarningsResponse
 
-    fun getTotalEarnings(filterBy: String,filterFor: String) {
+    fun getTotalEarnings(param: JsonObject) {
         viewModelScope.launch {
             _totalEarningsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
-                    mainRepository.getTotalEarning(filterBy,filterFor).let {
+                    mainRepository.getTotalEarning(param).let {
                         if (it.isSuccessful) {
                             _totalEarningsResponse.postValue(Resource.success(it.body()!!))
                         }/*else if (it.code() == 401) {

@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: com.airbnb.android:lottie:3.7.0@aar">
+  <library name="Gradle: com.airbnb.android:lottie:3.7.0@aar" external-system-id="GRADLE">
     <ANNOTATIONS>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/378a4c11cfbc3bbb31dd5eba4e8bf98d/transformed/jetified-lottie-3.7.0/annotations.zip!/" />
     </ANNOTATIONS>

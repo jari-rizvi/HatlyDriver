@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: io.card:android-sdk:5.5.1@aar">
+  <library name="Gradle: io.card:android-sdk:5.5.1@aar" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/2be9a04433d46466d72177a0a661f2fa/transformed/jetified-android-sdk-5.5.1/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/2be9a04433d46466d72177a0a661f2fa/transformed/jetified-android-sdk-5.5.1/res" />

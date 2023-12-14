@@ -15,7 +15,7 @@ import com.teamx.hatlyDriver.data.dataclasses.modelUploadImages.ModelUploadImage
 import com.teamx.hatlyDriver.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatlyDriver.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
-import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningData
+import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
@@ -104,12 +104,11 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<TransactionHistoryData>
 
-    @GET(NetworkCallPoints.TOTAL_EARNING)
+    @POST(NetworkCallPoints.TOTAL_EARNING)
     suspend fun getTotalEarning(
-        @Query("filterBy") filterBy: String,
-        @Query("filterFor") filterFor: String,
+        @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
-    ): Response<TotalEarningData>
+    ): Response<TotalEarningsData>
 
     @GET(NetworkCallPoints.CREDS_CARDS)
     suspend fun getCredCards(

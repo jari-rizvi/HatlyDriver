@@ -180,6 +180,7 @@
             android:background="@drawable/card_background_green"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_1sdp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/constraintOrders"
             app:layout_constraintHorizontal_bias="0.5"
@@ -240,7 +241,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintOrders"
-            android:layout_width="@dimen/_120sdp"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_100sdp"
             android:background="@drawable/card_background_green"
             android:backgroundTint="@color/white"
@@ -290,10 +291,24 @@
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
+            <TextView
+                android:id="@+id/totalOrderEarning"
+                android:layout_width="78dp"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/totalorders"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/totalorders"
+                app:layout_constraintTop_toTopOf="@+id/totalorders" />
+
+
+
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView16"
@@ -325,6 +340,17 @@
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
                 app:layout_constraintStart_toStartOf="@+id/textView16"
                 app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
+            <TextView
+                android:id="@+id/totalParcelsEarning"
+                android:layout_width="78dp"
+                android:layout_height="wrap_content"
+                android:text="0.0"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/totalParcels"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/totalParcels"
+                app:layout_constraintTop_toTopOf="@+id/totalParcels" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

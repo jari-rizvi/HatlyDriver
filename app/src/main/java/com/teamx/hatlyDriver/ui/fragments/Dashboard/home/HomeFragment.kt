@@ -74,7 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         get() = BR.viewModel
 
     lateinit var id: String
-    var Activityid: String = ""
 
     var earning: String = "earning"
 
@@ -319,7 +318,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 id: Long
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
-                earning = "earning"
+//                earning = "earning"
+
+                val params = JsonObject()
+                try {
+                    params.addProperty("filterBy", selectedItem)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                mViewModel.getTotalEarnings(params)
+
 //                mViewModel.getTotalEarnings(selectedItem, earning)
 
 
@@ -339,7 +347,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
 
-                earning = "order"
+//                earning = "order"
+
+                val params = JsonObject()
+                try {
+                    params.addProperty("filterBy", selectedItem)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                mViewModel.getTotalEarnings(params)
+
 
 //                mViewModel.getTotalEarnings(selectedItem, earning)
 
@@ -412,26 +429,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                             try {
                                 mViewDataBinding.hours.text =
-                                    data.spentTime.hours.toString() + " hrs"
+                                    data.totalSpendTime.hours.toString() + " hrs"
                                 mViewDataBinding.name.text =
-                                    "Hello " + data.riderDetail.name as String
-                                Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
+                                    "Hello " + data.userId.name as String
+                                Picasso.get().load(data.userId.profileImage).resize(500, 500)
                                     .into(mViewDataBinding.profilePicture)
-                                Activityid = data.riderDetail.activity._id
-                                Log.d("TAG", "Activityid: $Activityid")
+
+                                mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
+                                mViewDataBinding.totalorders.text = data.totalOrders.toString()
+                                mViewDataBinding.totalParcels.text = data.totalParcels.toString()
+
 
                             } catch (e: Exception) {
                             }
 
-                            if (earning == "earning") {
-                                mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
-//                                return@observe
-                            }
 
-                            if (earning == "order") {
-                                mViewDataBinding.totalorders.text = data.totalOrder.toString()
-                                mViewDataBinding.totalParcels.text = data.totalParcel.toString()
-                            }
 
 
                         }
@@ -945,41 +957,41 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onSubmitoflineClick(status: String, rejectionReason: String) {
-        val params = JsonObject()
-        try {
-            params.addProperty("offlineReason", rejectionReason)
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+//        val params = JsonObject()
+//        try {
+//            params.addProperty("offlineReason", rejectionReason)
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
 
-        mViewModel.offlineReason(Activityid, params)
+//        mViewModel.offlineReason(Activityid, params)
 
-        mViewModel.offlineReasonResponse.observe(requireActivity(), Observer {
-            when (it.status) {
-                Resource.Status.LOADING -> {
-                    loadingDialog.show()
-                }
-
-                Resource.Status.AUTH -> {
-                    loadingDialog.dismiss()
-                    onToSignUpPage()
-                }
-
-                Resource.Status.SUCCESS -> {
-                    loadingDialog.dismiss()
-                    it.data?.let { data ->
-                        RiderSocketClass.disconnect()
-                        dialog?.dismiss()
-
-                    }
-                }
-
-                Resource.Status.ERROR -> {
-                    loadingDialog.dismiss()
-                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
-                }
-            }
-        })
+//        mViewModel.offlineReasonResponse.observe(requireActivity(), Observer {
+//            when (it.status) {
+//                Resource.Status.LOADING -> {
+//                    loadingDialog.show()
+//                }
+//
+//                Resource.Status.AUTH -> {
+//                    loadingDialog.dismiss()
+//                    onToSignUpPage()
+//                }
+//
+//                Resource.Status.SUCCESS -> {
+//                    loadingDialog.dismiss()
+//                    it.data?.let { data ->
+//                        RiderSocketClass.disconnect()
+//                        dialog?.dismiss()
+//
+//                    }
+//                }
+//
+//                Resource.Status.ERROR -> {
+//                    loadingDialog.dismiss()
+//                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+//                }
+//            }
+//        })
     }
 
     override fun onCanceloflineClick() {

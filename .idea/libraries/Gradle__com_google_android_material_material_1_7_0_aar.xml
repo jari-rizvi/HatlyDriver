@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: com.google.android.material:material:1.7.0@aar">
+  <library name="Gradle: com.google.android.material:material:1.7.0@aar" external-system-id="GRADLE">
     <ANNOTATIONS>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0f8ecf17ae667e05d7e06ef4c38d6342/transformed/material-1.7.0/annotations.zip!/" />
     </ANNOTATIONS>

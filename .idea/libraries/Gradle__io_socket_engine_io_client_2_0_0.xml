@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: io.socket:engine.io-client:2.0.0">
+  <library name="Gradle: io.socket:engine.io-client:2.0.0" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.socket/engine.io-client/2.0.0/9d4a84db8ab071574e62cfce67e35bf5194f4c76/engine.io-client-2.0.0.jar!/" />
     </CLASSES>

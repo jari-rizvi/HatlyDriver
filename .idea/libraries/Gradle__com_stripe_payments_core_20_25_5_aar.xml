@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: com.stripe:payments-core:20.25.5@aar">
+  <library name="Gradle: com.stripe:payments-core:20.25.5@aar" external-system-id="GRADLE">
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/479ef77ecf96df2c713716b68bb3bfa5/transformed/jetified-payments-core-20.25.5/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/479ef77ecf96df2c713716b68bb3bfa5/transformed/jetified-payments-core-20.25.5/res" />

@@ -1,5 +1,5 @@
 <component name="libraryTable">
-  <library name="Gradle: com.facebook.stetho:stetho:1.5.1@aar">
+  <library name="Gradle: com.facebook.stetho:stetho:1.5.1@aar" external-system-id="GRADLE">
     <ANNOTATIONS>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/28ab8af2c627d61e708dd5588757aa47/transformed/jetified-stetho-1.5.1/annotations.zip!/" />
     </ANNOTATIONS>
