@@ -2,5 +2,4 @@ package com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoock
 
 data class ReceiverLocation(
     val location: Location,
-    val phoneNumber: String
 )
