@@ -21,8 +21,6 @@ class MainRepository @Inject constructor(
     suspend fun otpVerify(@Body param: JsonObject) = apiService.otpVerify(param)
 
     suspend fun updatePass(@Body param: JsonObject) = apiService.updatePass(param)
-
-
     suspend fun changePassword(@Body params: JsonObject) = apiService.changePassword(params)
     suspend fun otpVerifyForgot(@Body param: JsonObject) = apiService.otpVerifyForgot(param)
 
@@ -98,10 +96,13 @@ class MainRepository @Inject constructor(
         @Query("requestFor") requestFor: String
     ) = apiService.getActiveOrders(status, requestFor)
 
+    suspend fun acceptOrder(
+        @Path("id") id: String
+    ) = apiService.acceptOrder(id)
 
-    suspend fun acceptRejectOrder(
+    suspend fun rejectOrder(
         @Path("id") id: String, @Body param: JsonObject
-    ) = apiService.acceptRejectOrder(id, param)
+    ) = apiService.rejectOrder(id, param)
 
     suspend fun pickedDispatchOrder(
         @Path("id") id: String, @Body param: JsonObject

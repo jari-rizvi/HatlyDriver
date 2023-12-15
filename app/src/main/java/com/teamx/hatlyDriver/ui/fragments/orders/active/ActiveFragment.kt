@@ -76,8 +76,6 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
                                     mViewDataBinding.txtOrderConfoirm.visibility = View.VISIBLE
 
 
-
-                                Log.d("TAG", "onViewCreated121212: $id")
                             } catch (e: Exception) {
                             }
                             Log.d("TAG", "onViewCreated121212: $id")
@@ -109,6 +107,7 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
 
 
         mViewDataBinding.btnTrack.setOnClickListener {
+
             navController = Navigation.findNavController(
                 requireActivity(),
                 R.id.nav_host_fragment
@@ -128,6 +127,7 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
 
 
             mViewModel.pickedDispatchOrder(id, params)
+
 
             mViewModel.pickedDispatchOrderResponse.observe(requireActivity(), Observer {
                 when (it.status) {
@@ -155,9 +155,15 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
                         DialogHelperClass.errorDialog(requireContext(), it.message!!)
                     }
                 }
+                if (isAdded) {
+                    mViewModel.pickedDispatchOrderResponse.removeObservers(
+                        viewLifecycleOwner
+                    )
+                }
             })
 
         }
+
 
 
         /*
@@ -200,11 +206,6 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
                 }*/
 
 
-
-
-
-
-
         ActiveOrderRecyclerview()
 
 
@@ -220,18 +221,5 @@ class ActiveFragment : BaseFragment<FragmentActiveBinding, ActiveViewModel>() {
         mViewDataBinding.activeRecyclerView.adapter = activeOrderAdapter
 
     }
-
-
-//    private fun productRecyclerview() {
-//        productArrayList = ArrayList()
-//
-//        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-//        mViewDataBinding.activeRecyclerView.layoutManager = linearLayoutManager
-//
-//        productAdapter = ActiveAdapter(productArrayList)
-//        mViewDataBinding.activeRecyclerView.adapter = productAdapter
-//
-//    }
-
 
 }

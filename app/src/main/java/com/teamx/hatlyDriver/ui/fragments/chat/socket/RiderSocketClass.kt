@@ -207,13 +207,10 @@ object RiderSocketClass {
         })
     }
 
-
     fun disconnetRider(reason: String){
         goOffline(reason)
 
     }
-
-
 
     fun disconnect() {
         riderSocket?.disconnect()

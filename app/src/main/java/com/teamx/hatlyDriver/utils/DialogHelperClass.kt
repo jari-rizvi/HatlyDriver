@@ -188,7 +188,7 @@ class DialogHelperClass {
 
 
         interface ReasonDialog {
-            fun onSubmitClick(status: String, rejectionReason: String)
+            fun onSubmitClick(rejectionReason: String)
             fun onCancelClick()
         }
 
@@ -227,7 +227,7 @@ class DialogHelperClass {
                           return@setOnClickListener
                       }*/
                 if (boo) {
-                    reasonDialog.onSubmitClick(status, reason.text.toString())
+                    reasonDialog.onSubmitClick(reason.text.toString())
                 } else {
                     reasonDialog.onCancelClick()
                 }

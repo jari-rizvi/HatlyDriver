@@ -253,28 +253,40 @@
             app:layout_constraintTop_toTopOf="@+id/constraintEarnings"
             app:layout_constraintVertical_bias="0">
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="wrap_content"
+
+            <FrameLayout
+                android:layout_width="@dimen/_76sdp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_3sdp"
                 android:background="@drawable/card_border_green"
-                app:layout_constraintBottom_toTopOf="@+id/textView16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="8dp" />
+                app:layout_constraintBottom_toBottomOf="@+id/textView161"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/textView44"
+                app:layout_constraintTop_toTopOf="@+id/textView161"
+                app:layout_constraintVertical_bias="0">
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_2sdp"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </FrameLayout>
+
 
             <TextView
                 android:id="@+id/textView16"
-                android:layout_width="78dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders"
                 android:textSize="@dimen/_9ssp"
-                app:layout_constraintBottom_toTopOf="@+id/totalorders"
-                app:layout_constraintEnd_toEndOf="@+id/spinner1"
-                app:layout_constraintStart_toStartOf="@+id/spinner1"
-                app:layout_constraintTop_toBottomOf="@+id/spinner1" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.07"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1" />
 
             <TextView
                 android:id="@+id/textView161"
@@ -306,16 +318,16 @@
 
             <TextView
                 android:id="@+id/totalOrderEarning"
+                style="@style/open_sans_white_bold_medium"
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="0.0"
-                style="@style/open_sans_white_bold_medium"
 
-                app:layout_constraintHorizontal_bias="0"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/totalorders"
                 app:layout_constraintEnd_toEndOf="@+id/textView161"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="@+id/textView161"
                 app:layout_constraintTop_toTopOf="@+id/totalorders" />
 
@@ -371,11 +383,11 @@
 
             <TextView
                 android:id="@+id/totalParcelsEarning"
+                style="@style/open_sans_white_bold_medium"
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="0.0"
                 android:textColor="@color/black"
-                style="@style/open_sans_white_bold_medium"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/totalParcels"
                 app:layout_constraintEnd_toEndOf="@+id/textView433"
@@ -388,23 +400,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Earnings"
-                app:layout_constraintBottom_toBottomOf="@+id/textView161"
+                android:textSize="@dimen/_9ssp"
+                app:layout_constraintBottom_toTopOf="@+id/totalParcelsEarning"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView161"
-                app:layout_constraintTop_toTopOf="@+id/textView161" />
+                app:layout_constraintTop_toBottomOf="@+id/totalOrderEarning" />
 
             <TextView
                 android:id="@+id/totalEarning"
+                style="@style/open_sans_white_bold_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0.0"
                 android:textColor="@color/black"
-                style="@style/open_sans_white_bold_medium"
                 android:textSize="@dimen/_11ssp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/totalParcelsEarning"
                 app:layout_constraintEnd_toEndOf="@+id/textView44"
                 app:layout_constraintStart_toStartOf="@+id/textView44"
-                app:layout_constraintTop_toBottomOf="@+id/textView44" />
+                app:layout_constraintTop_toBottomOf="@+id/textView433" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -656,10 +669,11 @@
                         android:clickable="false"
                         android:focusable="false"
                         android:max="100"
+                        android:thumbOffset="-10dp"
+                        android:scrollbarThumbHorizontal="@dimen/_40sdp"
                         android:progressDrawable="@drawable/swipe_button_background"
                         android:splitTrack="true"
                         android:thumb="@drawable/custom_thumb"
-                        android:thumbOffset="-10dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

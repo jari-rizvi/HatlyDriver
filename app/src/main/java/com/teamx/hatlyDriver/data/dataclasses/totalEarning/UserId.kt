@@ -9,5 +9,5 @@ data class UserId(
     val profileImage: String,
     val role: String,
     val verified: Boolean,
-    val wallet: Int
+    val wallet: Double
 )

@@ -3,7 +3,6 @@ package com.teamx.hatlyDriver.ui.fragments.chat
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.Navigation
@@ -63,7 +62,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
         }
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, arguments, options)
+            navController.navigate(R.id.trackFragment, arguments, options)
             MessageSocketClass.disconnect()
         }
 
@@ -73,7 +72,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
                 override fun handleOnBackPressed() {
                     navController =
                         Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.homeFragment, arguments, options)
+                    navController.navigate(R.id.trackFragment, arguments, options)
                     MessageSocketClass.disconnect()
 
                 }
@@ -82,12 +81,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
         val bundle = arguments
         orderId = bundle?.getString("orderId").toString()
 
-        Log.d("TAG", "orderIdorderIdorderId: $orderId")
-
-
         MessageSocketClass.connect2(
             NetworkCallPoints.TOKENER, orderId, this, this
         )
+
         mViewDataBinding.imgSend.setOnClickListener {
             val text: String = mViewDataBinding.inpChat.text.toString()
             if (text.isNotEmpty()) {
@@ -130,7 +127,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     fun timeFormater(timeMili: String): Long? {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         var milliseconds: Long? = null
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Set the time zone to UTC
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
         try {
             val date: Date = dateFormat.parse(timeMili)

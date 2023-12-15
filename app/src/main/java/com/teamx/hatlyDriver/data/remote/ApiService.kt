@@ -169,8 +169,14 @@ interface ApiService {
     ): Response<GetActiveOrderData>
 
 
-    @PUT(NetworkCallPoints.ACCEPT_REJECT_ORDER)
-    suspend fun acceptRejectOrder(
+    @PUT(NetworkCallPoints.ACCEPT_ORDER)
+    suspend fun acceptOrder(
+        @Path("id") id: String,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
+    @PUT(NetworkCallPoints.REJECT_ORDER)
+    suspend fun rejectOrder(
         @Path("id") id: String,
         @Body params: JsonObject?,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"

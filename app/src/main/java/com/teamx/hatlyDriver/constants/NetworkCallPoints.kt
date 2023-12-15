@@ -34,7 +34,8 @@ class NetworkCallPoints {
         const val GET_ACTIVE_ORDER = "incoming/requests/all";
 
 //        const val ACCEPT_REJECT_ORDER = "incoming/requests/response/{id}";
-        const val ACCEPT_REJECT_ORDER = "incoming/requests/accept/{id}";
+        const val REJECT_ORDER = "incoming/requests/reject/{id}";
+        const val ACCEPT_ORDER = "incoming/requests/accept/{id}";
 //        const val PICKED_DISPATCH_ORDER = "incoming/requests/{id}";
         const val PICKED_DISPATCH_ORDER = "incoming/requests/{id}";
 

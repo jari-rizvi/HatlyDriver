@@ -46,7 +46,6 @@ import com.teamx.hatlyDriver.constants.NetworkCallPoints
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentTrackBinding
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.home.HomeFragment
-import com.teamx.hatlyDriver.ui.fragments.chat.socket.RiderSocketClass
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.TrackSocketClass
 import com.teamx.hatlyDriver.ui.fragments.topUp.TopUpModel
 import com.teamx.hatlyDriver.utils.DialogHelperClass
@@ -121,6 +120,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         mViewDataBinding.bottomSheetLayout.imgChat.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.chatFragment, bundle, options)
+            TrackSocketClass.disconnect()
+
+
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
@@ -137,8 +139,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                         arguments,
                         options
                     )
-
-
+                    TrackSocketClass.disconnect()
                 }
             })
 
@@ -151,7 +152,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.homeFragment, arguments, options)
-            RiderSocketClass.disconnect()
+            TrackSocketClass.disconnect()
 
         }
 
@@ -178,12 +179,12 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        TrackSocketClass.disconnect()
                         navController = Navigation.findNavController(
                             requireActivity(),
                             R.id.nav_host_fragment
                         )
                         navController.navigate(R.id.homeFragment, null, options)
+                        TrackSocketClass.disconnect()
 
                     }
                 }
@@ -254,14 +255,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
     }
 
 
-//    private fun checkLocationIsEnable(): Boolean {
-//        val locationManager =
-//            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-//            LocationManager.NETWORK_PROVIDER
-//        )
-//    }
-
 
     private val PERMISSION_REQUEST_CODE = 123
 
@@ -272,15 +265,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            /* RiderSocketClass.connectRider(
-                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-                 originLatitude,
-                 originLongitude
-             )*/
-
-            // Show an explanation to the user *asynchronously*
-            // why the permission is needed and why the user should grant it
-
             requestPermissions(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -288,25 +272,11 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 ), PERMISSION_REQUEST_CODE
             )
         } else {
-            // Permission has already been granted
             TrackSocketClass.connectRiderTrack(
                 NetworkCallPoints.TOKENER,
                 id
             )
 
-            /* Firebase.initialize(requireContext())
-             FirebaseApp.initializeApp(requireContext())
-
-             if (!mViewModel.fcmResponse.hasActiveObservers()) {
-                 askNotificationPermission()
-             }*/
-
-            /*DialogHelperClass.confirmLocation(
-                requireContext(), this@HomeFragment, true*/
-
-
-//            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-//            navController.navigate(R.id.dashboard, null, options)
         }
     }
 

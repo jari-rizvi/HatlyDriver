@@ -144,35 +144,42 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         mViewDataBinding.userProfile.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.editProfileFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.notificaitonFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.profileFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastParcelAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView18.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastOrderAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView20.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
 
@@ -227,11 +234,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         seekBar1.isClickable = false
 
         val seekbarValue = PrefHelper.getInstance(requireContext()).getMax
-        Log.d("seekbarValue", "seekbarValue: ${seekbarValue}")
+
+        if(seekbarValue == 100){
+            RiderSocketClass.connectRider(
+                NetworkCallPoints.TOKENER,
+                originLatitude,
+                originLongitude,
+                this@HomeFragment
+            )
+        }
+
 
         val seekbarText = PrefHelper.getInstance(requireContext()).getSeekbarText
-        Log.d("seekbarText", "seekbarText: ${seekbarText}")
 
+        Log.d("TAG", "seekbarValue: $seekbarValue")
 
         if (seekbarValue != null) {
             seekBar1.progress = seekbarValue
@@ -436,7 +452,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                             try {
                                 mViewDataBinding.hours.text =
-                                    data.totalSpendTime.hours.toString() + " hrs"
+                                    data.totalSpendTime.hours.toString() + "h " + data.totalSpendTime.minuts +"m"
                                 mViewDataBinding.name.text =
                                     "Hello " + data.userId.name as String
                                 Picasso.get().load(data.userId.profileImage).resize(500, 500)
@@ -757,17 +773,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun onAcceptSokcetClick(position: Int) {
         id = incomingOrderSocketArrayList[position]._id
 
-        Log.d("TAG", "onAcceptClick: $id")
-        val params = JsonObject()
-        try {
-            params.addProperty("status", "accepted")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+        mViewModel.acceptOrder(id)
 
-        mViewModel.acceptReject(id, params)
-
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.acceptResponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
@@ -811,18 +819,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         )
     }
 
-    override fun onSubmitClick(status: String, rejectionReason: String) {
+    override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
-            params.addProperty("status", "rejected")
-            params.addProperty("rejectionReason", rejectionReason)
+            params.addProperty("reasion", rejectionReason)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
 
-        mViewModel.acceptReject(id, params)
+        mViewModel.rejectOrder(id, params)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.rejectesponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
@@ -845,7 +852,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 //                        incomingOrderSocketArrayList.clear()
 //                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
-                        showToast(data.message)
+//                        showToast(data.message)
                         incomingOrderAdapter.notifyDataSetChanged()
 
                         navController =
@@ -897,16 +904,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun onAcceptParcelClick(position: Int) {
         id = incomingParcelSocketArrayList[position]._id
 
-        val params = JsonObject()
-        try {
-            params.addProperty("status", "accepted")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
 
-        mViewModel.acceptReject(id, params)
+        mViewModel.acceptOrder(id)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.acceptResponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
@@ -926,7 +927,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         incomingParcelSocketArrayList.clear()
                         incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
 
-                        showToast(data.message)
+//                        showToast(data.message)
                         incomingParcelAdapter.notifyDataSetChanged()
 
                         navController =
@@ -968,6 +969,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun onSubmitoflineClick(status: String, rejectionReason: String) {
 
         RiderSocketClass.disconnetRider(rejectionReason)
+        RiderSocketClass.disconnect()
+        incomingParcelSocketArrayList.clear()
+        incomingOrderSocketArrayList.clear()
+
+        incomingParcelAdapter.notifyDataSetChanged()
+        incomingOrderAdapter.notifyDataSetChanged()
 
 
 //        val params = JsonObject()
