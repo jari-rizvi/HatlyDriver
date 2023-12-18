@@ -99,10 +99,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     var userimg: String = ""
     var username: String = ""
 
-    lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
-    lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
-    lateinit var incomingOrderSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
-    lateinit var incomingParcelSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc>
+//    lateinit var sharedViewModel.incomingOrderAdapter: IncomingOrderSocketAdapter
+//    lateinit var sharedViewModel.incomingParcelAdapter: IncomingParcelSocketAdapter
+//    lateinit var sharedViewModel.incomingOrderSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
+//    lateinit var sharedViewModel.incomingParcelSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc>
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
@@ -231,6 +231,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         statusText = mViewDataBinding.statusText
 
 
+
         seekBar1.isClickable = false
 
         val seekbarValue = PrefHelper.getInstance(requireContext()).getMax
@@ -251,10 +252,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         if (seekbarValue != null) {
             seekBar1.progress = seekbarValue
+            mViewDataBinding.slider2.progress = seekbarValue
             statusText.text = seekbarText
 
         }
 
+      
+        
         seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -283,12 +287,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         .saveSeekbarText(statusText.text.toString())
 
                 }
+                mViewDataBinding.slider2.progress = seekBar.progress
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
+                mViewDataBinding.slider2.progress = seekBar.progress
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
+
                 if (seekBar1.progress > 50) {
                     seekBar1.progress = seekBar.max
                     PrefHelper.getInstance(requireContext())
@@ -314,7 +321,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         requireContext(), this@HomeFragment, true, "", ""
                     )
                 }
+                mViewDataBinding.slider2.progress =   seekBar1.progress
             }
+
         })
 
 
@@ -529,24 +538,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     private fun OrderRecyclerview() {
-        incomingOrderSocketArrayList = ArrayList()
+//        sharedViewModel.incomingOrderSocketArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
 
-        incomingOrderAdapter = IncomingOrderSocketAdapter(incomingOrderSocketArrayList, this)
-        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
+        sharedViewModel.incomingOrderAdapter = IncomingOrderSocketAdapter(sharedViewModel.incomingOrderSocketArrayList, this)
+        mViewDataBinding.recyclerViewIncomingOrders.adapter = sharedViewModel.incomingOrderAdapter
 
     }
 
     private fun ParcelRecyclerview() {
-        incomingParcelSocketArrayList = ArrayList()
+//        sharedViewModel.incomingParcelSocketArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
 
-        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList, this)
-        mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
+        sharedViewModel.incomingParcelAdapter = IncomingParcelSocketAdapter(sharedViewModel.incomingParcelSocketArrayList, this)
+        mViewDataBinding.recyclerViewSpecialOrders.adapter = sharedViewModel.incomingParcelAdapter
 
     }
 
@@ -717,13 +726,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onIncomingOrderRecieve(incomingOrderSocketData: com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc) {
-        /*    incomingOrderSocketArrayList.clear()*/
+        /*    sharedViewModel.incomingOrderSocketArrayList.clear()*/
 
         Log.d("TAG", "onIncomingOrderRecieveSinglre:")
         GlobalScope.launch(Dispatchers.Main) {
             Log.d("TAG", "onIncomingOrderRecieveSinglre:")
 
-            incomingOrderSocketArrayList.add(0, incomingOrderSocketData)
+            sharedViewModel.incomingOrderSocketArrayList.add(0, incomingOrderSocketData)
 
 
             mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
@@ -731,12 +740,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
-//        incomingOrderSocketArrayList.clear()
+//        sharedViewModel.incomingOrderSocketArrayList.clear()
         Log.d("TAG", "onIncomingOrderRecieveAll:")
 
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingOrderSocketArrayList.addAll(incomingOrderSocketData.docs)
+            sharedViewModel.incomingOrderSocketArrayList.addAll(incomingOrderSocketData.docs)
             Log.d("TAG", "onIncomingOrderRecieveAll:")
 
 
@@ -747,10 +756,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onGetAllParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
-        incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingParcelSocketArrayList.addAll(incomingParcelSocketData.docs)
+            sharedViewModel.incomingParcelSocketArrayList.addAll(incomingParcelSocketData.docs)
 
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
@@ -759,10 +768,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onIncomingParcelRecieve(incomingParcelSocketData: com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc) {
-        incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingParcelSocketArrayList.add(0, incomingParcelSocketData)
+            sharedViewModel.incomingParcelSocketArrayList.add(0, incomingParcelSocketData)
 
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
@@ -770,8 +779,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onAcceptSokcetClick(position: Int) {
-        id = incomingOrderSocketArrayList[position]._id
+        id = sharedViewModel.incomingOrderSocketArrayList[position]._id
 
         mViewModel.acceptOrder(id)
 
@@ -789,17 +799,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
                             it._id != id
                         }
-                        incomingOrderSocketArrayList.clear()
-                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
+                        sharedViewModel.incomingOrderSocketArrayList.clear()
+                        sharedViewModel.incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
 
 //                        showToast(data.message)
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         navController.navigate(R.id.orderFragment, null, options)
-                        incomingOrderAdapter.notifyDataSetChanged()
+                        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
                     }
                 }
 
@@ -812,13 +822,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectSocketClick(position: Int) {
-        id = incomingOrderSocketArrayList[position]._id
+        id = sharedViewModel.incomingOrderSocketArrayList[position]._id
 
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
         )
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
@@ -843,17 +854,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
                             it._id != id
                         }
 
 
-                        incomingOrderSocketArrayList.removeLast()
+                        sharedViewModel.incomingOrderSocketArrayList.removeLast()
 
-//                        incomingOrderSocketArrayList.clear()
-//                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
+//                        sharedViewModel.incomingOrderSocketArrayList.clear()
+//                        sharedViewModel.incomingOrderSocketArrayList.addAll(sharedViewModel.incomingOrderSocketArrayList1)
 //                        showToast(data.message)
-                        incomingOrderAdapter.notifyDataSetChanged()
+                        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
 
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -902,7 +913,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onAcceptParcelClick(position: Int) {
-        id = incomingParcelSocketArrayList[position]._id
+        id = sharedViewModel.incomingParcelSocketArrayList[position]._id
 
 
         mViewModel.acceptOrder(id)
@@ -921,14 +932,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingParcelSocketArrayList1 = incomingParcelSocketArrayList.filter {
+                        val incomingParcelSocketArrayList1 = sharedViewModel.incomingParcelSocketArrayList.filter {
                             it._id != id
                         }
-                        incomingParcelSocketArrayList.clear()
-                        incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
+                        sharedViewModel.incomingParcelSocketArrayList.clear()
+                        sharedViewModel.incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
 
 //                        showToast(data.message)
-                        incomingParcelAdapter.notifyDataSetChanged()
+                        sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
 
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -946,7 +957,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectParcelClick(position: Int) {
-        id = incomingParcelSocketArrayList[position]._id
+        id = sharedViewModel.incomingParcelSocketArrayList[position]._id
 
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
@@ -970,11 +981,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         RiderSocketClass.disconnetRider(rejectionReason)
         RiderSocketClass.disconnect()
-        incomingParcelSocketArrayList.clear()
-        incomingOrderSocketArrayList.clear()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingOrderSocketArrayList.clear()
 
-        incomingParcelAdapter.notifyDataSetChanged()
-        incomingOrderAdapter.notifyDataSetChanged()
+        sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
+        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
 
 
 //        val params = JsonObject()
