@@ -64,7 +64,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
     DialogHelperClass.Companion.OfflineReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
-    onAcceptRejectSocket, onAcceptRejectParcel {
+    onAcceptRejectSocket, onAcceptRejectParcel, DialogHelperClass.Companion.DialogProminentInterface {
 
     override val layoutId: Int
         get() = R.layout.fragment_home
@@ -120,6 +120,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+
+
 
 
         /*   try {
@@ -643,7 +645,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     override fun onConfirmLocation() {
-        requestPermission()
+
+        DialogHelperClass.prominentDialog(requireActivity(),this)
 
 
     }
@@ -1026,6 +1029,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onCanceloflineClick() {
+
+    }
+
+    override fun alloLocation() {
+        requestPermission()
+    }
+
+    override fun denyLocation() {
 
     }
 

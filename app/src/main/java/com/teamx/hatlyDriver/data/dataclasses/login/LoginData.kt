@@ -10,6 +10,6 @@ data class LoginData(
     val role: String,
     val token: String,
     val verified: Boolean,
-    val wallet: Int,
+    val wallet: Double,
     var profileImage: String
     )

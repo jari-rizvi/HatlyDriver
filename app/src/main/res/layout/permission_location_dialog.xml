@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_20sdp"
+            android:background="@drawable/button_radius_corner"
+            android:elevation="@dimen/_2sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingBottom="@dimen/_5sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView23"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp"
+                android:elevation="@dimen/_1sdp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Permission Requested"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toTopOf="@+id/tvLocation1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView23"
+                app:layout_constraintVertical_bias="0.1"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <TextView
+                android:id="@+id/tvLocation1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:text="@string/utilize_hatly_to_expedite_the_delivery_procedure_as_a_hatly_driver_you_help_us_provide_seamless_service_and_to_keep_that_going_we_need_to_collect_some_personal_information_this_includes_your_name_address_history_phone_number_and_transaction_details_gps_tracking_may_be_shared_with_other_users_who_are_waiting_for_delivery_and_helps_with_the_most_effective_assignment_of_orders_to_you_we_employ_gps_and_other_forms_of_background_location_tracking_in_order_to_provide_you_with_tailored_services_receive_timely_notifications_regarding_orders_that_are_pending_and_the_pickup_locations_up_to_five_kilometers_away_without_your_consent_to_this_data_collection_the_hatly_platform_cannot_function_properly_to_find_out_more_about_the_details_of_our_processes_see_our_privacy_policy"
+                android:textAlignment="viewStart"
+                android:textSize="@dimen/_11ssp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/allowBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation"
+                app:layout_constraintVertical_bias="0.06" />
+
+            <TextView
+                android:id="@+id/denyBtn"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginVertical="@dimen/_25sdp"
+                android:gravity="center"
+                android:maxLines="3"
+                android:text="Deny"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:elevation="@dimen/_1sdp"
+                android:textSize="@dimen/_10ssp"
+                android:textStyle="normal"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="#EA1B25"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/allowBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvLocation1" />
+
+            <TextView
+                android:id="@+id/allowBtn"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:elevation="@dimen/_1sdp"
+                android:gravity="center"
+                android:maxLines="3"
+                android:text="Allow"
+                android:background="@drawable/bg_circle"
+                android:backgroundTint="#1ED860"
+                android:textAlignment="center"
+                android:textSize="@dimen/_10ssp"
+                android:textColor="@color/white"
+                android:textStyle="normal"
+                app:layout_constraintBottom_toBottomOf="@+id/denyBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/denyBtn"
+                app:layout_constraintTop_toTopOf="@+id/denyBtn" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
+
+
+
+
+<!--<TextView-->
+<!--android:id="@+id/denyBtn"-->
+<!--android:layout_width="@dimen/_120sdp"-->
+<!--android:layout_height="@dimen/_35sdp"-->
+<!--android:layout_marginVertical="@dimen/_25sdp"-->
+<!--android:gravity="center"-->
+<!--android:maxLines="3"-->
+<!--android:text="Deny"-->
+<!--android:textAlignment="center"-->
+<!--android:textColor="@color/upperGredient"-->
+<!--android:elevation="@dimen/_1sdp"-->
+<!--android:textSize="@dimen/_10ssp"-->
+<!--android:textStyle="normal"-->
+<!--android:background="@drawable/cncl_btn_border"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toStartOf="@+id/allowBtn"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toBottomOf="@+id/tv_title_text" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/allowBtn"-->
+<!--android:layout_width="@dimen/_120sdp"-->
+<!--android:layout_height="@dimen/_35sdp"-->
+<!--android:elevation="@dimen/_1sdp"-->
+<!--android:gravity="center"-->
+<!--android:maxLines="3"-->
+<!--android:text="Allow"-->
+<!--android:background="@drawable/notification_round_item"-->
+<!--android:backgroundTint="@color/upperGredient"-->
+<!--android:textAlignment="center"-->
+<!--android:textColor="@color/white"-->
+<!--android:textSize="@dimen/_10ssp"-->
+<!--android:textStyle="normal"-->
+<!--app:layout_constraintBottom_toBottomOf="@+id/denyBtn"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintStart_toEndOf="@+id/denyBtn"-->
+<!--app:layout_constraintTop_toTopOf="@+id/denyBtn" />-->

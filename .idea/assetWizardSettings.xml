@@ -319,7 +319,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/person/baseline_person_24.xml" />
+                                      <entry key="url" value="file:/$USER_HOME$/AppData/Local/Android/Sdk/icons/material/materialicons/arrow_forward/baseline_arrow_forward_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -329,8 +329,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="a09b9b" />
-                            <entry key="outputName" value="baseline_person" />
+                            <entry key="color" value="050404" />
+                            <entry key="outputName" value="baseline_arrow_forward_24" />
                             <entry key="sourceFile" value="D:\top_up.svg" />
                           </map>
                         </option>

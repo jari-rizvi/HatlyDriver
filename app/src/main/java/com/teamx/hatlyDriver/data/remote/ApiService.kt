@@ -97,7 +97,7 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<MeModel>
 
-    @GET(NetworkCallPoints.TRANSACTION_HISTORY)
+    @GET(NetworkCallPoints.TRANSACTION_HISTORY2)
     suspend fun getTransactionHistory(
         @Query("limit") limit: Int,
         @Query("page") page: Int,

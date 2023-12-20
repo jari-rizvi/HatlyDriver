@@ -288,5 +288,38 @@ class DialogHelperClass {
         }
 
 
+
+        interface DialogProminentInterface {
+            fun alloLocation()
+            fun denyLocation()
+        }
+
+        fun prominentDialog(context: Context, dialogCallBack: DialogProminentInterface): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.permission_location_dialog)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+            dialog.setCancelable(false)
+            val allowBtn = dialog.findViewById<TextView>(R.id.allowBtn)
+            val denyBtn = dialog.findViewById<TextView>(R.id.denyBtn)
+
+            denyBtn.setOnClickListener {
+                dialogCallBack.denyLocation()
+                dialog.dismiss()
+            }
+
+            allowBtn.setOnClickListener {
+                dialogCallBack.alloLocation()
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setCancelable(false)
+            dialog.show()
+            return dialog
+        }
+
+
     }
 }

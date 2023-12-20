@@ -229,13 +229,12 @@
                 android:layout_height="@dimen/_30sdp"
                 android:background="@drawable/circle"
                 android:elevation="@dimen/_3sdp"
-                android:padding="@dimen/_8sdp"
                 app:layout_constraintBottom_toTopOf="@+id/view2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/back_arrow" />
+                app:srcCompat="@drawable/baseline_person" />
 
             <TextView
                 android:id="@+id/textView32"

@@ -32,6 +32,9 @@
     <string name="dropoff">Dropoff</string>
     <string name="accept">Accept</string>
     <string name="orders">Orders</string>
+    <string name="active">Active</string>
+    <string name="incoming">Incoming</string>
+    <string name="completed">Completed</string>
     <string name="my_profile">My Profile</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="terms_condition"><![CDATA[Terms & Condition]]></string>
@@ -100,6 +103,7 @@
     <string name="top_up_success">Top-up Success</string>
     <string name="your_top_up_has_been_successfully_done">Your top-up has been successfully done</string>
     <string name="top_up_more_amount">Top-up more amount</string>
+    <string name="utilize_hatly_to_expedite_the_delivery_procedure_as_a_hatly_driver_you_help_us_provide_seamless_service_and_to_keep_that_going_we_need_to_collect_some_personal_information_this_includes_your_name_address_history_phone_number_and_transaction_details_gps_tracking_may_be_shared_with_other_users_who_are_waiting_for_delivery_and_helps_with_the_most_effective_assignment_of_orders_to_you_we_employ_gps_and_other_forms_of_background_location_tracking_in_order_to_provide_you_with_tailored_services_receive_timely_notifications_regarding_orders_that_are_pending_and_the_pickup_locations_up_to_five_kilometers_away_without_your_consent_to_this_data_collection_the_hatly_platform_cannot_function_properly_to_find_out_more_about_the_details_of_our_processes_see_our_privacy_policy">Utilize Hatly to expedite the delivery procedure! As a Hatly driver, you help us provide seamless service, and to keep that going, we need to collect some personal information. This includes your name, address history, phone number, and transaction details. GPS tracking may be shared with other users who are waiting for delivery and helps with the most effective assignment of orders to you.We employ GPS and other forms of background location tracking in order to provide you with tailored services Receive timely notifications regarding orders that are pending and the pickup locations up to five kilometers away. Without your consent to this data collection, the Hatly platform cannot function properly. To find out more about the details of our processes, see our Privacy Policy.</string>
 
 
 </resources>
