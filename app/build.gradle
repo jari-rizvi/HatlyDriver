@@ -22,8 +22,10 @@ android {
         applicationId "com.teamx.hatlyDriver"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 23
-        versionName "2.3"
+        versionCode 12
+        versionName "10.92"
+
+        //19 - 25 build already hogi
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

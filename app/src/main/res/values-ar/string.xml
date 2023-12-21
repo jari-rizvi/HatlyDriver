@@ -22,6 +22,7 @@
     <string name="incoming_orders">الطلبات الواردة</string>
     <string name="your_earnings">أرباحك</string>
     <string name="total_orders">اجمالي الطلبات</string>
+    <string name="total_orders_earning">"إجمالي أرباح الطلبات "</string>
     <string name="pick_up">"استلام "</string>
     <string name="dropoff">"توصيل "</string>
     <string name="accept">الموافقة</string>
@@ -92,12 +93,20 @@
     <string name="top_up_success">النجاح في تعبئة الرصيد</string>
     <string name="your_top_up_has_been_successfully_done">لقد تمت عملية تعبئة رصيدك بنجاح.</string>
     <string name="top_up_more_amount">قم بتعبئة المزيد من المبلغ</string>
+    <string name="go_online">"اتصل بالانترنت "</string>
     <string name="oops_something_went_wrong"> عفوًا ، حدث خطأ ما! </string>
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="something_wrong"> حدث خطأ ما </string>
     <string name="active">نشيط</string>
     <string name="incoming">وارد</string>
     <string name="completed">"مكتمل "</string>
+    <string name="total_parcels_earning">"إجمالي ربح الطرود "</string>
+    <string name="total_parcels">"إجمالي الطرود "</string>
+    <string name="total_earnings">"الأرباح الكلية "</string>
+    <string name="special_incoming_orders">"الطلبات الواردة الخاصة "</string>
+    <string name="go_offline">انتقل إلى وضع عدم الاتصال</string>
+    <string name="deny">ينكر</string>
+    <string name="allow">يسمح</string>
 
 
 </resources>

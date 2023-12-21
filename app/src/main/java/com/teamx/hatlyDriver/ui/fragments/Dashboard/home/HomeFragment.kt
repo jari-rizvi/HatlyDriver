@@ -122,6 +122,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
+        val userData = PrefHelper.getInstance(requireActivity()).getUserData()
+
+        userData?.let {
+            Log.d("setUserData", "onViewCreated: ${it}")
+            sharedViewModel.setUserData(it)
+
+        }
+
 
 
         /*   try {
@@ -273,7 +281,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     )
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    statusText.text = "Go Offline"
+                    statusText.text = getString(R.string.go_offline)
                     PrefHelper.getInstance(requireContext())
                         .saveSeekbarText(statusText.text.toString())
 
@@ -284,7 +292,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 //                    RiderSocketClass.disconnect()
                     // Hide "Go Online" text
-                    statusText.text = "Go Online"
+                    statusText.text = getString(R.string.go_online)
                     PrefHelper.getInstance(requireContext())
                         .saveSeekbarText(statusText.text.toString())
 
