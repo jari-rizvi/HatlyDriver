@@ -33,6 +33,11 @@ class PrefHelper private constructor() {
         }
     }
 
+    fun clearAll() {
+        sharedPreferences.edit().clear().apply()
+    }
+
+
     fun saveLANGTYPE(lang_type: String) {
         sharedPreferences.edit().putString(LANGTYPE, lang_type).apply()
     }

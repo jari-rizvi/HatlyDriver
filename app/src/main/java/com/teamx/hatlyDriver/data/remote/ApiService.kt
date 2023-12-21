@@ -190,4 +190,11 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
+//    @DELETE(NetworkCallPoints.DELETE_USER)
+    @HTTP(method = "DELETE", path = NetworkCallPoints.DELETE_USER, hasBody = true)
+    suspend fun deleteUserApi(
+        @Body param: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
 }

@@ -108,5 +108,6 @@ class MainRepository @Inject constructor(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.pickedDispatchOrder(id, param)
 
+    suspend fun deleteUserApi(      @Body param: JsonObject?,) = apiService.deleteUserApi(param)
 
 }

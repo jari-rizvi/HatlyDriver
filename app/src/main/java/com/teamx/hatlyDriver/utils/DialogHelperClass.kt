@@ -320,6 +320,38 @@ class DialogHelperClass {
             return dialog
         }
 
+        interface DialogExitApp {
+            fun exitAppSystem()
+        }
+
+        fun deleteUserDialog(context: Context, dialogCallBack: DialogExitApp): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.delete_user_dialog)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+
+            val removeBtn = dialog.findViewById<TextView>(R.id.removeBtn)
+            removeBtn.setOnClickListener {
+                dialogCallBack.exitAppSystem()
+                dialog.dismiss()
+            }
+
+            val cancelBtn = dialog.findViewById<TextView>(R.id.cancelBtn)
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            return dialog
+//            dialog.show()
+        }
+
 
     }
+
+
+
+
 }

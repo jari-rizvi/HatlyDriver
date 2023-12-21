@@ -46,9 +46,10 @@
             android:background="@drawable/input_auth_field"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_3sdp"
+            android:layout_marginHorizontal="@dimen/_15sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imgBack"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView23"
             app:layout_constraintVertical_bias="0.05">
 

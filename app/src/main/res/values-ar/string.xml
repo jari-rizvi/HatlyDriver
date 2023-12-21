@@ -73,6 +73,7 @@
     <string name="enter_the_6_digit_verification_code_nsent_on_your_mobile_number">أدخل رمز التحقق المكون من 6 أرقام المرسل على رقم هاتفك المحمول</string>
     <string name="special">المميز</string>
     <string name="select_card">الرجاء اختيار بطاقة الحساب البنكي</string>
+    <string name="are_you_sure_you_want_delete_user_account">هل أنت متأكد من رغبتك في حذف هذا الحساب</string>
     <string name="confirm_password">الرجاء تاكيد كلمة السر</string>
     <string name="password"> كلمة المرور </string>
     <string name="set_as_default">التعيين كافتراضي</string>

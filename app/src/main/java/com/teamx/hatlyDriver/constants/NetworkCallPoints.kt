@@ -53,6 +53,7 @@ class NetworkCallPoints {
 //        const val TOTAL_EARNING = "incoming/requests-stat"
         const val TOTAL_EARNING = "dashboard/driver"
         const val OFFLINE_REASON = "offlineReason/update"
+        const val DELETE_USER = "auth/delete"
 
 
 

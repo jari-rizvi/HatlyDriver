@@ -32,7 +32,7 @@
                 android:elevation="@dimen/_1sdp"
                 android:scaleType="centerCrop"
                 android:tint="@color/green"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.95"

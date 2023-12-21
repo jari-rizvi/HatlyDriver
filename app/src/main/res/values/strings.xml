@@ -112,6 +112,8 @@
     <string name="special_incoming_orders">Special Incoming Orders</string>
     <string name="deny">Deny</string>
     <string name="allow">Allow</string>
+    <string name="are_you_sure_you_want_delete_user_account">Are you sure you want to delete this account</string>
+    <string name="delete">Delete</string>
 
 
 </resources>
