@@ -28,9 +28,8 @@ class TransactionAdapter(
         val list: com.teamx.hatlyDriver.data.dataclasses.transactionHistory.Doc = arrayList[position]
 
         try {
-
-            holder.binding.tvNoti.text = list.description
-            holder.binding.amount.text = list.charges.toString()+" AED"
+            holder.binding.tvNoti.text = list.change
+            holder.binding.amount.text = list.amount.toString()+" AED"
 
             holder.binding.time.text= TimeFormatter.formatTimeDifference(list.createdAt)
 

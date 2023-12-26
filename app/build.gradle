@@ -22,8 +22,8 @@ android {
         applicationId "com.teamx.hatlyDriver"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 12
-        versionName "10.92"
+        versionCode 27
+        versionName "27.0"
 
         //19 - 25 build already hogi
 

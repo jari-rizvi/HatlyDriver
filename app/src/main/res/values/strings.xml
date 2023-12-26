@@ -114,6 +114,9 @@
     <string name="allow">Allow</string>
     <string name="are_you_sure_you_want_delete_user_account">Are you sure you want to delete this account</string>
     <string name="delete">Delete</string>
+    <string name="withdraw">Withdraw</string>
+    <string name="add_bank_details">Add Bank Details</string>
+    <string name="withdrawal_history">Withdrawal History</string>
 
 
 </resources>

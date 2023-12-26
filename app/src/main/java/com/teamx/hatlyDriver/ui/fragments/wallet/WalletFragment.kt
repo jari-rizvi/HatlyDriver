@@ -12,9 +12,11 @@ import com.teamx.hatlyDriver.BR
 import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentWalletBinding
 import com.teamx.hatlyDriver.localization.LocaleManager
+import com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithdrawalAdapter
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +35,9 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
     lateinit var transactionHistoryAdapter: TransactionAdapter
     lateinit var transactionHistoryArrayList: ArrayList<com.teamx.hatlyDriver.data.dataclasses.transactionHistory.Doc>
 
+  lateinit var withdrawalHistoryAdapter: WithdrawalAdapter
+    lateinit var withdrawalHistoryArrayList: ArrayList<Doc>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,6 +50,10 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
             }
         }
 
+        mViewDataBinding.btnAddBank.setOnClickListener {
+
+        }
+
         if (!MainApplication.localeManager!!.getLanguage()
                 .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
         ) {
@@ -52,7 +61,7 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
             mViewDataBinding.imgBack.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                       R.drawable.stripe_ic_arrow_right_circle,
+                    R.drawable.stripe_ic_arrow_right_circle,
                     requireActivity().theme
                 )
             )
@@ -77,19 +86,36 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
             navController.navigate(R.id.topUpFragment, arguments, options)
         }
 
+        mViewDataBinding.imgwithdraw.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.withDrawFragment, arguments, options)
+        }
+        mViewDataBinding.btnAddBank.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.bankDetailsFragment, arguments, options)
+        }
+
+
         mViewDataBinding.textView39.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.transcationHistoryFragment, arguments, options)
         }
+        mViewDataBinding.textView391.setOnClickListener {
+            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+            navController.navigate(R.id.withdrawalHistoryFragment, arguments, options)
+        }
 
         TransactionRecyclerview()
+        WithdrawalRecyclerview()
         mViewModel.me()
         if (!mViewModel.meResponse.hasActiveObservers()) {
             mViewModel.meResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    }
+
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
                     }
@@ -115,13 +141,15 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
         }
 
 
-        mViewModel.trancationHisotory(5,1)
+        mViewModel.trancationHisotory(5, 1)
         if (!mViewModel.transactionHistoryResponse.hasActiveObservers()) {
             mViewModel.transactionHistoryResponse.observe(requireActivity()) {
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    }
+
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
                     }
@@ -144,6 +172,42 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
                 }
             }
         }
+
+
+
+
+        mViewModel.withdrawalHisotory(5, 1)
+        if (!mViewModel.withdrawalHistoryResponse.hasActiveObservers()) {
+            mViewModel.withdrawalHistoryResponse.observe(requireActivity()) {
+                when (it.status) {
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
+                    }
+
+                    Resource.Status.AUTH -> {
+                        loadingDialog.dismiss()
+                        onToSignUpPage()
+                    }
+
+                    Resource.Status.SUCCESS -> {
+                        loadingDialog.dismiss()
+                        it.data?.let { data ->
+                            data.docs.forEach {
+                                withdrawalHistoryArrayList.add(it)
+                            }
+
+                            withdrawalHistoryAdapter.notifyDataSetChanged()
+                        }
+                    }
+
+                    Resource.Status.ERROR -> {
+                        loadingDialog.dismiss()
+                        mViewDataBinding.root.snackbar(it.message!!)
+                    }
+                }
+            }
+        }
+
     }
 
 
@@ -155,6 +219,16 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
 
         transactionHistoryAdapter = TransactionAdapter(transactionHistoryArrayList)
         mViewDataBinding.Tranrecycler.adapter = transactionHistoryAdapter
+
+    }
+    private fun WithdrawalRecyclerview() {
+        withdrawalHistoryArrayList = ArrayList()
+
+        val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        mViewDataBinding.WithDrawrecycler.layoutManager = linearLayoutManager
+
+        withdrawalHistoryAdapter = WithdrawalAdapter(withdrawalHistoryArrayList)
+        mViewDataBinding.WithDrawrecycler.adapter = withdrawalHistoryAdapter
 
     }
 

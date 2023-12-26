@@ -17,6 +17,8 @@ import com.teamx.hatlyDriver.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
 import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.dataclasses.transactionHistory.TransactionHistoryData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalData.WithDrawalData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory.WithDrawalHistory
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.modelDetach.ModelDetachCredCards
@@ -104,6 +106,20 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<TransactionHistoryData>
 
+    @GET(NetworkCallPoints.WITHDRAWAL_HISTORY)
+    suspend fun getWithdrawalHistory(
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<WithDrawalHistory>
+
+    @POST(NetworkCallPoints.WALLET_WITHDRAWAL)
+    suspend fun createWithdrawal(
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<WithDrawalData>
+
+
     @POST(NetworkCallPoints.TOTAL_EARNING)
     suspend fun getTotalEarning(
         @Body params: JsonObject,
@@ -120,7 +136,6 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<ModelSavedCard>
-
 
     @Multipart
     @POST(NetworkCallPoints.UPLOAD_REVIEW_IMGS)
@@ -190,11 +205,16 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
-//    @DELETE(NetworkCallPoints.DELETE_USER)
+    //    @DELETE(NetworkCallPoints.DELETE_USER)
     @HTTP(method = "DELETE", path = NetworkCallPoints.DELETE_USER, hasBody = true)
     suspend fun deleteUserApi(
         @Body param: JsonObject?,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
+    @POST(NetworkCallPoints.ADD_BANK_DETAILS)
+    suspend fun addBankDetails(
+        @Body params: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
 }

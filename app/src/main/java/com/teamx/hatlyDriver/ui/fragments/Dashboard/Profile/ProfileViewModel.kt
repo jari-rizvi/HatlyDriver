@@ -23,8 +23,8 @@ class ProfileViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val _deleteUserApi = MutableLiveData<Resource<Any>>()
-    val deleteUserApi: LiveData<Resource<Any>>
+    private val _deleteUserApi = MutableLiveData<Resource<SuccessData>>()
+    val deleteUserApi: LiveData<Resource<SuccessData>>
         get() = _deleteUserApi
 
     fun deleteUserApi(param: JsonObject?) {

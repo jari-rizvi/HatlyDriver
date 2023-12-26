@@ -13,7 +13,23 @@
         android:layout_height="@dimen/_40sdp"
         android:layout_margin="@dimen/_10sdp">
 
+
         <TextView
+            android:id="@+id/tvNoti"
+            style="@style/open_sans_regular_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_regular"
+            android:text="@string/order_completed"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+       <!-- <TextView
             android:id="@+id/tvNoti"
             style="@style/open_sans_regular_medium"
             android:layout_width="wrap_content"
@@ -29,7 +45,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/time"
@@ -66,15 +82,13 @@
         <View
             android:id="@+id/view"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_marginHorizontal="@dimen/_15sdp"
-            android:background="@color/white"
-            android:backgroundTint="@color/colorPrimary"
-            android:orientation="vertical"
+            android:layout_height="0.5dp"
+            android:background="#8A8A8A"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time" />
+            app:layout_constraintTop_toBottomOf="@+id/time"
+            app:layout_constraintVertical_bias="0.7" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

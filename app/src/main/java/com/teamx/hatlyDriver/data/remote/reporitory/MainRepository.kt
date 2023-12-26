@@ -38,13 +38,19 @@ class MainRepository @Inject constructor(
     suspend fun offlineReason(
         @Path("id") id: String,
         @Body param: JsonObject,
-    ) = apiService.offlineReason(id,param)
+    ) = apiService.offlineReason(id, param)
 
     suspend fun me() = apiService.me()
     suspend fun getTransactionHistory(
         @Query("limit") limit: Int,
         @Query("page") page: Int
     ) = apiService.getTransactionHistory(limit, page)
+
+    suspend fun getWithdrawalHistory(
+        @Query("limit") limit: Int,
+        @Query("page") page: Int
+    ) = apiService.getWithdrawalHistory(limit, page)
+
 
     suspend fun getTotalEarning(
         @Body params: JsonObject
@@ -58,6 +64,10 @@ class MainRepository @Inject constructor(
     suspend fun topUpSaved(
         @Body params: JsonObject
     ) = apiService.topUpSaved(params)
+
+    suspend fun createWithdrawal(
+        @Body params: JsonObject
+    ) = apiService.createWithdrawal(params)
 
     suspend fun getCredCards(
     ) = apiService.getCredCards()
@@ -108,6 +118,7 @@ class MainRepository @Inject constructor(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.pickedDispatchOrder(id, param)
 
-    suspend fun deleteUserApi(      @Body param: JsonObject?,) = apiService.deleteUserApi(param)
+    suspend fun deleteUserApi(@Body param: JsonObject?) = apiService.deleteUserApi(param)
+    suspend fun addBankDetails(@Body param: JsonObject) = apiService.addBankDetails(param)
 
 }
