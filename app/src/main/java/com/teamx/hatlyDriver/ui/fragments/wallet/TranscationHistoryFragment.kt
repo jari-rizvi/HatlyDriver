@@ -29,10 +29,14 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
         get() = BR.viewModel
 
 
+
     var isScrolling = false
+    var hasNextPage = false
+    var nextPage = 1
     var currentItems = 0
     var totalItems = 0
     var scrollOutItems = 0
+
 
 
     lateinit var transactionHistoryAdapter: TransactionAdapter
@@ -77,7 +81,7 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
             popUpStack()
         }
 
-        mViewModel.trancationHisotory(10, 1)
+        mViewModel.trancationHisotory(10, nextPage)
         if (!mViewModel.transactionHistoryResponse.hasActiveObservers()) {
             mViewModel.transactionHistoryResponse.observe(requireActivity()) {
                 when (it.status) {
@@ -91,10 +95,15 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
+                            if (!hasNextPage) {
+                                transactionHistoryArrayList.clear()
+                            }
                             data.docs.forEach {
                                 transactionHistoryArrayList.add(it)
                             }
 
+                            nextPage = data.nextPage  ?: 1
+                            hasNextPage = data.hasNextPage
                             transactionHistoryAdapter.notifyDataSetChanged()
                         }
                     }
@@ -125,6 +134,11 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
                 }
             }
 
+
+
+
+
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -134,7 +148,10 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
 
                 if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
                     isScrolling = false;
-//                    fetchData()
+                    if (hasNextPage) {
+                        mViewModel.trancationHisotory(10, nextPage)
+                    }
+
                 }
             }
         })

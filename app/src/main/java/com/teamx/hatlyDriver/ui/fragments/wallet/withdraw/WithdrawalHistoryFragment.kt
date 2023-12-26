@@ -32,10 +32,11 @@ class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding,
 
 
     var isScrolling = false
+    var hasNextPage = false
+    var nextPage = 1
     var currentItems = 0
     var totalItems = 0
     var scrollOutItems = 0
-
 
     lateinit var withdrawalHistoryAdapter: WithdrawalAdapter
     lateinit var withdrawalHistoryArrayList: ArrayList<Doc>
@@ -95,10 +96,15 @@ class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding,
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
+                            if (!hasNextPage) {
+                                withdrawalHistoryArrayList.clear()
+                            }
+
                             data.docs.forEach {
                                 withdrawalHistoryArrayList.add(it)
                             }
-
+                            nextPage = data.nextPage  ?: 1
+                            hasNextPage = data.hasNextPage
                             withdrawalHistoryAdapter.notifyDataSetChanged()
                         }
                     }
@@ -138,7 +144,9 @@ class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding,
 
                 if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
                     isScrolling = false;
-//                    fetchData()
+                    if (hasNextPage) {
+                        mViewModel.withdrawalHisotory(10, nextPage)
+                    }
                 }
             }
         })
