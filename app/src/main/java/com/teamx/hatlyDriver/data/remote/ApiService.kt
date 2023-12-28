@@ -18,6 +18,7 @@ import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
 import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.dataclasses.transactionHistory.TransactionHistoryData
 import com.teamx.hatlyDriver.data.dataclasses.withdrawalData.WithDrawalData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalDetails.WithDrawalDetailsData
 import com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory.WithDrawalHistory
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
@@ -217,4 +218,11 @@ interface ApiService {
         @Body params: JsonObject?,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
+
+
+    @GET(NetworkCallPoints.WITHDRAWAL_DETAILS)
+    suspend fun withdrawalDetails(
+        @Path("id") id: String,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<WithDrawalDetailsData>
 }

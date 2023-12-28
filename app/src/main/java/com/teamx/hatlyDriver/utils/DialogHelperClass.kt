@@ -4,11 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.TextUtils.isEmpty
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatlyDriver.R
 import kotlinx.coroutines.Job
 
@@ -215,17 +218,22 @@ class DialogHelperClass {
             val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
             val reason = dialog.findViewById<EditText>(R.id.reason)
 
-//            AddReviewBtn.text = context.getString(R.string.add_review)
             AddReviewBtn.setOnClickListener {
-                /*      val desc = tvTitleText.text
-                      if (desc.isBlank()) {
+                var isValid = true
+                if ( isEmpty(reason.text.toString()) ) {
+                    isValid = false
+                    Toast.makeText(context, "empty", Toast.LENGTH_LONG).show()
+                }
+
+
+                      if (reason.text.isNullOrBlank()) {
                           Snackbar.make(
                               AddReviewBtn,
-                              "Please enter some text",
+                              "Please enter Reason",
                               Snackbar.LENGTH_LONG
                           )
                           return@setOnClickListener
-                      }*/
+                      }
                 if (boo) {
                     reasonDialog.onSubmitClick(reason.text.toString())
                 } else {

@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification
+import androidx.annotation.Keep
 
+@Keep
 data class Doc(
     val _id: String,
     val description: String,

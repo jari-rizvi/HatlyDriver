@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.SignUp
+import androidx.annotation.Keep
 
+@Keep
 data class RegisterData(
     val __v: Int,
     val _id: String,

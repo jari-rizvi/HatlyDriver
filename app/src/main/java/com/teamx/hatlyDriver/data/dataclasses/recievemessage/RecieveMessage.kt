@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.recievemessage
+import androidx.annotation.Keep
 
+@Keep
 data class RecieveMessage(
     val _id: String,
     val createdAt: String,

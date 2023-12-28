@@ -117,6 +117,12 @@
     <string name="withdraw">Withdraw</string>
     <string name="add_bank_details">Add Bank Details</string>
     <string name="withdrawal_history">Withdrawal History</string>
+    <string name="withdrawal_detail">Withdrawal Detail</string>
+    <string name="transaction_receipt">Transaction Receipt</string>
+    <string name="status">Status</string>
+    <string name="reference_no">Reference No.</string>
+    <string name="account_holder_name">Account Holder Name</string>
+    <string name="to_account_iban">To Account/IBAN</string>
 
 
 </resources>

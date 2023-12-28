@@ -11,7 +11,8 @@ import com.teamx.hatlyDriver.utils.TimeFormatter
 
 
 class WithdrawalAdapter(
-    val arrayList: ArrayList<Doc>
+    val arrayList: ArrayList<Doc>,
+    private val onWithDrawalListener: OnWithDrawalListener
 ) : RecyclerView.Adapter<WithdrawalAdapter.TopProductViewHolder>() {
 
 
@@ -40,6 +41,10 @@ class WithdrawalAdapter(
 
         }
 
+        holder.itemView.setOnClickListener {
+            onWithDrawalListener.onItemClick(position)
+        }
+
     }
 
     override fun getItemCount(): Int {
@@ -51,4 +56,8 @@ class WithdrawalAdapter(
         val binding = itemTransactionBinding
 
     }
+}
+interface OnWithDrawalListener {
+    fun onItemClick(position : Int)
+
 }

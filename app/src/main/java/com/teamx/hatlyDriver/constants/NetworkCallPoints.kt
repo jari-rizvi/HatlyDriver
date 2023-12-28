@@ -48,6 +48,7 @@ class NetworkCallPoints {
         const val TRANSACTION_HISTORY = "incoming/requests/transaction-history"
         const val TRANSACTION_HISTORY2 = "transection/list"
         const val WITHDRAWAL_HISTORY = "withdrawal/list"
+        const val WITHDRAWAL_DETAILS = "withdrawal/{id}"
         const val ADD_BANK_DETAILS = "user/account/detail"
 
 

@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.login
+import androidx.annotation.Keep
 
+@Keep
 data class LoginData(
     val __v: Int,
     val _id: String,

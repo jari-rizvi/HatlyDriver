@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
 import androidx.core.content.res.ResourcesCompat
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding, WalletViewModel>() {
+class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding, WalletViewModel>(),OnWithDrawalListener {
 
     override val layoutId: Int
         get() = R.layout.fragment_withdrawal_history
@@ -124,7 +125,7 @@ class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding,
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.withdrawalRec.layoutManager = linearLayoutManager
 
-        withdrawalHistoryAdapter = WithdrawalAdapter(withdrawalHistoryArrayList)
+        withdrawalHistoryAdapter = WithdrawalAdapter(withdrawalHistoryArrayList,this)
         mViewDataBinding.withdrawalRec.adapter = withdrawalHistoryAdapter
 
         mViewDataBinding.withdrawalRec.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -153,6 +154,16 @@ class WithdrawalHistoryFragment : BaseFragment<FragmentWithdrawalHistoryBinding,
 
 
 
+    }
+
+    override fun onItemClick(position: Int) {
+        val id = withdrawalHistoryArrayList[position]._id
+
+        val bundle = Bundle()
+        bundle.putString("id", id)
+
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+        navController.navigate(R.id.withDetailsFragment, bundle, options)
     }
 
 }

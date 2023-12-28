@@ -351,6 +351,18 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="withDetailsFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="988" />
+                            <option name="y" value="368" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="withDrawFragment">
                     <value>
                       <LayoutPositions>

@@ -119,7 +119,6 @@
                 android:text="1 x Spicy Chicken Burger"
                 android:textColor="#6D6D6D"
                 android:textSize="@dimen/_8ssp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/textView27"
                 app:layout_constraintTop_toBottomOf="@+id/textView27" />
@@ -132,7 +131,6 @@
                 android:text="1 x Spicy Chicken Burger"
                 android:textColor="#6D6D6D"
                 android:textSize="@dimen/_8ssp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/textView27"
                 app:layout_constraintEnd_toEndOf="@+id/view"
                 app:layout_constraintHorizontal_bias="1"

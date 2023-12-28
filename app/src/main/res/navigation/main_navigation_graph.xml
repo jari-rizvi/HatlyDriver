@@ -142,6 +142,10 @@
         android:id="@+id/withdrawalHistoryFragment"
         android:name="com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithdrawalHistoryFragment"
         android:label="WithdrawalHistoryFragment" />
+    <fragment
+        android:id="@+id/withDetailsFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithDetailsFragment"
+        android:label="WithDetailsFragment" />
 
 
 </navigation>

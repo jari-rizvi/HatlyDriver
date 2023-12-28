@@ -118,6 +118,10 @@ class MainRepository @Inject constructor(
         @Path("id") id: String, @Body param: JsonObject
     ) = apiService.pickedDispatchOrder(id, param)
 
+    suspend fun withdrawalDetails(
+        @Path("id") id: String
+    ) = apiService.withdrawalDetails(id)
+
     suspend fun deleteUserApi(@Body param: JsonObject?) = apiService.deleteUserApi(param)
     suspend fun addBankDetails(@Body param: JsonObject) = apiService.addBankDetails(param)
 

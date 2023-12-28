@@ -16,13 +16,14 @@ import com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentWalletBinding
 import com.teamx.hatlyDriver.localization.LocaleManager
+import com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.OnWithDrawalListener
 import com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithdrawalAdapter
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
+class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(),OnWithDrawalListener {
 
     override val layoutId: Int
         get() = R.layout.fragment_wallet
@@ -227,10 +228,19 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>() {
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         mViewDataBinding.WithDrawrecycler.layoutManager = linearLayoutManager
 
-        withdrawalHistoryAdapter = WithdrawalAdapter(withdrawalHistoryArrayList)
+        withdrawalHistoryAdapter = WithdrawalAdapter(withdrawalHistoryArrayList,this)
         mViewDataBinding.WithDrawrecycler.adapter = withdrawalHistoryAdapter
 
     }
+
+    override fun onItemClick(position: Int) {
+        val id = withdrawalHistoryArrayList[position]._id
+
+        val bundle = Bundle()
+        bundle.putString("id", id)
+
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+        navController.navigate(R.id.withDetailsFragment, bundle, options)    }
 
 
 }
