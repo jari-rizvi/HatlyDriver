@@ -1,4 +1,4 @@
-package com.teamx.raseef.data.models.messagesUser
+package  com.teamx.hatlyDriver.data.models.messagesUser
 
 import androidx.annotation.Keep
 

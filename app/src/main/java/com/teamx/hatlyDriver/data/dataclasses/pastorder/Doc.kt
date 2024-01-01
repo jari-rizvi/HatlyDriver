@@ -1,11 +1,13 @@
 package com.teamx.hatlyDriver.data.dataclasses.pastorder
+import androidx.annotation.Keep
 
+@Keep
 data class Doc(
     val _id: String,
     val charges: Double,
     val createdAt: String,
     val dropOff: DropOff,
-    val estimatedDeliveryTime: Any,
+    val estimatedDeliveryTime: Double,
     val orders: Orders,
     val pickup: Pickup,
     val requestFor: String,

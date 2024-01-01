@@ -14,10 +14,9 @@
         android:layout_height="wrap_content"
         android:elevation="@dimen/_5sdp"
         android:paddingBottom="32dp"
-        app:behavior_peekHeight="@dimen/_90sdp"
         app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/_90sdp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
 
 
         <View
@@ -34,10 +33,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/view1"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view1">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -123,16 +121,16 @@
                 android:background="@drawable/card_background_green"
                 android:backgroundTint="@color/white"
                 android:elevation="@dimen/_3sdp"
-                app:layout_constraintTop_toBottomOf="@+id/layout1"
                 app:layout_constraintEnd_toEndOf="@+id/layout1"
-                app:layout_constraintStart_toStartOf="@+id/layout1">
+                app:layout_constraintStart_toStartOf="@+id/layout1"
+                app:layout_constraintTop_toBottomOf="@+id/layout1">
 
                 <TextView
                     android:id="@+id/textView25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_regular"
-                    android:text="Order Summery"
+                    android:text="@string/order_summery"
                     android:textColor="#EA1B25"
                     android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toTopOf="@+id/textView27"
@@ -213,7 +211,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_regular"
-                    android:text="Total Amount"
+                    android:text="@string/total_amount"
                     android:textColor="#EA1B25"
                     android:textSize="@dimen/_8ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -237,12 +235,131 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+            <!--                android:layout_width="0dp"-->
+            <!--                android:layout_height="@dimen/_120sdp"-->
+            <!--                android:layout_marginTop="@dimen/_15sdp"-->
+            <!--                app:layout_constraintVertical_bias="0"-->
+            <!--                android:layout_marginBottom="@dimen/_10sdp"-->
+            <!--                android:background="@drawable/card_background_green"-->
+            <!--                android:backgroundTint="@color/white"-->
+            <!--                android:elevation="@dimen/_3sdp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/layout2"-->
+            <!--                app:layout_constraintStart_toStartOf="@+id/layout2"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/layout2">-->
+
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/imgAvatar"-->
+            <!--                    android:layout_width="@dimen/_30sdp"-->
+            <!--                    android:layout_height="@dimen/_30sdp"-->
+            <!--                    android:background="@drawable/circle"-->
+            <!--                    android:elevation="@dimen/_3sdp"-->
+            <!--                    android:padding="@dimen/_8sdp"-->
+            <!--                    app:layout_constraintBottom_toTopOf="@+id/view2"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.05"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/textView32"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/open_sans_regular"-->
+            <!--                    android:text="@string/orders"-->
+            <!--                    android:textColor="#0A0001"-->
+            <!--                    android:textSize="@dimen/_10ssp"-->
+            <!--                    app:layout_constraintBottom_toTopOf="@+id/textView33"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.1"-->
+            <!--                    app:layout_constraintStart_toEndOf="@+id/imgAvatar"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/imgChat"-->
+            <!--                    android:layout_width="@dimen/_18sdp"-->
+            <!--                    android:layout_height="@dimen/_18sdp"-->
+            <!--                    android:elevation="@dimen/_3sdp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="@+id/textView32"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.86"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="@+id/textView32"-->
+            <!--                    app:srcCompat="@drawable/chat" />-->
+
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/imgCall"-->
+            <!--                    android:layout_width="@dimen/_18sdp"-->
+            <!--                    android:layout_height="@dimen/_18sdp"-->
+            <!--                    android:elevation="@dimen/_3sdp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="@+id/textView32"-->
+            <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                    app:layout_constraintHorizontal_bias="0.95"-->
+            <!--                    app:layout_constraintStart_toStartOf="parent"-->
+            <!--                    app:layout_constraintTop_toTopOf="@+id/textView32"-->
+            <!--                    app:srcCompat="@drawable/call" />-->
+
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/textView33"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/open_sans_regular"-->
+            <!--                    android:textColor="#6D6D6D"-->
+            <!--                    android:gravity="center_vertical"-->
+            <!--                    android:drawableStart="@drawable/address_location"-->
+            <!--                    android:textSize="@dimen/_8ssp"-->
+            <!--                    app:layout_constraintBottom_toTopOf="@+id/view2"-->
+            <!--                    app:layout_constraintEnd_toEndOf="@+id/view2"-->
+            <!--                    app:layout_constraintStart_toStartOf="@+id/textView32"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@+id/textView32" />-->
+
+
+            <!--                <View-->
+            <!--                    android:id="@+id/view2"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="0.5dp"-->
+            <!--                    android:background="#8A8A8A"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="@+id/imgChat"-->
+            <!--                    app:layout_constraintStart_toStartOf="@+id/textView32"-->
+            <!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/textView34"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/open_sans_regular"-->
+            <!--                    android:text="@string/special_instruction"-->
+            <!--                    android:textColor="#EA1B25"-->
+            <!--                    android:textSize="@dimen/_8ssp"-->
+            <!--                    app:layout_constraintBottom_toTopOf="@+id/textView35"-->
+            <!--                    app:layout_constraintStart_toStartOf="@+id/view2"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@+id/view2" />-->
+
+            <!--                <TextView-->
+            <!--                    android:id="@+id/textView35"-->
+            <!--                    android:layout_width="0dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:fontFamily="@font/open_sans_regular"-->
+            <!--                    android:textColor="#6D6D6D"-->
+            <!--                    android:textSize="@dimen/_8ssp"-->
+            <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                    app:layout_constraintEnd_toEndOf="@+id/view2"-->
+            <!--                    app:layout_constraintStart_toStartOf="@+id/textView34"-->
+            <!--                    app:layout_constraintTop_toBottomOf="@+id/textView34" />-->
+
+
+            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/conn"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_120sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                app:layout_constraintVertical_bias="0"
                 android:layout_marginBottom="@dimen/_10sdp"
                 android:background="@drawable/card_background_green"
                 android:backgroundTint="@color/white"
@@ -250,7 +367,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/layout2"
                 app:layout_constraintStart_toStartOf="@+id/layout2"
-                app:layout_constraintTop_toBottomOf="@+id/layout2">
+                app:layout_constraintTop_toBottomOf="@+id/layout2"
+                app:layout_constraintVertical_bias="0">
 
 
                 <ImageView
@@ -264,12 +382,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/back_arrow" />
 
                 <TextView
                     android:id="@+id/textView32"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:fontFamily="@font/open_sans_regular"
                     android:text="@string/orders"
                     android:textColor="#0A0001"
@@ -285,6 +405,7 @@
                     android:id="@+id/imgChat"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:elevation="@dimen/_3sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView32"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -297,6 +418,7 @@
                     android:id="@+id/imgCall"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:elevation="@dimen/_3sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView32"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -306,21 +428,21 @@
                     app:srcCompat="@drawable/call" />
 
 
-
-
                 <TextView
                     android:id="@+id/textView33"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/open_sans_regular"
-                    android:textColor="#6D6D6D"
-                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_5sdp"
                     android:drawableStart="@drawable/address_location"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:fontFamily="@font/open_sans_regular"
+                    android:gravity="center_vertical"
+                    android:textColor="#6D6D6D"
                     android:textSize="@dimen/_8ssp"
                     app:layout_constraintBottom_toTopOf="@+id/view2"
                     app:layout_constraintEnd_toEndOf="@+id/view2"
                     app:layout_constraintStart_toStartOf="@+id/textView32"
-                    app:layout_constraintTop_toBottomOf="@+id/textView32" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgChat" />
 
 
                 <View
@@ -339,7 +461,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/open_sans_regular"
-                    android:text="Special Instruction"
+                    android:text="@string/special_instruction"
                     android:textColor="#EA1B25"
                     android:textSize="@dimen/_8ssp"
                     app:layout_constraintBottom_toTopOf="@+id/textView35"
@@ -371,7 +493,7 @@
                 android:fontFamily="@font/open_sans_regular"
                 android:gravity="center"
                 android:paddingVertical="@dimen/_7sdp"
-                android:text="Order Complete"
+                android:text="@string/order_complete"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -381,12 +503,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/conn" />
 
 
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
+import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.data.dataclasses.recievemessage.RecieveMessage
 import com.teamx.hatlyDriver.databinding.ItemChatRiderBinding
 import com.teamx.hatlyDriver.databinding.ItemChatUserBinding
+import com.teamx.hatlyDriver.utils.Helper
 import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -93,51 +96,35 @@ class MessageAdapter(
                 Log.d("TAG", "onBindViewHolder11111: ${messagesUser.message}")
                 (holder as MessageGenericViewHolder2).bind!!.todayTime.text = messagesUser.createdAt
 
-//                if (messagesUser.imgMsg.isNullOrBlank()) {
-//
-//                    (holder as MessageGenericViewHolder2).bind!!.txtMessage.visibility = View.GONE
-////                    Picasso.get().load(messagesUser.imgUrl).into(holder.bind!!.imgMessage)
-//                } else {
-//                    Picasso.get().load(messagesUser.imgMsg).into((holder as MessageGenericViewHolder2).bind!!.txtMessage)
-//                    (holder as MessageGenericViewHolder2).bind!!.txtMessage.visibility = View.VISIBLE
-//                }
-
-//                if (messagesUser.profileImg.isNullOrBlank()) {
-//
-//                    (holder as MessageGenericViewHolder2).bind!!.imgUser.visibility = View.GONE
-////                    Picasso.get().load(messagesUser.imgUrl).into(holder.bind!!.imgMessage)
-//                } else {
-//                    Picasso.get().load(messagesUser.profileImg)
-//                        .into((holder as MessageGenericViewHolder2).bind!!.imgUser)
-//                    (holder as MessageGenericViewHolder2).bind!!.imgUser.visibility = View.VISIBLE
-//                }
 
                 (holder as MessageGenericViewHolder2).bind!!.todayTime.text =  getTimeInString(messagesUser.createdAt)
 
                 Timber.tag("TAG").d("onBindViewHolder: true")
 
-//                if (todayTimeString == messagesUser.timeAndDate) {
-//                    (holder as MessageGenericViewHolder2).bind!!.todayTime.visibility = View.GONE
 
-//                } else {
-//                    (holder as MessageGenericViewHolder2).bind!!.todayTime.visibility = View.VISIBLE
+                if (Helper.isUrl(messagesUser.message)){
+                    (holder as MessageGenericViewHolder2).bind!!.txtMessage.visibility = View.GONE
+                    (holder as MessageGenericViewHolder2).bind!!.imgUserChat.visibility = View.VISIBLE
+                    Picasso.get().load(messagesUser.message).placeholder(R.drawable.baseline_image_24).error(
+                        R.drawable.baseline_image_24).resize(500, 500).into( (holder as MessageGenericViewHolder2).bind!!.imgUserChat)
+                }else {
+                    (holder as MessageGenericViewHolder2).bind!!.imgUserChat.visibility = View.GONE
+                    (holder as MessageGenericViewHolder2).bind!!.txtMessage.visibility = View.VISIBLE
+                    (holder as MessageGenericViewHolder2).bind!!.txtMessage.text = try {
+                        messagesUser.message
+                    } catch (e: Exception) {
+                        ""
+                    }
+                }
 
-//                }
+
 
                 todayTimeString = messagesUser.createdAt
             }
 
             false -> {
 
-
                 val text: String = messagesUser.message
-
-                Timber.tag("TAG").d("onBindViewHolder: false")
-
-//                (holder as MessageGenericViewHolder2).bind!!.todayTime1.text = messagesUser.timeAndDate
-
-                Timber.tag("TAG")
-                    .d("same $text $position ${messagesUser.createdAt} $todayTimeString")
 
                 if (messagesUser.createdAt == todayTimeString) {
                     (holder as MessageGenericViewHolder2).bind1!!.todayTime.visibility = View.GONE
@@ -146,37 +133,13 @@ class MessageAdapter(
                         View.VISIBLE
                 }
 
-
-                Log.d("TAG", "onBindViewHolder11111: ${messagesUser.message}")
                 (holder as MessageGenericViewHolder2).bind1!!.txtMessage.text = messagesUser.message
-
-
                 (holder as MessageGenericViewHolder2).bind1!!.todayTime.text =
                     getTimeInString(messagesUser.createdAt)
-//                (holder as MessageGenericViewHolder2).bind1!!.txtMessageTime.text = messagesUser.timeAndDate
-//                if (messagesUser.profileImg.isNullOrBlank()) {
-//
-//                    (holder as MessageGenericViewHolder2).bind1!!.imgUser.visibility = View.GONE
-////                    Picasso.get().load(messagesUser.imgUrl).into(holder.bind1!!.imgMessage)
-//                } else {
-//                    Picasso.get().load(messagesUser.profileImg)
-//                        .into((holder as MessageGenericViewHolder2).bind1!!.imgUser)
-//                    (holder as MessageGenericViewHolder2).bind1!!.imgUser.visibility = View.VISIBLE
-//                }
-//                if (messagesUser.imgMsg.isNullOrBlank()) {
-//
-//                    (holder as MessageGenericViewHolder2).bind1!!.imgMessage.visibility = View.GONE
-////                    Picasso.get().load(messagesUser.imgUrl).into(holder.bind1!!.imgMessage)
-//                } else {
-//                    Picasso.get().load(messagesUser.imgMsg)
-//                        .into((holder as MessageGenericViewHolder2).bind1!!.imgMessage)
-//                    (holder as MessageGenericViewHolder2).bind1!!.imgMessage.visibility = View.VISIBLE
-//                }
 
                 todayTimeString = messagesUser.createdAt
-                Timber.tag("TAG").d("working")
+
             }
-//            else -> throw IllegalArgumentException("Invalid item type")
         }
 
     }

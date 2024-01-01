@@ -3,14 +3,17 @@ package com.teamx.hatlyDriver.ui.fragments.wallet
 import android.os.Bundle
 import android.view.View
 import android.widget.AbsListView
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentTransactionBinding
+import com.teamx.hatlyDriver.localization.LocaleManager
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,10 +29,14 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
         get() = BR.viewModel
 
 
+
     var isScrolling = false
+    var hasNextPage = false
+    var nextPage = 1
     var currentItems = 0
     var totalItems = 0
     var scrollOutItems = 0
+
 
 
     lateinit var transactionHistoryAdapter: TransactionAdapter
@@ -47,11 +54,34 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
             }
         }
 
+        if (!MainApplication.localeManager!!.getLanguage()
+                .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
+        ) {
+
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                       R.drawable.stripe_ic_arrow_right_circle,
+                    requireActivity().theme
+                )
+            )
+
+        } else {
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.back_arrow,
+                    requireActivity().theme
+                )
+            )
+
+        }
+
         mViewDataBinding.imgBack.setOnClickListener {
             popUpStack()
         }
 
-        mViewModel.trancationHisotory(10, 1)
+        mViewModel.trancationHisotory(10, nextPage)
         if (!mViewModel.transactionHistoryResponse.hasActiveObservers()) {
             mViewModel.transactionHistoryResponse.observe(requireActivity()) {
                 when (it.status) {
@@ -65,10 +95,15 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
+                            if (!hasNextPage) {
+                                transactionHistoryArrayList.clear()
+                            }
                             data.docs.forEach {
                                 transactionHistoryArrayList.add(it)
                             }
 
+                            nextPage = data.nextPage  ?: 1
+                            hasNextPage = data.hasNextPage
                             transactionHistoryAdapter.notifyDataSetChanged()
                         }
                     }
@@ -99,6 +134,11 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
                 }
             }
 
+
+
+
+
+
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -108,7 +148,10 @@ class TranscationHistoryFragment : BaseFragment<FragmentTransactionBinding, Wall
 
                 if (isScrolling && (currentItems + scrollOutItems == totalItems)) {
                     isScrolling = false;
-//                    fetchData()
+                    if (hasNextPage) {
+                        mViewModel.trancationHisotory(10, nextPage)
+                    }
+
                 }
             }
         })

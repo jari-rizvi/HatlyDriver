@@ -10,7 +10,7 @@ import com.teamx.hatlyDriver.data.dataclasses.fcmmodel.FcmModel
 import com.teamx.hatlyDriver.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatlyDriver.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
-import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningData
+import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.data.remote.reporitory.MainRepository
 import com.teamx.hatlyDriver.utils.NetworkHelper
@@ -27,16 +27,16 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel() {
 
 
-    private val _totalEarningsResponse = MutableLiveData<Resource<TotalEarningData>>()
-    val totalEarningsResponse: LiveData<Resource<TotalEarningData>>
+    private val _totalEarningsResponse = MutableLiveData<Resource<TotalEarningsData>>()
+    val totalEarningsResponse: LiveData<Resource<TotalEarningsData>>
         get() = _totalEarningsResponse
 
-    fun getTotalEarnings(filterBy: String,filterFor: String) {
+    fun getTotalEarnings(param: JsonObject) {
         viewModelScope.launch {
             _totalEarningsResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
-                    mainRepository.getTotalEarning(filterBy,filterFor).let {
+                    mainRepository.getTotalEarning(param).let {
                         if (it.isSuccessful) {
                             _totalEarningsResponse.postValue(Resource.success(it.body()!!))
                         }/*else if (it.code() == 401) {
@@ -59,27 +59,27 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    private val _acceptRejectResponse = MutableLiveData<Resource<SuccessData>>()
-    val acceptRejectResponse: LiveData<Resource<SuccessData>>
-        get() = _acceptRejectResponse
+    private val _acceptResponse = MutableLiveData<Resource<SuccessData>>()
+    val acceptResponse: LiveData<Resource<SuccessData>>
+        get() = _acceptResponse
 
-    fun acceptReject(id: String, param: JsonObject) {
+    fun acceptOrder(id: String) {
         viewModelScope.launch {
-            _acceptRejectResponse.postValue(Resource.loading(null))
+            _acceptResponse.postValue(Resource.loading(null))
             if (networkHelper.isNetworkConnected()) {
                 try {
-                    mainRepository.acceptRejectOrder(id, param).let {
+                    mainRepository.acceptOrder(id).let {
                         if (it.isSuccessful) {
-                            _acceptRejectResponse.postValue(Resource.success(it.body()!!))
+                            _acceptResponse.postValue(Resource.success(it.body()!!))
                         }
                         else if (it.code() == 401) {
-                            _acceptRejectResponse.postValue(Resource.unAuth("", null))
+                            _acceptResponse.postValue(Resource.unAuth("", null))
                         }
                         else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
-                            _acceptRejectResponse.postValue(Resource.error(jsonObj.getString("message")))
+                            _acceptResponse.postValue(Resource.error(jsonObj.getString("message")))
                         } else {
-                            _acceptRejectResponse.postValue(
+                            _acceptResponse.postValue(
                                 Resource.error(
                                     "Some thing went wrong",
                                     null
@@ -88,9 +88,86 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
-                    _acceptRejectResponse.postValue(Resource.error("${e.message}", null))
+                    _acceptResponse.postValue(Resource.error("${e.message}", null))
                 }
-            } else _acceptRejectResponse.postValue(Resource.error("No internet connection", null))
+            } else _acceptResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
+      private val _rejectResponse = MutableLiveData<Resource<SuccessData>>()
+    val rejectesponse: LiveData<Resource<SuccessData>>
+        get() = _rejectResponse
+
+    fun rejectOrder(id: String, param: JsonObject) {
+        viewModelScope.launch {
+            _rejectResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.rejectOrder(id, param).let {
+                        if (it.isSuccessful) {
+                            _rejectResponse.postValue(Resource.success(it.body()!!))
+                        }
+                        else if (it.code() == 401) {
+                            _rejectResponse.postValue(Resource.unAuth("", null))
+                        }
+                        else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _rejectResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            _rejectResponse.postValue(
+                                Resource.error(
+                                    "Some thing went wrong",
+                                    null
+                                )
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    _rejectResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _rejectResponse.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
+
+
+
+
+
+    private val _offlineReasonResponse = MutableLiveData<Resource<SuccessData>>()
+    val offlineReasonResponse: LiveData<Resource<SuccessData>>
+        get() = _offlineReasonResponse
+
+    fun offlineReason(id: String, param: JsonObject) {
+        viewModelScope.launch {
+            _offlineReasonResponse.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.offlineReason(id, param).let {
+                        if (it.isSuccessful) {
+                            _offlineReasonResponse.postValue(Resource.success(it.body()!!))
+                        }
+                        else if (it.code() == 401) {
+                            _offlineReasonResponse.postValue(Resource.unAuth("", null))
+                        }
+                        else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400 || it.code() == 422) {
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _offlineReasonResponse.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            _offlineReasonResponse.postValue(
+                                Resource.error(
+                                    "Some thing went wrong",
+                                    null
+                                )
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    _offlineReasonResponse.postValue(Resource.error("${e.message}", null))
+                }
+            } else _offlineReasonResponse.postValue(Resource.error("No internet connection", null))
         }
     }
 
@@ -151,6 +228,7 @@ class HomeViewModel @Inject constructor(
                             Timber.tag("87878787887").d("secoonnddd")
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
                             _getPastOrdersResponse.postValue(Resource.error(jsonObj.getString("message")))
+
                         } else {
 //                            _getPastOrdersResponse.postValue(
                                /* Resource.error(
@@ -163,7 +241,10 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     _getPastOrdersResponse.postValue(Resource.error("${e.message}", null))
+                    Timber.tag("87878787887error").d(e.message)
+
                 }
             } else _getPastOrdersResponse.postValue(Resource.error("No internet connection", null))
         }
@@ -193,6 +274,7 @@ class HomeViewModel @Inject constructor(
 
 //                            _getPastParcelsResponse.postValue(Resource.error(it.message(), null))
                             val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+
 //                            _getPastParcelsResponse.postValue(Resource.error(jsonObj.getString("message")))
                         } else {
                             /*_getPastParcelsResponse.postValue(
@@ -207,6 +289,8 @@ class HomeViewModel @Inject constructor(
                     }
                 } catch (e: Exception) {
                     _getPastParcelsResponse.postValue(Resource.error("${e.message}", null))
+                    Timber.tag("87878787887error").d(e.message)
+
                 }
             } else _getPastParcelsResponse.postValue(Resource.error("No internet connection", null))
         }

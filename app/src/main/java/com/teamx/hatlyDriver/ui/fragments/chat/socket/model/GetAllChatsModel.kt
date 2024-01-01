@@ -1,4 +1,4 @@
-package com.teamx.raseef.ui.fragments.messages.socket.model
+package  com.teamx.hatlyDriver.ui.fragments.chat.socket.model
 
 class GetAllChatsModel {
 }

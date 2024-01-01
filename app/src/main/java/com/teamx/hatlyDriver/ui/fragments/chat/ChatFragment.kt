@@ -3,18 +3,21 @@ package com.teamx.hatlyDriver.ui.fragments.chat
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
+import com.teamx.hatlyDriver.constants.NetworkCallPoints
 import com.teamx.hatlyDriver.data.dataclasses.recievemessage.RecieveMessage
 import com.teamx.hatlyDriver.databinding.FragmentChatBinding
+import com.teamx.hatlyDriver.localization.LocaleManager
 import com.teamx.hatlyDriver.ui.fragments.chat.adapter.MessageAdapter
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.MessageSocketClass
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.allmessageData.GetAllMessageData
@@ -22,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -43,16 +45,12 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     override val bindingVariable: Int
         get() = BR.viewModel
 
-
-    //    private lateinit var messagesUserArrayList: ArrayList<RiderMessage>
     private lateinit var messagesUserArrayList: ArrayList<RecieveMessage>
 
-    //    private lateinit var messagesUserAdapter: ChatAdapter
     private lateinit var messagesUserAdapter: MessageAdapter
 
     var userId = ""
     private var orderId: String = ""
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,9 +63,33 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+
+        if (!MainApplication.localeManager!!.getLanguage()
+                .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
+        ) {
+
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                       R.drawable.stripe_ic_arrow_right_circle,
+                    requireActivity().theme
+                )
+            )
+
+        } else {
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.back_arrow,
+                    requireActivity().theme
+                )
+            )
+
+        }
+
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, arguments, options)
+            navController.navigate(R.id.trackFragment, arguments, options)
             MessageSocketClass.disconnect()
         }
 
@@ -75,11 +97,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // Handle the back button event here
-                    navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.homeFragment, arguments, options)
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.trackFragment, arguments, options)
                     MessageSocketClass.disconnect()
-
 
                 }
             })
@@ -87,14 +108,10 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
         val bundle = arguments
         orderId = bundle?.getString("orderId").toString()
 
-        Log.d("TAG", "orderIdorderIdorderId: $orderId")
-
-
-//        MessageSocketClass.connect("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI4MDBmYjA4ODFjNGUzYTBiNjdkZmNmMmZhYWRkY2YiLCJpYXQiOjE2OTc0NTQxMzIsImV4cCI6MTAzMzc0NTQxMzJ9.ADKHPgvmRMsAu6EiNZHsLYLAVbhQokpgnhG335SsJ0s","6511befda128e070ad313243")
         MessageSocketClass.connect2(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
-            orderId, this, this
+            NetworkCallPoints.TOKENER, orderId, this, this
         )
+
         mViewDataBinding.imgSend.setOnClickListener {
             val text: String = mViewDataBinding.inpChat.text.toString()
             if (text.isNotEmpty()) {
@@ -137,24 +154,18 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     fun timeFormater(timeMili: String): Long? {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         var milliseconds: Long? = null
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC") // Set the time zone to UTC
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
 
         try {
             val date: Date = dateFormat.parse(timeMili)
             return date.time
-            println("Timestamp in milliseconds: $milliseconds")
         } catch (e: ParseException) {
             e.printStackTrace()
         }
         return milliseconds
     }
 
-    var strImg = ""
-
     override fun onGetReceiveMessage(getAllChatsData: RecieveMessage) {
-
-        Timber.tag("MessageUserFragment").d("onGetReceiveMessage${getAllChatsData.message}: ")
-        Timber.tag("MessageUserFragment").d("onGetReceiveMessage${getAllChatsData}: ")
 
         var timestamp = ""
 
@@ -167,21 +178,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
         GlobalScope.launch(Dispatchers.Main) {
             messagesUserArrayList.add(
                 getAllChatsData
-//                RiderMessage(
-//                    "2",
-//                    str,
-//                    "",
-//                    "",
-//                    "",
-//                    false,
-//                    getAllChatsData.message,
-//                    true,
-//                    "",
-//                    "",
-//                    ""
-//                )
             )
-            Log.d("TAG", "messageaaya: ${messagesUserArrayList.size}")
+
             messagesUserAdapter.notifyDataSetChanged()
             mViewDataBinding.recChat.scrollToPosition(messagesUserArrayList.size - 1)
 
@@ -189,8 +187,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     }
 
     override fun responseMessage2(str: String) {
-        Timber.tag("MessageUserFragment").d("responseMessage2: ")
-
         GlobalScope.launch(Dispatchers.Main) {
 
             var timestamp = ""
@@ -199,19 +195,14 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
             messagesUserArrayList.add(
                 RecieveMessage("2", str2, "", "", "", false, str, "false", "", "")
             )
-            Log.d("TAG", "messageaaya: $str")
             messagesUserAdapter.notifyDataSetChanged()
             mViewDataBinding.recChat.scrollToPosition(messagesUserArrayList.size - 1)
         }
     }
 
     override fun onGetAllMessage(getAllMessageData: GetAllMessageData) {
-        Timber.tag("MessageUserFragment").d("onGetAllMessage: ${getAllMessageData.docs.size}")
         GlobalScope.launch(Dispatchers.Main) {
-            Timber.tag("MessageUserFragment").d("Dispatchers: ${getAllMessageData.docs.size}")
-
             messagesUserArrayList.clear()
-
 
             getAllMessageData.docs.forEachIndexed { i, it ->
 
@@ -240,22 +231,9 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
 
                 val str = getTimeInString(timestamp)
 
-                Timber.tag("MessageUserFragment").d("timeFormatter: ${it.message}")
                 if (userId.isEmpty()) {
                     userId = it.from
                 }
-//                if (userId == it.from) {
-//                    messagesUserArrayList.add(
-////                        RiderMessage("2", str, "", "", "", false, it.message, true, "", "", "")
-//                    )
-//                } else {
-//                    messagesUserArrayList.add(
-////                        RiderMessage("1", str, "", "", "", false, it.message, true, "", "", "")
-//
-//                    )
-//                }
-//                userId = it.from
-
             }
 
             messagesUserAdapter.notifyDataSetChanged()
@@ -263,7 +241,6 @@ class ChatFragment : BaseFragment<FragmentChatBinding, ChatViewModel>(),
     }
 
     override fun responseMessage() {
-        Timber.tag("MessageUserFragment").d("responseMessage: ")
     }
 
 

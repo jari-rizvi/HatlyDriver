@@ -1,6 +1,6 @@
 package com.teamx.hatlyDriver.data.dataclasses.totalEarning
 
-data class SpentTime(
+data class TotalSpendTime(
     val hours: Int,
-    val minutes: Int
+    val minuts: Int
 )

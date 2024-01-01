@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.SignUp
+import androidx.annotation.Keep
 
+@Keep
 data class RegisterData(
     val __v: Int,
     val _id: String,
@@ -8,5 +10,5 @@ data class RegisterData(
     val name: String,
     val role: String,
     val verified: Boolean,
-    val wallet: Int
+    val wallet: Double
 )

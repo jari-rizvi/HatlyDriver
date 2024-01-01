@@ -4,14 +4,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.databinding.FragmentOrdersBinding
+import com.teamx.hatlyDriver.localization.LocaleManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -37,6 +39,30 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
                 popExit = R.anim.nav_default_pop_exit_anim
             }
         }
+
+        if (!MainApplication.localeManager!!.getLanguage()
+                .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
+        ) {
+
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                       R.drawable.stripe_ic_arrow_right_circle,
+                    requireActivity().theme
+                )
+            )
+
+        } else {
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.back_arrow,
+                    requireActivity().theme
+                )
+            )
+
+        }
+
 
         mViewDataBinding.imgBack.setOnClickListener {
             navController =
@@ -97,15 +123,15 @@ OrdersFragment : BaseFragment<FragmentOrdersBinding, OrdersViewModel>() {
 
             when (position) {
                 0 -> {
-                    tab.text = "Active"
+                    tab.text =getString(R.string.active)
                 }
 
                 1 -> {
-                    tab.text = "Incoming"
+                    tab.text =  getString(R.string.incoming)
                 }
 
                 2 -> {
-                    tab.text = "Completed"
+                    tab.text = getString(R.string.completed)
                 }
             }
 

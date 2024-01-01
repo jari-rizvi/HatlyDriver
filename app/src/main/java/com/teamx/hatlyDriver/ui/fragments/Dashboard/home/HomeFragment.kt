@@ -39,6 +39,7 @@ import com.squareup.picasso.Picasso
 import com.teamx.hatlyDriver.BR
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
+import com.teamx.hatlyDriver.constants.NetworkCallPoints
 import com.teamx.hatlyDriver.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentHomeBinding
@@ -48,6 +49,7 @@ import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketD
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatlyDriver.ui.fragments.orders.Incoming.onAcceptReject
 import com.teamx.hatlyDriver.utils.DialogHelperClass
+import com.teamx.hatlyDriver.utils.PrefHelper
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -60,8 +62,9 @@ import timber.log.Timber
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
+    DialogHelperClass.Companion.OfflineReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
-    onAcceptRejectSocket, onAcceptRejectParcel {
+    onAcceptRejectSocket, onAcceptRejectParcel, DialogHelperClass.Companion.DialogProminentInterface {
 
     override val layoutId: Int
         get() = R.layout.fragment_home
@@ -72,7 +75,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var id: String
 
-    private lateinit var seekBar: SeekBar
+    var earning: String = "earning"
+
+    private lateinit var seekBar1: SeekBar
     private lateinit var statusText: TextView
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -94,10 +99,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     var userimg: String = ""
     var username: String = ""
 
-    lateinit var incomingOrderAdapter: IncomingOrderSocketAdapter
-    lateinit var incomingParcelAdapter: IncomingParcelSocketAdapter
-    lateinit var incomingOrderSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
-    lateinit var incomingParcelSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc>
+//    lateinit var sharedViewModel.incomingOrderAdapter: IncomingOrderSocketAdapter
+//    lateinit var sharedViewModel.incomingParcelAdapter: IncomingParcelSocketAdapter
+//    lateinit var sharedViewModel.incomingOrderSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc>
+//    lateinit var sharedViewModel.incomingParcelSocketArrayList: ArrayList<com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc>
 
     lateinit var incomingOrderArrayList: ArrayList<Doc>
 
@@ -117,21 +122,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
-     /*   try {
+        val userData = PrefHelper.getInstance(requireActivity()).getUserData()
 
-            var bundle = arguments
-            if (bundle == null) {
-                bundle = Bundle()
-            }
-            userimg = bundle?.getString("userimg").toString()
-            username = bundle?.getString("username").toString()
+        userData?.let {
+            Log.d("setUserData", "onViewCreated: ${it}")
+            sharedViewModel.setUserData(it)
 
-            mViewDataBinding.name.text = "Hello " + username
-            mViewDataBinding.userProfile
-            Picasso.get().load(userimg).resize(500, 500)
-                .into(mViewDataBinding.profilePicture)
-        } catch (e: Exception) {
-        }*/
+        }
+
+
+
+        /*   try {
+
+               var bundle = arguments
+               if (bundle == null) {
+                   bundle = Bundle()
+               }
+               userimg = bundle?.getString("userimg").toString()
+               username = bundle?.getString("username").toString()
+
+               mViewDataBinding.name.text = "Hello " + username
+               mViewDataBinding.userProfile
+               Picasso.get().load(userimg).resize(500, 500)
+                   .into(mViewDataBinding.profilePicture)
+           } catch (e: Exception) {
+           }*/
 
         apiCalls()
 
@@ -139,35 +154,42 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         mViewDataBinding.userProfile.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.editProfileFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.notificaitonFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.profileFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastParcelAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView18.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastOrderAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView20.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
+            RiderSocketClass.disconnect()
         }
 
 
@@ -181,7 +203,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
         pushNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-
 
         if (!mViewModel.fcmResponse.hasActiveObservers()) {
             mViewModel.fcmResponse.observe(requireActivity()) {
@@ -198,7 +219,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            mViewDataBinding.root.snackbar(data.message)
+//                            mViewDataBinding.root.snackbar(data.message)
                         }
                     }
 
@@ -211,48 +232,48 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
 
-
         OrderRecyclerview()
         ParcelRecyclerview()
         PastOrderRecyclerview()
         PastParcelRecyclerview()
 
-
-        seekBar = mViewDataBinding.slider
+        seekBar1 = mViewDataBinding.slider
         statusText = mViewDataBinding.statusText
 
 
-        seekBar.isClickable = false
 
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        seekBar1.isClickable = false
+
+        val seekbarValue = PrefHelper.getInstance(requireContext()).getMax
+
+        if(seekbarValue == 100){
+            RiderSocketClass.connectRider(
+                NetworkCallPoints.TOKENER,
+                originLatitude,
+                originLongitude,
+                this@HomeFragment
+            )
+        }
+
+
+        val seekbarText = PrefHelper.getInstance(requireContext()).getSeekbarText
+
+        Log.d("TAG", "seekbarValue: $seekbarValue")
+
+        if (seekbarValue != null) {
+            seekBar1.progress = seekbarValue
+            mViewDataBinding.slider2.progress = seekbarValue
+            statusText.text = seekbarText
+
+        }
+
+      
+        
+        seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 seekBar.isEnabled = true
-                var previousProgress = 0
 
-                /*
-                                if (progress > previousProgress) {
-                                    // If progressing to the right, set the progress to the maximum value
-                                    seekBar.progress = seekBar.max
-
-                                    DialogHelperClass.confirmLocation(
-                                        requireContext(), this@HomeFragment, true
-                                    )
-
-                                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                                    statusText.text = "Go Offline"
-                                } else if (progress < previousProgress) {
-                                    seekBar.progress = seekBar.min
-                                    seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                                    RiderSocketClass.disconnect()
-                                    // Hide "Go Online" text
-                                    statusText.text = "Go Online"
-                                }
-                                previousProgress = progress // Update the previous progress valu
-                */
-
-
-                // Check if the SeekBar is fully swiped
                 if (progress == seekBar.max) {
 
                     DialogHelperClass.confirmLocation(
@@ -260,52 +281,77 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     )
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    statusText.text = "Go Offline"
-                    Log.d("TAG", "onProgressChanged11: ")
-                    Log.d("TAG", "Online: ")
+                    statusText.text = getString(R.string.go_offline)
+                    PrefHelper.getInstance(requireContext())
+                        .saveSeekbarText(statusText.text.toString())
 
 
                 } else {
                     // Reset thumb color to the default
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
-                    Log.d("TAG", "Offilne: ")
-                    Log.d("TAG", "onProgressChanged12: ")
 
-
-                    RiderSocketClass.disconnect()
+//                    RiderSocketClass.disconnect()
                     // Hide "Go Online" text
-                    statusText.text = "Go Online"
+                    statusText.text = getString(R.string.go_online)
+                    PrefHelper.getInstance(requireContext())
+                        .saveSeekbarText(statusText.text.toString())
+
                 }
+                mViewDataBinding.slider2.progress = seekBar.progress
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Not needed for this example
+                mViewDataBinding.slider2.progress = seekBar.progress
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Not needed for this example
+
+                if (seekBar1.progress > 50) {
+                    seekBar1.progress = seekBar.max
+                    PrefHelper.getInstance(requireContext())
+                        .isMax(seekBar.max)
+                    PrefHelper.getInstance(requireContext())
+                        .saveSeekbarText(statusText.text.toString())
+                    RiderSocketClass.connectRider(
+                        NetworkCallPoints.TOKENER,
+                        originLatitude,
+                        originLongitude,
+                        this@HomeFragment
+                    )
+
+
+                } else {
+                    seekBar1.progress = seekBar.min
+                    PrefHelper.getInstance(requireContext())
+                        .isMax(seekBar.min)
+                    PrefHelper.getInstance(requireContext())
+                        .saveSeekbarText(statusText.text.toString())
+
+                    DialogHelperClass.submitOfflineReason(
+                        requireContext(), this@HomeFragment, true, "", ""
+                    )
+                }
+                mViewDataBinding.slider2.progress =   seekBar1.progress
             }
+
         })
 
 
-        val spinner = mViewDataBinding.spinner
-        val spinner1 = mViewDataBinding.spinner1
+        val spinner = mViewDataBinding.spinner1
+//        val spinner1 = mViewDataBinding.spinner1
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.spinner_items,
             android.R.layout.simple_spinner_item
         )
 
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        // Apply the adapter to the spinner
-        spinner.adapter = adapter
-        spinner1.adapter = adapter
 
-        // Set a selection listener to handle item selection
+        spinner.adapter = adapter
+//        spinner1.adapter = adapter
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
@@ -314,7 +360,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 id: Long
             ) {
                 val selectedItem = parent.getItemAtPosition(position) as String
-                mViewModel.getTotalEarnings(selectedItem, "earning")
+//                earning = "earning"
+
+                val params = JsonObject()
+                try {
+                    params.addProperty("filterBy", selectedItem)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+                mViewModel.getTotalEarnings(params)
+
+//                mViewModel.getTotalEarnings(selectedItem, earning)
 
 
             }
@@ -324,24 +380,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
-        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent.getItemAtPosition(position) as String
-
-                mViewModel.getTotalEarnings(selectedItem, "order")
-
-
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-
-            }
-        }
+//        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>,
+//                view: View,
+//                position: Int,
+//                id: Long
+//            ) {
+//                val selectedItem = parent.getItemAtPosition(position) as String
+//
+////                earning = "order"
+//
+//                val params = JsonObject()
+//                try {
+//                    params.addProperty("filterBy", selectedItem)
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+//                mViewModel.getTotalEarnings(params)
+//
+//
+////                mViewModel.getTotalEarnings(selectedItem, earning)
+//
+//
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>) {
+//
+//            }
+//        }
 
 
     }
@@ -401,15 +468,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
-                            mViewDataBinding.totalEarnings.text = data.totalEarning.toString()
-                            mViewDataBinding.totalorders.text = data.totalOrder.toString()
-                            mViewDataBinding.totalParcels.text = data.totalParcel.toString()
-                            mViewDataBinding.hours.text = data.spentTime.hours.toString()+" hrs"
-                            mViewDataBinding.name.text = "Hello " + data.riderDetail.name as String
-                            Picasso.get().load(data.riderDetail.profileImage).resize(500, 500)
-                                .into(mViewDataBinding.profilePicture)
+
+                            try {
+                                mViewDataBinding.hours.text =
+                                    data.totalSpendTime.hours.toString() + "h " + data.totalSpendTime.minuts +"m"
+                                mViewDataBinding.name.text =
+                                    "Hello " + data.userId.name as String
+                                Picasso.get().load(data.userId.profileImage).resize(500, 500)
+                                    .into(mViewDataBinding.profilePicture)
+
+                                mViewDataBinding.totalEarning.text = data.totalEarning.toString()
+                                mViewDataBinding.totalorders.text = data.totalOrders.toString()
+                                mViewDataBinding.totalParcels.text = data.totalParcels.toString()
+                                mViewDataBinding.totalOrderEarning.text =
+                                    data.totalOrdersEarning.toString()
+                                mViewDataBinding.totalParcelsEarning.text =
+                                    data.totalParcelsEarning.toString()
 
 
+                            } catch (e: Exception) {
+                            }
 
 
                         }
@@ -425,9 +503,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 }
             }
         }
-
-
-
 
         mViewModel.getPastOrders(1, 5, "delivered")
 
@@ -473,27 +548,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     private fun OrderRecyclerview() {
-        incomingOrderSocketArrayList = ArrayList()
+//        sharedViewModel.incomingOrderSocketArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
 
-        incomingOrderAdapter = IncomingOrderSocketAdapter(incomingOrderSocketArrayList, this)
-        mViewDataBinding.recyclerViewIncomingOrders.adapter = incomingOrderAdapter
+        sharedViewModel.incomingOrderAdapter = IncomingOrderSocketAdapter(sharedViewModel.incomingOrderSocketArrayList, this)
+        mViewDataBinding.recyclerViewIncomingOrders.adapter = sharedViewModel.incomingOrderAdapter
 
     }
 
     private fun ParcelRecyclerview() {
-        incomingParcelSocketArrayList = ArrayList()
+//        sharedViewModel.incomingParcelSocketArrayList = ArrayList()
 
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
 
-        incomingParcelAdapter = IncomingParcelSocketAdapter(incomingParcelSocketArrayList, this)
-        mViewDataBinding.recyclerViewSpecialOrders.adapter = incomingParcelAdapter
+        sharedViewModel.incomingParcelAdapter = IncomingParcelSocketAdapter(sharedViewModel.incomingParcelSocketArrayList, this)
+        mViewDataBinding.recyclerViewSpecialOrders.adapter = sharedViewModel.incomingParcelAdapter
 
     }
-
 
     private fun PastParcelRecyclerview() {
         pastparcelArrayList = ArrayList()
@@ -505,7 +579,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         mViewDataBinding.recyclerViewSpecialPastOrders.adapter = pastParcelAdapter
 
     }
-
 
     private fun PastOrderRecyclerview() {
         pastOrderArrayList = ArrayList()
@@ -520,7 +593,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     var locationPermissionGranted = true
-
 
     companion object {
         var mMap: GoogleMap? = null
@@ -581,7 +653,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     override fun onConfirmLocation() {
-        requestPermission()
+
+        DialogHelperClass.prominentDialog(requireActivity(),this)
 
 
     }
@@ -596,10 +669,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
-            // Show an explanation to the user *asynchronously*
-            // why the permission is needed and why the user should grant it
-
             requestPermissions(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -609,7 +678,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         } else {
             // Permission has already been granted
             RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                NetworkCallPoints.TOKENER,
                 originLatitude,
                 originLongitude,
                 this
@@ -636,11 +705,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         requestCode: Int, permissions: Array<String>, grantResults: IntArray
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            /*  navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-              navController.navigate(R.id.dashboard, null, options)*/
 
             RiderSocketClass.connectRider(
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI0OGZiMTU2OTg2ZDNkM2IzYmQ3ZTIyMjM0MmY0YTQiLCJpYXQiOjE2OTc0NzA4MzksImV4cCI6MTAzMzc0NzA4Mzl9.V-hG2OFgmRy8D0PQCICXNHp6GeqUpAXq09hqU8OXeco",
+                NetworkCallPoints.TOKENER,
                 originLatitude,
                 originLongitude, this
             )
@@ -665,18 +732,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
             snackbar.show()
 
-            // Permission was denied. Handle this however is appropriate for your app.
+
         }
     }
 
     override fun onIncomingOrderRecieve(incomingOrderSocketData: com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc) {
-        /*    incomingOrderSocketArrayList.clear()*/
+        /*    sharedViewModel.incomingOrderSocketArrayList.clear()*/
 
         Log.d("TAG", "onIncomingOrderRecieveSinglre:")
         GlobalScope.launch(Dispatchers.Main) {
             Log.d("TAG", "onIncomingOrderRecieveSinglre:")
 
-            incomingOrderSocketArrayList.add(0, incomingOrderSocketData)
+            sharedViewModel.incomingOrderSocketArrayList.add(0, incomingOrderSocketData)
 
 
             mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
@@ -684,12 +751,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData) {
-//        incomingOrderSocketArrayList.clear()
+//        sharedViewModel.incomingOrderSocketArrayList.clear()
         Log.d("TAG", "onIncomingOrderRecieveAll:")
 
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingOrderSocketArrayList.addAll(incomingOrderSocketData.docs)
+            sharedViewModel.incomingOrderSocketArrayList.addAll(incomingOrderSocketData.docs)
             Log.d("TAG", "onIncomingOrderRecieveAll:")
 
 
@@ -700,23 +767,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onGetAllParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData) {
-        incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingParcelSocketArrayList.addAll(incomingParcelSocketData.docs)
+            sharedViewModel.incomingParcelSocketArrayList.addAll(incomingParcelSocketData.docs)
 
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
 
         }
     }
-
 
     override fun onIncomingParcelRecieve(incomingParcelSocketData: com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.Doc) {
-        incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
         GlobalScope.launch(Dispatchers.Main) {
 
-            incomingParcelSocketArrayList.add(0, incomingParcelSocketData)
+            sharedViewModel.incomingParcelSocketArrayList.add(0, incomingParcelSocketData)
 
 
             mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
@@ -724,25 +790,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun onAcceptSokcetClick(position: Int) {
-        id = incomingOrderSocketArrayList[position]._id
+        id = sharedViewModel.incomingOrderSocketArrayList[position]._id
 
-        Log.d("TAG", "onAcceptClick: $id")
-        val params = JsonObject()
-        try {
-            params.addProperty("status", "accepted")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+        mViewModel.acceptOrder(id)
 
-        mViewModel.acceptReject(id, params)
-
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.acceptResponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -751,17 +810,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
                             it._id != id
                         }
-                        incomingOrderSocketArrayList.clear()
-                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
+                        sharedViewModel.incomingOrderSocketArrayList.clear()
+                        sharedViewModel.incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
 
-                        showToast(data.message)
+//                        showToast(data.message)
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
                         navController.navigate(R.id.orderFragment, null, options)
-                        incomingOrderAdapter.notifyDataSetChanged()
+                        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
                     }
                 }
 
@@ -774,29 +833,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectSocketClick(position: Int) {
-        id = incomingOrderSocketArrayList[position]._id
+        id = sharedViewModel.incomingOrderSocketArrayList[position]._id
 
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
         )
     }
 
-    override fun onSubmitClick(status: String, rejectionReason: String) {
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
-            params.addProperty("status", "rejected")
-            params.addProperty("rejectionReason", rejectionReason)
+            params.addProperty("reasion", rejectionReason)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
 
-        mViewModel.acceptReject(id, params)
+        mViewModel.rejectOrder(id, params)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.rejectesponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -805,17 +865,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = incomingOrderSocketArrayList.filter {
+                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
                             it._id != id
                         }
 
 
-                        incomingOrderSocketArrayList.removeLast()
+                        sharedViewModel.incomingOrderSocketArrayList.removeLast()
 
-//                        incomingOrderSocketArrayList.clear()
-//                        incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
-                        showToast(data.message)
-                        incomingOrderAdapter.notifyDataSetChanged()
+//                        sharedViewModel.incomingOrderSocketArrayList.clear()
+//                        sharedViewModel.incomingOrderSocketArrayList.addAll(sharedViewModel.incomingOrderSocketArrayList1)
+//                        showToast(data.message)
+                        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
 
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -838,20 +898,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
     private fun getFcmToken() {
-        Log.d("fcmToken", "askNotificationPermission")
-        // This is only necessary for API level >= 33 (TIRAMISU)
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("123123", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
 
-            // Get new FCM registration token
-//            fcmToken = task.result
             val params = JsonObject()
             params.addProperty("fcmToken", task.result)
 
@@ -861,13 +913,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
         })
-        // FCM SDK (and your app) can post notifications.
-//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//                Log.d("fcmToken", "POST_NOTIFICATIONS")
-//            } else {
-//                Log.d("fcmToken", "else")
-//            }
-//        }
+
     }
 
 
@@ -878,23 +924,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onAcceptParcelClick(position: Int) {
-        id = incomingParcelSocketArrayList[position]._id
+        id = sharedViewModel.incomingParcelSocketArrayList[position]._id
 
-        Log.d("TAG", "onAcceptClick: $id")
-        val params = JsonObject()
-        try {
-            params.addProperty("status", "accepted")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
 
-        mViewModel.acceptReject(id, params)
+        mViewModel.acceptOrder(id)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.acceptResponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
@@ -903,14 +943,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingParcelSocketArrayList1 = incomingParcelSocketArrayList.filter {
+                        val incomingParcelSocketArrayList1 = sharedViewModel.incomingParcelSocketArrayList.filter {
                             it._id != id
                         }
-                        incomingParcelSocketArrayList.clear()
-                        incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
+                        sharedViewModel.incomingParcelSocketArrayList.clear()
+                        sharedViewModel.incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
 
-                        showToast(data.message)
-                        incomingParcelAdapter.notifyDataSetChanged()
+//                        showToast(data.message)
+                        sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
 
                         navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -928,7 +968,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onRejectParcelClick(position: Int) {
-        id = incomingParcelSocketArrayList[position]._id
+        id = sharedViewModel.incomingParcelSocketArrayList[position]._id
 
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
@@ -947,5 +987,66 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             Log.d("fcmToken", "granted else")
         }
     }
+
+    override fun onSubmitoflineClick(status: String, rejectionReason: String) {
+
+        RiderSocketClass.disconnetRider(rejectionReason)
+        RiderSocketClass.disconnect()
+        sharedViewModel.incomingParcelSocketArrayList.clear()
+        sharedViewModel.incomingOrderSocketArrayList.clear()
+
+        sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
+        sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
+
+
+//        val params = JsonObject()
+//        try {
+//            params.addProperty("offlineReason", rejectionReason)
+//        } catch (e: JSONException) {
+//            e.printStackTrace()
+//        }
+
+//        mViewModel.offlineReason(Activityid, params)
+
+//        mViewModel.offlineReasonResponse.observe(requireActivity(), Observer {
+//            when (it.status) {
+//                Resource.Status.LOADING -> {
+//                    loadingDialog.show()
+//                }
+//
+//                Resource.Status.AUTH -> {
+//                    loadingDialog.dismiss()
+//                    onToSignUpPage()
+//                }
+//
+//                Resource.Status.SUCCESS -> {
+//                    loadingDialog.dismiss()
+//                    it.data?.let { data ->
+//                        RiderSocketClass.disconnect()
+//                        dialog?.dismiss()
+//
+//                    }
+//                }
+//
+//                Resource.Status.ERROR -> {
+//                    loadingDialog.dismiss()
+//                    DialogHelperClass.errorDialog(requireContext(), it.message!!)
+//                }
+//            }
+//        })
+    }
+
+    override fun onCanceloflineClick() {
+
+    }
+
+    override fun alloLocation() {
+        requestPermission()
+    }
+
+    override fun denyLocation() {
+
+    }
+
 
 }

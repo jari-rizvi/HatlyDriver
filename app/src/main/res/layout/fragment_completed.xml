@@ -18,6 +18,7 @@
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="Completed"
+            android:visibility="gone"
             android:textColor="#0A0001"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintEnd_toEndOf="parent"

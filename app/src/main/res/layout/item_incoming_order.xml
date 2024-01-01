@@ -93,7 +93,7 @@
             style="@style/open_sans_secondary_bold_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="200 AED"
+            android:text="0.00 AED"
             android:layout_marginEnd="@dimen/_10sdp"
             android:textColor="@color/red"
             android:textSize="@dimen/_13ssp"

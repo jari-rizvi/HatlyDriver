@@ -9,6 +9,7 @@ data class MeModel(
     val _id: String,
     val contact: String,
     val coordinates: Coordinates,
+    val bankDetail: BankDetail,
     val email: String,
     val location: Location,
     val name: String,

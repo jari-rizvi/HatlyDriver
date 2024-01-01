@@ -7,15 +7,19 @@ import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
 import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentEditProfileBinding
+import com.teamx.hatlyDriver.localization.LocaleManager
+import com.teamx.hatlyDriver.utils.PrefHelper
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -54,6 +58,50 @@ class EditProfileFragment :
             }
         }
 
+
+
+        sharedViewModel.userData.observe(requireActivity()) {
+            mViewDataBinding.etName.setText(it.name)
+            mViewDataBinding.etPhone.setText(it.contact)
+            Log.d("PersonalI", "onViewCreated: ${it.contact}")
+//            if (it.contact == null) {
+//                mViewDataBinding.editText2.isEnabled = true
+//            } else {
+//                mViewDataBinding.editText2.isEnabled = false
+//                mViewDataBinding.editText2.setText(it.contact)
+//            }
+
+            Picasso.get().load(it.profileImage).placeholder(R.drawable.logo).error(R.drawable.logo).resize(500, 500).into(mViewDataBinding.hatlyIcon)
+            imageUrl = it.profileImage
+            userName = it.name
+        }
+
+
+
+        if (!MainApplication.localeManager!!.getLanguage()
+                .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
+        ) {
+
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                       R.drawable.stripe_ic_arrow_right_circle,
+                    requireActivity().theme
+                )
+            )
+
+        } else {
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.back_arrow,
+                    requireActivity().theme
+                )
+            )
+
+        }
+
+
         mViewDataBinding.imgBack.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.homeFragment, arguments, options)        }
@@ -74,14 +122,14 @@ class EditProfileFragment :
         mViewDataBinding.etPhone.isFocusable = false
         mViewDataBinding.etPhone.isFocusableInTouchMode = false
 
-        /*  val userData = PrefHelper.getInstance(requireActivity()).getUserData()
+       /*   val userData = PrefHelper.getInstance(requireActivity()).getUserData()
 
           mViewDataBinding.etName.setText(userData?.name)
           mViewDataBinding.etPhone.setText(userData?.contact)
           Picasso.get().load(userData?.profileImage).resize(500, 500).into(mViewDataBinding.hatlyIcon)*/
 
 
-        mViewModel.me()
+   /*     mViewModel.me()
         if (!mViewModel.meResponse.hasActiveObservers()) {
             mViewModel.meResponse.observe(requireActivity()) {
                 when (it.status) {
@@ -111,7 +159,7 @@ class EditProfileFragment :
                     }
                 }
             }
-        }
+        }*/
 
 
 
@@ -124,7 +172,7 @@ class EditProfileFragment :
 
         mViewDataBinding.btnSave.setOnClickListener {
             userName = mViewDataBinding.etName.text.toString()
-            if (userName.isNotEmpty()) {
+
                 val params = JsonObject()
                 try {
                     params.addProperty("name", userName)
@@ -134,11 +182,10 @@ class EditProfileFragment :
                 }
 
                 mViewModel.updateProfile(params)
-            } else {
-                mViewDataBinding.root.snackbar("Enter Username")
             }
 
-        }
+
+
         mViewDataBinding.imgGallery.setOnClickListener {
             fetchImageFromGallery()
         }
@@ -147,19 +194,23 @@ class EditProfileFragment :
         if (!mViewModel.uploadReviewImgResponse.hasActiveObservers()) {
             mViewModel.uploadReviewImgResponse.observe(requireActivity()) {
                 when (it.status) {
-                    Resource.Status.LOADING -> {
-                        loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
+                    }
+
+                    Resource.Status.LOADING -> {
+                        loadingDialog.show()
                     }
 
                     Resource.Status.SUCCESS -> {
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             if (data.isNotEmpty()) {
+                                Log.d("uploadReviewIm", "onViewCreated: ${data[0]}")
                                 if (data.isNotEmpty()) {
-                                    Picasso.get().load(imageUrl).resize(500, 500)
+                                    imageUrl = data[0]
+                                    Picasso.get().load(imageUrl).placeholder(R.drawable.logo).error(R.drawable.logo).resize(500, 500)
                                         .into(mViewDataBinding.hatlyIcon)
                                 }
                             }
@@ -169,7 +220,10 @@ class EditProfileFragment :
                     Resource.Status.ERROR -> {
                         loadingDialog.dismiss()
                         Log.d("uploadReviewIm", "onViewCreated: ${it.message}")
-                        mViewDataBinding.root.snackbar(it.message!!)
+                        if (isAdded) {
+
+                            mViewDataBinding.root.snackbar(it.message!!)
+                        }
                     }
                 }
             }
@@ -194,11 +248,15 @@ class EditProfileFragment :
                             Picasso.get().load(data.profileImage).resize(500, 500)
                                 .into(mViewDataBinding.hatlyIcon)
                             mViewDataBinding.etName.setText(data.name)
-                          /*  val userData = PrefHelper.getInstance(requireActivity()).getUserData()
+                            val userData = PrefHelper.getInstance(requireActivity()).getUserData()
                             userData!!.name = data.name
                             userData!!.profileImage = data.profileImage
-                            PrefHelper.getInstance(requireActivity()).setUserData(userData)*/
-                            mViewDataBinding.root.snackbar("Profile updated")
+                            PrefHelper.getInstance(requireActivity()).setUserData(userData)
+                            PrefHelper.getInstance(requireActivity()).setUserData(userData)
+                            sharedViewModel.setUserData(userData)
+                            if (isAdded) {
+                                mViewDataBinding.root.snackbar("Profile updated")
+                            }
 
 
                             val bundle = arguments

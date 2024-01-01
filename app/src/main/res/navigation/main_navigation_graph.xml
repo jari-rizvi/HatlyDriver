@@ -126,6 +126,26 @@
         android:id="@+id/trackFragment"
         android:name="com.teamx.hatlyDriver.ui.fragments.track.TrackFragment"
         android:label="TrackFragment" />
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.language.LanguageFragment"
+        android:label="LanguageFragment" />
+    <fragment
+        android:id="@+id/withDrawFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithDrawFragment"
+        android:label="WithDrawFragment" />
+    <fragment
+        android:id="@+id/bankDetailsFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.bankdetails.BankDetailsFragment"
+        android:label="BankDetailsFragment" />
+    <fragment
+        android:id="@+id/withdrawalHistoryFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithdrawalHistoryFragment"
+        android:label="WithdrawalHistoryFragment" />
+    <fragment
+        android:id="@+id/withDetailsFragment"
+        android:name="com.teamx.hatlyDriver.ui.fragments.wallet.withdraw.WithDetailsFragment"
+        android:label="WithDetailsFragment" />
 
 
 </navigation>

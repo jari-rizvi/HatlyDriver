@@ -4,11 +4,14 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.text.TextUtils.isEmpty
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatlyDriver.R
 import kotlinx.coroutines.Job
 
@@ -82,7 +85,7 @@ class DialogHelperClass {
 //            return dialog
 //        }
 
-        fun wallettDialog(context: Context, topPrice : String, contactUs: ContactUs): Dialog {
+        fun wallettDialog(context: Context, topPrice: String, contactUs: ContactUs): Dialog {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.wallet_dialog)
 
@@ -97,7 +100,7 @@ class DialogHelperClass {
 
             txtDialogPrice.text = try {
                 "$topPrice Aed"
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 "null"
             }
 
@@ -117,7 +120,6 @@ class DialogHelperClass {
         }
 
 
-
         fun errorDialog(context: Context, errorMessage: String) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_layout_error)
@@ -131,7 +133,6 @@ class DialogHelperClass {
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
         }
-
 
 
         interface ChangePasswordDialog {
@@ -156,10 +157,10 @@ class DialogHelperClass {
                 dialogCallBack.onLoginButton()
                 dialog.dismiss()
             }
-                val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView19)
-                cancelBtn.setOnClickListener {
-                    dialog.dismiss()
-                }
+            val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView19)
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
 
 
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -189,10 +190,15 @@ class DialogHelperClass {
         }
 
 
-
         interface ReasonDialog {
-            fun onSubmitClick(status:String, rejectionReason:String)
+            fun onSubmitClick(rejectionReason: String)
             fun onCancelClick()
+        }
+
+
+        interface OfflineReasonDialog {
+            fun onSubmitoflineClick(status: String, rejectionReason: String)
+            fun onCanceloflineClick()
         }
 
 
@@ -212,19 +218,24 @@ class DialogHelperClass {
             val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
             val reason = dialog.findViewById<EditText>(R.id.reason)
 
-//            AddReviewBtn.text = context.getString(R.string.add_review)
             AddReviewBtn.setOnClickListener {
-          /*      val desc = tvTitleText.text
-                if (desc.isBlank()) {
-                    Snackbar.make(
-                        AddReviewBtn,
-                        "Please enter some text",
-                        Snackbar.LENGTH_LONG
-                    )
-                    return@setOnClickListener
-                }*/
+                var isValid = true
+                if ( isEmpty(reason.text.toString()) ) {
+                    isValid = false
+                    Toast.makeText(context, "empty", Toast.LENGTH_LONG).show()
+                }
+
+
+                      if (reason.text.isNullOrBlank()) {
+                          Snackbar.make(
+                              AddReviewBtn,
+                              "Please enter Reason",
+                              Snackbar.LENGTH_LONG
+                          )
+                          return@setOnClickListener
+                      }
                 if (boo) {
-                    reasonDialog.onSubmitClick(status,reason.text.toString())
+                    reasonDialog.onSubmitClick(reason.text.toString())
                 } else {
                     reasonDialog.onCancelClick()
                 }
@@ -240,7 +251,115 @@ class DialogHelperClass {
             dialog.show()
         }
 
+        fun submitOfflineReason(
+            context: Context, oflinereasonDialog: OfflineReasonDialog, boo: Boolean, status: String,
+            rejectionReason: String
+        ) {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.dialog_reason)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+//            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
+
+
+            val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
+            val reason1 = dialog.findViewById<EditText>(R.id.reason)
+
+//            AddReviewBtn.text = context.getString(R.string.add_review)
+            AddReviewBtn.setOnClickListener {
+                /*      val desc = tvTitleText.text
+                      if (desc.isBlank()) {
+                          Snackbar.make(
+                              AddReviewBtn,
+                              "Please enter some text",
+                              Snackbar.LENGTH_LONG
+                          )
+                          return@setOnClickListener
+                      }*/
+                if (boo) {
+                    oflinereasonDialog.onSubmitoflineClick(status, reason1.text.toString())
+                } else {
+                    oflinereasonDialog.onCanceloflineClick()
+                }
+                dialog.dismiss()
+            }
+            val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
+
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+        }
+
+
+
+        interface DialogProminentInterface {
+            fun alloLocation()
+            fun denyLocation()
+        }
+
+        fun prominentDialog(context: Context, dialogCallBack: DialogProminentInterface): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.permission_location_dialog)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+            dialog.setCancelable(false)
+            val allowBtn = dialog.findViewById<TextView>(R.id.allowBtn)
+            val denyBtn = dialog.findViewById<TextView>(R.id.denyBtn)
+
+            denyBtn.setOnClickListener {
+                dialogCallBack.denyLocation()
+                dialog.dismiss()
+            }
+
+            allowBtn.setOnClickListener {
+                dialogCallBack.alloLocation()
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.setCancelable(false)
+            dialog.show()
+            return dialog
+        }
+
+        interface DialogExitApp {
+            fun exitAppSystem()
+        }
+
+        fun deleteUserDialog(context: Context, dialogCallBack: DialogExitApp): Dialog {
+            val dialog = Dialog(context)
+            dialog.setContentView(R.layout.delete_user_dialog)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
+            )
+
+
+            val removeBtn = dialog.findViewById<TextView>(R.id.removeBtn)
+            removeBtn.setOnClickListener {
+                dialogCallBack.exitAppSystem()
+                dialog.dismiss()
+            }
+
+            val cancelBtn = dialog.findViewById<TextView>(R.id.cancelBtn)
+            cancelBtn.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            return dialog
+//            dialog.show()
+        }
 
 
     }
+
+
+
+
 }

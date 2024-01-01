@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_bold"
-                android:text="Chat with Customer"
+                android:text="@string/chat_with_customer"
                 android:textColor="#262626"
                 android:textSize="@dimen/_13ssp"
                 android:textStyle="bold"

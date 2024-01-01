@@ -4,6 +4,7 @@ package com.teamx.hatlyDriver.ui.fragments.Dashboard.Profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.teamx.hatlyDriver.baseclasses.BaseViewModel
 import com.teamx.hatlyDriver.data.dataclasses.meModel.me.MeModel
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
@@ -20,6 +21,40 @@ class ProfileViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val networkHelper: NetworkHelper
 ) : BaseViewModel() {
+
+
+    private val _deleteUserApi = MutableLiveData<Resource<SuccessData>>()
+    val deleteUserApi: LiveData<Resource<SuccessData>>
+        get() = _deleteUserApi
+
+    fun deleteUserApi(param: JsonObject?) {
+        viewModelScope.launch {
+            _deleteUserApi.postValue(Resource.loading(null))
+            if (networkHelper.isNetworkConnected()) {
+                try {
+                    mainRepository.deleteUserApi(param).let {
+                        if (it.isSuccessful) {
+                            _deleteUserApi.postValue(Resource.success(it.body()!!))
+                        } else if (it.code() == 500 || it.code() == 409 || it.code() == 502 || it.code() == 404 || it.code() == 400) {
+//                            _deleteUserApi.postValue(Resource.error(it.message(), null))
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _deleteUserApi.postValue(Resource.error(jsonObj.getString("message")))
+                        } else {
+                            _deleteUserApi.postValue(
+                                Resource.error(
+                                    "Some thing went wrong", null
+                                )
+                            )
+                        }
+                    }
+                } catch (e: Exception) {
+                    _deleteUserApi.postValue(Resource.error("${e.message}", null))
+                }
+            } else _deleteUserApi.postValue(Resource.error("No internet connection", null))
+        }
+    }
+
+
 
     private val _meResponse = MutableLiveData<Resource<MeModel>>()
     val meResponse: LiveData<Resource<MeModel>>

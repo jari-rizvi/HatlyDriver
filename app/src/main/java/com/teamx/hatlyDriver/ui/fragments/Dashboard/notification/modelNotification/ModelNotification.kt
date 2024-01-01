@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification
+import androidx.annotation.Keep
 
+@Keep
 data class ModelNotification(
     val docs: List<Doc>,
     val hasNextPage: Boolean,

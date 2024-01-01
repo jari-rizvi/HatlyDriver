@@ -12,6 +12,7 @@ import com.teamx.hatlyDriver.data.remote.reporitory.MainRepository
 import com.teamx.hatlyDriver.utils.NetworkHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,7 +36,9 @@ class LoginViewModel @Inject constructor(
                         } else if (it.code() == 401) {
                             _loginResponse.postValue(Resource.error(it.message(), null))
                         } else if (it.code() == 500 || it.code() == 404 || it.code() == 400) {
-                            _loginResponse.postValue(Resource.error(it.message(), null))
+                            val jsonObj = JSONObject(it.errorBody()!!.charStream().readText())
+                            _loginResponse.postValue(Resource.error(jsonObj.getString("message")))
+//                            _loginResponse.postValue(Resource.error(it.message(), null))
                         } else {
                             _loginResponse.postValue(Resource.error("Some thing went wrong", null))
                         }

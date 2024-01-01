@@ -1,14 +1,13 @@
 package com.teamx.hatlyDriver.data.dataclasses.totalEarning
 
-data class RiderDetail(
+data class UserId(
     val __v: Int,
     val _id: String,
-    val activity: Activity,
     val contact: String,
-    val profileImage: String,
     val email: String,
-    val location: Location,
     val name: String,
+    val profileImage: String,
     val role: String,
-    val verified: Boolean
+    val verified: Boolean,
+    val wallet: Double
 )

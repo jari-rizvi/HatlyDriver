@@ -116,16 +116,11 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
     override fun onAcceptClick(position: Int) {
         id = incomingOrderArrayList[position]._id
 
-        val params = JsonObject()
-        try {
-            params.addProperty("status", "accepted")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
 
-        mViewModel.acceptReject(id, params)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.acceptOrder(id)
+
+        mViewModel.acceptResponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
@@ -162,7 +157,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
         )
     }
 
-    override fun onSubmitClick(status: String, rejectionReason: String) {
+    override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
             params.addProperty("status", "rejected")
@@ -171,9 +166,9 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
             e.printStackTrace()
         }
 
-        mViewModel.acceptReject(id, params)
+        mViewModel.rejectOrder(id, params)
 
-        mViewModel.acceptRejectResponse.observe(requireActivity(), Observer {
+        mViewModel.rejectesponse.observe(requireActivity(), Observer {
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
@@ -186,7 +181,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        showToast(data.message)
+//                        showToast(data.message)
 
                         incomingOrderArrayList.removeLast()
 

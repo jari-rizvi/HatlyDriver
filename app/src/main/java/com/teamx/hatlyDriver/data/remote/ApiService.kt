@@ -15,8 +15,11 @@ import com.teamx.hatlyDriver.data.dataclasses.modelUploadImages.ModelUploadImage
 import com.teamx.hatlyDriver.data.dataclasses.pastParcels.GetPastParcelsData
 import com.teamx.hatlyDriver.data.dataclasses.pastorder.PastOrdersData
 import com.teamx.hatlyDriver.data.dataclasses.sucess.SuccessData
-import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningData
+import com.teamx.hatlyDriver.data.dataclasses.totalEarning.TotalEarningsData
 import com.teamx.hatlyDriver.data.dataclasses.transactionHistory.TransactionHistoryData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalData.WithDrawalData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalDetails.WithDrawalDetailsData
+import com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory.WithDrawalHistory
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification.ModelNotification
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.defaultmodel.ModelDefaultCredCards
 import com.teamx.hatlyDriver.ui.fragments.payments.paymentmethod.modelDetach.ModelDetachCredCards
@@ -61,7 +64,8 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<LoginData>
-  @POST(NetworkCallPoints.LOGOUT)
+
+    @POST(NetworkCallPoints.LOGOUT)
     suspend fun logout(
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
@@ -78,6 +82,13 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<ModelDefaultCredCards>
 
+    @POST(NetworkCallPoints.OFFLINE_REASON)
+    suspend fun offlineReason(
+        @Path("id") id: String,
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
     @POST(NetworkCallPoints.DETACH_CREDS_CARDS)
     suspend fun setDetachCredCards(
         @Body params: JsonObject,
@@ -89,19 +100,32 @@ interface ApiService {
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<MeModel>
 
-    @GET(NetworkCallPoints.TRANSACTION_HISTORY)
+    @GET(NetworkCallPoints.TRANSACTION_HISTORY2)
     suspend fun getTransactionHistory(
         @Query("limit") limit: Int,
         @Query("page") page: Int,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<TransactionHistoryData>
 
-    @GET(NetworkCallPoints.TOTAL_EARNING)
-    suspend fun getTotalEarning(
-        @Query("filterBy") filterBy: String,
-        @Query("filterFor") filterFor: String,
+    @GET(NetworkCallPoints.WITHDRAWAL_HISTORY)
+    suspend fun getWithdrawalHistory(
+        @Query("limit") limit: Int,
+        @Query("page") page: Int,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
-    ): Response<TotalEarningData>
+    ): Response<WithDrawalHistory>
+
+    @POST(NetworkCallPoints.WALLET_WITHDRAWAL)
+    suspend fun createWithdrawal(
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<WithDrawalData>
+
+
+    @POST(NetworkCallPoints.TOTAL_EARNING)
+    suspend fun getTotalEarning(
+        @Body params: JsonObject,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<TotalEarningsData>
 
     @GET(NetworkCallPoints.CREDS_CARDS)
     suspend fun getCredCards(
@@ -113,7 +137,6 @@ interface ApiService {
         @Body params: JsonObject,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<ModelSavedCard>
-
 
     @Multipart
     @POST(NetworkCallPoints.UPLOAD_REVIEW_IMGS)
@@ -162,19 +185,44 @@ interface ApiService {
     ): Response<GetActiveOrderData>
 
 
-    @POST(NetworkCallPoints.ACCEPT_REJECT_ORDER)
-    suspend fun acceptRejectOrder(
+    @PUT(NetworkCallPoints.ACCEPT_ORDER)
+    suspend fun acceptOrder(
+        @Path("id") id: String,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
+    @PUT(NetworkCallPoints.REJECT_ORDER)
+    suspend fun rejectOrder(
         @Path("id") id: String,
         @Body params: JsonObject?,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
 
-    @POST(NetworkCallPoints.PICKED_DISPATCH_ORDER)
+    @PUT(NetworkCallPoints.PICKED_DISPATCH_ORDER)
     suspend fun pickedDispatchOrder(
         @Path("id") id: String,
         @Body params: JsonObject?,
         @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
     ): Response<SuccessData>
 
+    //    @DELETE(NetworkCallPoints.DELETE_USER)
+    @HTTP(method = "DELETE", path = NetworkCallPoints.DELETE_USER, hasBody = true)
+    suspend fun deleteUserApi(
+        @Body param: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
+    @POST(NetworkCallPoints.ADD_BANK_DETAILS)
+    suspend fun addBankDetails(
+        @Body params: JsonObject?,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<SuccessData>
+
+
+    @GET(NetworkCallPoints.WITHDRAWAL_DETAILS)
+    suspend fun withdrawalDetails(
+        @Path("id") id: String,
+        @Header("Authorization") basicCredentials: String = "Bearer $TOKENER"
+    ): Response<WithDrawalDetailsData>
 }

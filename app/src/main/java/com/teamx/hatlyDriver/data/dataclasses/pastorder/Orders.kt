@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.pastorder
+import androidx.annotation.Keep
 
+@Keep
 data class Orders(
     val __v: Int,
     val _id: String,

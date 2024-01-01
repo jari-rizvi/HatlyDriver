@@ -5,14 +5,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.MainApplication
 import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentNotificationBinding
+import com.teamx.hatlyDriver.localization.LocaleManager
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.notification.modelNotification.Doc
 import com.teamx.hatlyDriver.utils.TimeFormatter
 import com.teamx.hatlyDriver.utils.snackbar
@@ -51,6 +54,29 @@ class NotificaitonFragment : BaseFragment<FragmentNotificationBinding, Notificat
             }
         }
 
+
+        if (!MainApplication.localeManager!!.getLanguage()
+                .equals(LocaleManager.Companion.LANGUAGE_ENGLISH)
+        ) {
+
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                       R.drawable.stripe_ic_arrow_right_circle,
+                    requireActivity().theme
+                )
+            )
+
+        } else {
+            mViewDataBinding.imgBack.setImageDrawable(
+                ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.back_arrow,
+                    requireActivity().theme
+                )
+            )
+
+        }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,

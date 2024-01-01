@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.pastorder
+import androidx.annotation.Keep
 
+@Keep
 data class Product(
     val _id: String,
     val image: String,
@@ -8,5 +10,4 @@ data class Product(
     val productName: String,
     val quantity: Int,
     val shopId: String,
-    val veriations: Any
 )

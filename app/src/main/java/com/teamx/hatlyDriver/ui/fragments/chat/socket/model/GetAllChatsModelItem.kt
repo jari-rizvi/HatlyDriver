@@ -1,6 +1,8 @@
-package com.teamx.raseef.ui.fragments.messages.socket.model
+package  com.teamx.hatlyDriver.ui.fragments.messages.socket.model
 
 import androidx.annotation.Keep
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.MessageX
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.OrderDetail
 
 @Keep
 data class GetAllChatsModelItem(

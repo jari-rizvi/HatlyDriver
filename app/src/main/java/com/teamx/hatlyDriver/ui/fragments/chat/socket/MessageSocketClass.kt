@@ -22,7 +22,7 @@ object MessageSocketClass {
 
 
         headers["Authorization"] =
-            listOf("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGlmaWNhdGlvbiI6eyJpdiI6IjZiNjQ3NTMzNjkzODM3NjM2ODMyNmIzOTM1MzczODY0IiwiZW5jcnlwdGVkRGF0YSI6IjM4OTFhZWVmYjBlZDgwZmU2ZDY3OWEwYWQzY2IzNGQyZWM3MDA4MDFjZWNiZDY0NDk4ZWZlOWEwZjMxMDNkMjEifSwidW5pcXVlSWQiOiI5YmJmMDY2MGRhNGQzYWJjOTYyNGI1ODkxYjU2NDciLCJpYXQiOjE2OTc1NTQ1MDIsImV4cCI6MTAzMzc1NTQ1MDJ9.wVcvv6arA3aHPWgXg-ruB2ZlbnxIhw8bDgGLwH2myyg")
+            listOf(token)
 
 
         options.extraHeaders = headers
@@ -372,7 +372,6 @@ object MessageSocketClass {
     ) {
         val data = JSONObject().put("limit", 5).put("page",4)
 
-        Timber.tag("MessageSocketClass").d("getallmessage:$data ")
         userMessageSocket?.emit("ALL_CHAT", data, object : Ack {
             override fun call(vararg args: Any?) {
                 Timber.tag("MessageSocketClass").d("Recieve12121212")
