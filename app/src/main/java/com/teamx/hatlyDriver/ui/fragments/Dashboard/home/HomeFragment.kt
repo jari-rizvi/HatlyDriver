@@ -36,6 +36,8 @@ import com.google.firebase.ktx.initialize
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
+import com.teamx.hatlyDriver.BR
+import com.teamx.hatlyDriver.R
 import com.teamx.hatlyDriver.baseclasses.BaseFragment
 import com.teamx.hatlyDriver.data.dataclasses.getOrderStatus.Doc
 import com.teamx.hatlyDriver.data.remote.Resource
