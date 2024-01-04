@@ -121,6 +121,7 @@ class DialogHelperClass {
         }
 
 
+
         fun errorDialog(context: Context, errorMessage: String) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_layout_error)
