@@ -86,7 +86,16 @@ class WithDetailsFragment : BaseFragment<FragmentWithdrawalDetailsBinding, Withd
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        mViewDataBinding.textView48.text = data.status
+
+                        if(data.status == "accepted"){
+                            mViewDataBinding.textView48.visibility = View.VISIBLE
+                            mViewDataBinding.textView488.visibility = View.GONE
+                        }
+                        if(data.status == "rejected"){
+                            mViewDataBinding.textView48.visibility = View.GONE
+                            mViewDataBinding.textView488.visibility = View.VISIBLE
+                        }
+
                         Picasso.get().load(data.screenShort).into(mViewDataBinding.imageView23)
 
                     }

@@ -64,7 +64,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     DialogHelperClass.Companion.ReasonDialog,
     DialogHelperClass.Companion.OfflineReasonDialog,
     onAcceptReject, DialogHelperClass.Companion.ConfirmLocationDialog, IncomingOrderCallBack,
-    onAcceptRejectSocket, onAcceptRejectParcel, DialogHelperClass.Companion.DialogProminentInterface {
+    onAcceptRejectSocket, onAcceptRejectParcel,
+    DialogHelperClass.Companion.DialogProminentInterface {
 
     override val layoutId: Int
         get() = R.layout.fragment_home
@@ -129,7 +130,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             sharedViewModel.setUserData(it)
 
         }
-
 
 
         /*   try {
@@ -246,7 +246,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         val seekbarValue = PrefHelper.getInstance(requireContext()).getMax
 
-        if(seekbarValue == 100){
+        if (seekbarValue == 100) {
             RiderSocketClass.connectRider(
                 NetworkCallPoints.TOKENER,
                 originLatitude,
@@ -267,8 +267,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         }
 
-      
-        
+
+
         seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -331,7 +331,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         requireContext(), this@HomeFragment, true, "", ""
                     )
                 }
-                mViewDataBinding.slider2.progress =   seekBar1.progress
+                mViewDataBinding.slider2.progress = seekBar1.progress
             }
 
         })
@@ -351,35 +351,37 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         spinner.adapter = adapter
 //        spinner1.adapter = adapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View,
-                position: Int,
-                id: Long
-            ) {
-                val selectedItem = parent.getItemAtPosition(position) as String
+        try {
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedItem = parent.getItemAtPosition(position) as String
 //                earning = "earning"
 
-                val params = JsonObject()
-                try {
-                    params.addProperty("filterBy", selectedItem)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-                mViewModel.getTotalEarnings(params)
+                    val params = JsonObject()
+                    try {
+                        params.addProperty("filterBy", selectedItem)
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                    mViewModel.getTotalEarnings(params)
 
 //                mViewModel.getTotalEarnings(selectedItem, earning)
 
 
-            }
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
+                override fun onNothingSelected(parent: AdapterView<*>) {
 
+                }
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
 //        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 //            override fun onItemSelected(
 //                parent: AdapterView<*>,
@@ -471,7 +473,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
                             try {
                                 mViewDataBinding.hours.text =
-                                    data.totalSpendTime.hours.toString() + "h " + data.totalSpendTime.minuts +"m"
+                                    data.totalSpendTime.hours.toString() + "h " + data.totalSpendTime.minuts + "m"
                                 mViewDataBinding.name.text =
                                     "Hello " + data.userId.name as String
                                 Picasso.get().load(data.userId.profileImage).resize(500, 500)
@@ -553,7 +555,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewIncomingOrders.layoutManager = linearLayoutManager
 
-        sharedViewModel.incomingOrderAdapter = IncomingOrderSocketAdapter(sharedViewModel.incomingOrderSocketArrayList, this)
+        sharedViewModel.incomingOrderAdapter =
+            IncomingOrderSocketAdapter(sharedViewModel.incomingOrderSocketArrayList, this)
         mViewDataBinding.recyclerViewIncomingOrders.adapter = sharedViewModel.incomingOrderAdapter
 
     }
@@ -564,7 +567,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val linearLayoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         mViewDataBinding.recyclerViewSpecialOrders.layoutManager = linearLayoutManager
 
-        sharedViewModel.incomingParcelAdapter = IncomingParcelSocketAdapter(sharedViewModel.incomingParcelSocketArrayList, this)
+        sharedViewModel.incomingParcelAdapter =
+            IncomingParcelSocketAdapter(sharedViewModel.incomingParcelSocketArrayList, this)
         mViewDataBinding.recyclerViewSpecialOrders.adapter = sharedViewModel.incomingParcelAdapter
 
     }
@@ -654,7 +658,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     override fun onConfirmLocation() {
 
-        DialogHelperClass.prominentDialog(requireActivity(),this)
+        DialogHelperClass.prominentDialog(requireActivity(), this)
 
 
     }
@@ -810,11 +814,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
-                            it._id != id
-                        }
+                        val incomingOrderSocketArrayList1 =
+                            sharedViewModel.incomingOrderSocketArrayList.filter {
+                                it._id != id
+                            }
                         sharedViewModel.incomingOrderSocketArrayList.clear()
-                        sharedViewModel.incomingOrderSocketArrayList.addAll(incomingOrderSocketArrayList1)
+                        sharedViewModel.incomingOrderSocketArrayList.addAll(
+                            incomingOrderSocketArrayList1
+                        )
 
 //                        showToast(data.message)
                         navController =
@@ -865,9 +872,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingOrderSocketArrayList1 = sharedViewModel.incomingOrderSocketArrayList.filter {
-                            it._id != id
-                        }
+                        val incomingOrderSocketArrayList1 =
+                            sharedViewModel.incomingOrderSocketArrayList.filter {
+                                it._id != id
+                            }
 
 
                         sharedViewModel.incomingOrderSocketArrayList.removeLast()
@@ -943,11 +951,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        val incomingParcelSocketArrayList1 = sharedViewModel.incomingParcelSocketArrayList.filter {
-                            it._id != id
-                        }
+                        val incomingParcelSocketArrayList1 =
+                            sharedViewModel.incomingParcelSocketArrayList.filter {
+                                it._id != id
+                            }
                         sharedViewModel.incomingParcelSocketArrayList.clear()
-                        sharedViewModel.incomingParcelSocketArrayList.addAll(incomingParcelSocketArrayList1)
+                        sharedViewModel.incomingParcelSocketArrayList.addAll(
+                            incomingParcelSocketArrayList1
+                        )
 
 //                        showToast(data.message)
                         sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()

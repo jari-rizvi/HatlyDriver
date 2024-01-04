@@ -94,6 +94,7 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
                 return@setOnClickListener
             }
             params.addProperty("amount", amount.toInt())
+
             when (selectedPaymentMethod) {
                 PaymentMethod.CASH_ON_DELIVERY -> {
                 }
@@ -212,7 +213,7 @@ class TopUpFragment : BaseFragment<FragmentTopUpBinding, TopUpModel>(),
         PaymentConfiguration.init(
             requireActivity().applicationContext,
 //            stripPublicKey
-            "pk_test_51LMwtTIXOwead2Sp6mZEM5tGaiZT363HLHm58hq7Wrip8KOH2Jj1U303ONw2DMd6oTGHP0uLiDw197LA0jauVeMG00HtE9n9nM"
+            "pk_test_51NM8SbAESDqUcVTloKKwPpIdtlkmmm595qL1D8BZHt5hWrKp7GrEaBiRXG6jXZYgtMRR0yk7eD7RzTp0fwyahzDu00xf6h8wvu"
         )
 
         paymentSheet.presentWithPaymentIntent(

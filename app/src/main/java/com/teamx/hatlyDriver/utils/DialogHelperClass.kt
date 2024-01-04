@@ -116,6 +116,7 @@ class DialogHelperClass {
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.setCancelable(false)
             dialog.show()
+            
             return dialog
         }
 
