@@ -85,6 +85,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     var locationRequest: LocationRequest? = null
 
 
+
     private var originLatitude: String = "0.0"
     private var originLongitude: String = "0.0"
 
