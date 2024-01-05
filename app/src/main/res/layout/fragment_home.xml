@@ -51,8 +51,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
                 android:maxLines="1"
+                android:fontFamily="@font/open_sans_bold"
+                style="@style/txtGrayColor"
                 android:text="Hello"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
                 app:layout_constraintEnd_toStartOf="@+id/constraintLayout1"
@@ -102,8 +103,8 @@
                     android:id="@+id/profilePicture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:src="@drawable/baseline_person"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -269,6 +270,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/_2sdp"
+                    android:layout_marginHorizontal="@dimen/_1sdp"
+                    android:prompt="@color/light_gray"
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </FrameLayout>
@@ -280,6 +283,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders"
                 android:textSize="@dimen/_9ssp"
+                android:textColor="#6D6D6D"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.07"
@@ -293,6 +297,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders_earning"
                 android:textSize="@dimen/_9ssp"
+                android:textColor="#6D6D6D"
+
                 app:layout_constraintBottom_toBottomOf="@+id/textView16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.2"
@@ -349,6 +355,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_parcels"
                 android:textSize="@dimen/_9ssp"
+                android:textColor="#6D6D6D"
+
                 app:layout_constraintBottom_toTopOf="@+id/totalParcels"
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
                 app:layout_constraintHorizontal_bias="0"
@@ -359,6 +367,8 @@
                 android:id="@+id/textView433"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#6D6D6D"
+
                 android:text="@string/total_parcels_earning"
                 android:textSize="@dimen/_9ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView43"
@@ -401,6 +411,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/total_earnings"
                 android:textSize="@dimen/_9ssp"
+                android:textColor="#6D6D6D"
+
                 app:layout_constraintBottom_toTopOf="@+id/totalParcelsEarning"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textView161"
@@ -439,99 +451,116 @@
                 android:orientation="vertical"
                 android:paddingTop="@dimen/_16sdp">
 
-                <TextView
-                    android:id="@+id/textView17"
-                    style="@style/open_sans_white_bold_medium"
-                    android:layout_width="wrap_content"
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/connnnn"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/_10sdp"
-                    android:text="@string/special_incoming_orders"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_13ssp"
+                    android:visibility="gone"
+                    android:layout_marginStart="@dimen/_10sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.015" />
+                    app:layout_constraintVertical_bias="0.015">
 
-                <TextView
-                    android:id="@+id/textView18"
-                    style="@style/open_sans_secondary_bold_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/view_all"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView17"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintStart_toEndOf="@+id/textView17"
-                    app:layout_constraintTop_toTopOf="@+id/textView17" />
+                    <TextView
+                        android:id="@+id/textView17"
+                        style="@style/txtGrayColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="@string/special_incoming_orders"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewSpecialOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/textView17"
-                    app:layout_constraintTop_toBottomOf="@+id/textView17"
-                    app:layout_constraintVertical_bias="0.02"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_incoming_order" />
+                    <TextView
+                        android:id="@+id/textView18"
+                        style="@style/open_sans_secondary_bold_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_10ssp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView17"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.9"
+                        app:layout_constraintStart_toEndOf="@+id/textView17"
+                        app:layout_constraintTop_toTopOf="@+id/textView17" />
 
-                <TextView
-                    android:id="@+id/textView19"
-                    style="@style/open_sans_white_bold_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/incoming_orders"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_13ssp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewSpecialOrders"
-                    app:layout_constraintVertical_bias="0.01" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewSpecialOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_160sdp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/textView17"
+                        app:layout_constraintTop_toBottomOf="@+id/textView17"
+                        app:layout_constraintVertical_bias="0.02"
+                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_incoming_order" />
 
-                <TextView
-                    android:id="@+id/textView20"
-                    style="@style/open_sans_secondary_bold_medium"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/view_all"
-                    android:textColor="@color/red"
-                    android:textSize="@dimen/_10ssp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView19"
-                    app:layout_constraintEnd_toEndOf="@+id/textView18"
-                    app:layout_constraintHorizontal_bias="1"
-                    app:layout_constraintStart_toStartOf="@+id/textView18"
-                    app:layout_constraintTop_toTopOf="@+id/textView19" />
+                    <TextView
+                        android:id="@+id/textView19"
+                        style="@style/txtGrayColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:text="@string/incoming_orders"
+                        android:textSize="@dimen/_13ssp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
+                        app:layout_constraintTop_toBottomOf="@+id/recyclerViewSpecialOrders"
+                        app:layout_constraintVertical_bias="0.01" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewIncomingOrders"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_160sdp"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
-                    app:layout_constraintTop_toBottomOf="@+id/textView19"
-                    app:layout_constraintVertical_bias="0.03"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_incoming_order" />
+                    <TextView
+                        android:id="@+id/textView20"
+                        style="@style/open_sans_secondary_bold_medium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/view_all"
+                        android:textColor="@color/red"
+                        android:textSize="@dimen/_10ssp"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView19"
+                        app:layout_constraintEnd_toEndOf="@+id/textView18"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintStart_toStartOf="@+id/textView18"
+                        app:layout_constraintTop_toTopOf="@+id/textView19" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewIncomingOrders"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_160sdp"
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"
+                        app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
+                        app:layout_constraintTop_toBottomOf="@+id/textView19"
+                        app:layout_constraintVertical_bias="0.03"
+                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_incoming_order" />
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                 <TextView
                     android:id="@+id/textView200"
-                    style="@style/open_sans_white_bold_medium"
+                    style="@style/txtGrayColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:fontFamily="@font/open_sans_bold"
                     android:text="@string/past_orders"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/_13ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialOrders"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewIncomingOrders"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/connnnn"
                     app:layout_constraintVertical_bias="0.01" />
 
 
@@ -544,9 +573,9 @@
                     android:textColor="@color/red"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView200"
-                    app:layout_constraintEnd_toEndOf="@+id/textView20"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintStart_toStartOf="@+id/textView20"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.95"
+                    app:layout_constraintStart_toStartOf="@+id/connnnn"
                     app:layout_constraintTop_toTopOf="@+id/textView200" />
 
 
@@ -556,7 +585,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textView200"
                     app:layout_constraintTop_toBottomOf="@+id/textView200"
                     app:layout_constraintVertical_bias="0.03"
@@ -566,11 +595,11 @@
 
                 <TextView
                     android:id="@+id/textView2000"
-                    style="@style/open_sans_white_bold_medium"
+                    style="@style/txtGrayColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/open_sans_bold"
                     android:text="Past Special Orders"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/_13ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/recyclerViewPastOrders"
@@ -598,7 +627,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialOrders"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textView2000"
                     app:layout_constraintTop_toBottomOf="@+id/textView2000"
                     app:layout_constraintVertical_bias="0.03"
@@ -622,10 +651,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
-                        android:max="100"
-                        android:progress="0"
                         android:clickable="false"
                         android:focusable="false"
+                        android:max="100"
+                        android:progress="0"
                         android:progressDrawable="@drawable/swipe_button_background"
                         android:progressTint="@color/green"
                         android:thumb="@android:color/transparent"
@@ -650,9 +679,9 @@
                         android:progressTint="@android:color/transparent"
                         android:splitTrack="true"
                         android:thumb="@drawable/custom_thumb"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView

@@ -62,6 +62,7 @@
                 android:text="@string/we_need_to_know_your_location_to_find_orders_near_you"
                 android:textAlignment="viewStart"
                 android:textSize="@dimen/_13sdp"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/btnAllowLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

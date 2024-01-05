@@ -112,13 +112,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/mobile_number"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4"
             app:layout_constraintVertical_bias="0.05">
@@ -131,9 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/email_or_number"
-                android:drawablePadding="@dimen/_5sdp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:drawablePadding="@dimen/_5sdp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

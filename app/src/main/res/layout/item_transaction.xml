@@ -17,10 +17,11 @@
 
         <TextView
             android:id="@+id/tvNoti"
-            style="@style/open_sans_regular_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/open_sans_regular"
+            android:textSize="@dimen/_14ssp"
+            android:fontFamily="@font/open_sans_bold"
+            style="@style/txtGrayColor"
             android:text="@string/order_completed"
             app:layout_constraintVertical_bias="0"
             android:layout_marginTop="@dimen/_5sdp"

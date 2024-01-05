@@ -43,12 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="@string/add_bank_details"
-            android:textColor="#0A0001"
+            android:fontFamily="@font/open_sans_bold"
+            style="@style/txtGrayColor"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -66,13 +66,11 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="Bank Name"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/imgBack1"
             app:layout_constraintStart_toStartOf="@+id/imgBack"
             app:layout_constraintTop_toBottomOf="@+id/textView23">
@@ -84,9 +82,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,13 +94,11 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="Account Number / IBAN"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/imgBack1"
             app:layout_constraintStart_toStartOf="@+id/imgBack"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -116,9 +110,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -129,13 +121,11 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:hint="Account Holder Name"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/imgBack1"
             app:layout_constraintStart_toStartOf="@+id/imgBack"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout1">
@@ -147,9 +137,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

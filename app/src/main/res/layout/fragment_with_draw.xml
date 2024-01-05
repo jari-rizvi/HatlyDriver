@@ -43,12 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="@string/withdraw"
-            android:textColor="#0A0001"
+            android:fontFamily="@font/open_sans_bold"
+            style="@style/txtGrayColor"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/how_much_amount_would_you_like_to_transfer"
-            android:textColor="#262626"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:textSize="@dimen/_11ssp"
             app:layout_constraintVertical_bias="0.05"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -81,13 +82,11 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="Amount"
             android:layout_marginTop="@dimen/_10sdp"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="@+id/textView456"
             app:layout_constraintStart_toStartOf="@+id/textView456"
             app:layout_constraintTop_toBottomOf="@+id/textView456">
@@ -99,9 +98,7 @@
                 android:id="@+id/amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawablePadding="@dimen/_5sdp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:drawablePadding="@dimen/_5sdp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

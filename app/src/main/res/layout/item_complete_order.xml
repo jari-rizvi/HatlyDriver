@@ -26,18 +26,37 @@
             <TextView
                 android:id="@+id/ordername"
                 style="@style/open_sans_regular_medium"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:textStyle="bold"
+                android:text=""
                 android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/_13sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/orderId"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/orderId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/light_gray"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_regular"
+                android:gravity="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginHorizontal="@dimen/_5sdp"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/ordername"
                 app:layout_constraintTop_toTopOf="parent"
-
-                />
+                tools:layout_editor_absoluteY="7dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -103,6 +122,7 @@
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:ellipsize="end"
+            style="@style/open_sans_regular_small"
             android:text=""
             android:textSize="@dimen/_9ssp"
             app:layout_constraintBottom_toTopOf="@+id/textView14"
@@ -145,6 +165,8 @@
             android:textSize="@dimen/_9ssp"
             android:layout_marginBottom="@dimen/_5sdp"
             android:maxLines="2"
+            style="@style/open_sans_regular_small"
+
             android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView13"

@@ -45,18 +45,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="@string/orders"
-            android:textColor="#0A0001"
+            android:fontFamily="@font/open_sans_bold"
+            style="@style/txtGrayColor"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"
             app:layout_constraintEnd_toStartOf="@+id/imgNotification"
             app:layout_constraintStart_toEndOf="@+id/imgBack"
             app:layout_constraintTop_toTopOf="@+id/imgBack"
             app:layout_constraintVertical_bias="0.75" />
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -67,13 +68,13 @@
             android:elevation="@dimen/_3sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imgNotification"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/imgBack"
             app:layout_constraintTop_toBottomOf="@+id/textView23"
-            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintVertical_bias="0.021"
             app:tabBackground="@drawable/tab_background"
             app:tabRippleColor="@null"
             app:tabTextAppearance="@style/tabTextColor" />
-
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"

@@ -248,6 +248,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val seekbarValue = PrefHelper.getInstance(requireContext()).getMax
 
         if (seekbarValue == 100) {
+            mViewDataBinding.connnnn.visibility = View.VISIBLE
+
             RiderSocketClass.connectRider(
                 NetworkCallPoints.TOKENER,
                 originLatitude,
@@ -319,6 +321,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         originLongitude,
                         this@HomeFragment
                     )
+                    mViewDataBinding.connnnn.visibility = View.VISIBLE
 
 
                 } else {
@@ -341,16 +344,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         val spinner = mViewDataBinding.spinner1
 //        val spinner1 = mViewDataBinding.spinner1
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.spinner_items,
-            android.R.layout.simple_spinner_item
-        )
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        try {
 
 
-        spinner.adapter = adapter
+            val items = arrayOf("weekly", "monthly", "yearly")
+
+            val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+        catch (e:Exception){
+
+        }
+
+
+//        val adapter = ArrayAdapter.createFromResource(
+//            requireContext(),
+//            R.array.spinner_items,
+//            R.layout.custom_spinner_item
+//        )
+
+//        adapter.setDropDownViewResource(R.layout.custom_spinner_item)
+
+
+
 //        spinner1.adapter = adapter
         try {
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -1006,6 +1023,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         RiderSocketClass.disconnect()
         sharedViewModel.incomingParcelSocketArrayList.clear()
         sharedViewModel.incomingOrderSocketArrayList.clear()
+        mViewDataBinding.connnnn.visibility = View.GONE
+
 
         sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
         sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()

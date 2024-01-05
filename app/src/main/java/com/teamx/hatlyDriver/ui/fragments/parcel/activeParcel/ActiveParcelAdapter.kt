@@ -56,6 +56,7 @@ class ActiveParcelAdapter(
             holder.binding.textView27.text = list.parcel.details.item
             holder.binding.textView31.text = list.parcel.fare.toString()
             holder.binding.textView32.text = list.parcel.senderId.name
+            holder.binding.orderId.text = list.parcel._id
 //            holder.binding.textView35.text = list.orders.specialNote
         } catch (e: Exception) {
 

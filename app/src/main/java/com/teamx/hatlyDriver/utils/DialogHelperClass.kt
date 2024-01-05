@@ -4,14 +4,13 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.text.TextUtils.isEmpty
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import com.teamx.hatlyDriver.R
 import kotlinx.coroutines.Job
 
@@ -210,38 +209,23 @@ class DialogHelperClass {
         ) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_reason)
-            dialog.window!!.setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
-            )
+            dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
 
-//            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
-
-
-            val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
+            val btnReason = dialog.findViewById<TextView>(R.id.btnSubmit)
             val reason = dialog.findViewById<EditText>(R.id.reason)
 
-            AddReviewBtn.setOnClickListener {
-                var isValid = true
-                if ( isEmpty(reason.text.toString()) ) {
-                    isValid = false
-                    Toast.makeText(context, "empty", Toast.LENGTH_LONG).show()
-                }
-
-
-                      if (reason.text.isNullOrBlank()) {
-                          Snackbar.make(
-                              AddReviewBtn,
-                              "Please enter Reason",
-                              Snackbar.LENGTH_LONG
-                          )
-                          return@setOnClickListener
-                      }
-                if (boo) {
-                    reasonDialog.onSubmitClick(reason.text.toString())
+            btnReason.setOnClickListener {
+                Log.d("reasonDialog", "submitReason: jkhjkhkjh")
+                if (reason.text.toString().isBlank() ||reason.text.toString().isEmpty() ) {
+                    Toast.makeText(context, "Should not be Empty!", Toast.LENGTH_LONG).show()
                 } else {
-                    reasonDialog.onCancelClick()
+                    if (boo) {
+                        reasonDialog.onSubmitClick(reason.text.toString())
+                    } else {
+                        reasonDialog.onCancelClick()
+                    }
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
             }
             val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
 
@@ -263,29 +247,22 @@ class DialogHelperClass {
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
             )
 
-//            val tvTitleText = dialog.findViewById<TextView>(R.id.tvLocation1)
-
-
             val AddReviewBtn = dialog.findViewById<TextView>(R.id.btnSubmit)
             val reason1 = dialog.findViewById<EditText>(R.id.reason)
 
-//            AddReviewBtn.text = context.getString(R.string.add_review)
             AddReviewBtn.setOnClickListener {
-                /*      val desc = tvTitleText.text
-                      if (desc.isBlank()) {
-                          Snackbar.make(
-                              AddReviewBtn,
-                              "Please enter some text",
-                              Snackbar.LENGTH_LONG
-                          )
-                          return@setOnClickListener
-                      }*/
-                if (boo) {
-                    oflinereasonDialog.onSubmitoflineClick(status, reason1.text.toString())
-                } else {
-                    oflinereasonDialog.onCanceloflineClick()
+                Log.d("reasonDialog", "submitReason: jkhjkhkjh")
+                if (reason1.text.toString().isBlank() ||reason1.text.toString().isEmpty() ) {
+                    Toast.makeText(context, "Should not be Empty!", Toast.LENGTH_LONG).show()
                 }
-                dialog.dismiss()
+                else {
+                    if (boo) {
+                        oflinereasonDialog.onSubmitoflineClick(status, reason1.text.toString())
+                    } else {
+                        oflinereasonDialog.onCanceloflineClick()
+                    }
+                    dialog.dismiss()
+                }
             }
             val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
 
@@ -296,8 +273,6 @@ class DialogHelperClass {
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
         }
-
-
 
         interface DialogProminentInterface {
             fun alloLocation()

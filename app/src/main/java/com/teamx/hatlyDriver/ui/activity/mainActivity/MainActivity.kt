@@ -1,11 +1,16 @@
 package com.teamx.hatlyDriver.ui.activity.mainActivity
 
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -35,6 +40,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
 
     private var navController: NavController? = null
+
+    private var modeChangeReceiver: BroadcastReceiver? = null
+
 
 
     //    override fun onResumeFragments() {
@@ -70,24 +78,28 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onPause() {
         super.onPause()
-        val navState = navController!!.saveState()!!
-        mViewModel.bundleB.postValue(navState)
+        unregisterReceiver(modeChangeReceiver)
+//        val navState = navController!!.saveState()!!
+//        mViewModel.bundleB.postValue(navState)
 //        val prefs = getPreferences(Context.MODE_PRIVATE)
 //        prefs.edit().putString("navState", navState!!).apply()
-        Log.d("321321", "onPause:$navState ")
+//        Log.d("321321", "onPause:$navState ")
     }
 
     override fun onResume() {
         super.onResume()
+        val filter = IntentFilter()
+        filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED)
+        registerReceiver(modeChangeReceiver, filter)
 //        val prefs = getPreferences(Context.MODE_PRIVATE)
 //        val navState = prefs.getString("navState", null)
-        val navState = mViewModel.bundleB.value
-        navState!!.let {
-            navController!!.restoreState(it)
-//            navController!!.navigate(navController!!.currentDestination!!.id, null)
-//        navController?.popBackStack()
-        }
-        Log.d("321321", "onResume:$navState ")
+//        val navState = mViewModel.bundleB.value
+//        navState!!.let {
+//            navController!!.restoreState(it)
+////            navController!!.navigate(navController!!.currentDestination!!.id, null)
+////        navController?.popBackStack()
+//        }
+//        Log.d("321321", "onResume:$navState ")
     }
 
     override fun onStop() {
@@ -110,6 +122,31 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             val helperState = savedInstanceState.getBundle(STATE_HELPER)
             stateHelper.restoreHelperState(helperState!!)
         }
+
+
+        modeChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (intent?.action == Intent.ACTION_CONFIGURATION_CHANGED) {
+                    val currentNightMode =
+                        resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+                    if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                        // Dark mode is enabled
+//                        finish()
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                        startActivity(getIntent())
+//                        Toast.makeText(context, "Dark Mode Enabled", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // Light mode is enabled
+//                        finish()
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                        startActivity(getIntent())
+//                        Toast.makeText(context, "Light Mode Enabled", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+
 
 
 //

@@ -75,6 +75,7 @@ class ActiveAdapter(
 
             holder.binding.textView28.text = list.orders.products[0].prize.toString() + " AED"
             holder.binding.textView31.text = list.orders.subTotal.toString()
+            holder.binding.orderId.text = list.orders._id
             holder.binding.textView32.text = list.orders.customer.name
             holder.binding.textView33.text = list.dropOff.address
             holder.binding.textView35.text = list.orders.specialNote

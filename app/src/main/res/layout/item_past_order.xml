@@ -36,7 +36,6 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-
                 />
 
 
@@ -104,6 +103,7 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:text=""
+            style="@style/open_sans_regular_small"
             android:textSize="@dimen/_9ssp"
             app:layout_constraintBottom_toTopOf="@+id/textView14"
             app:layout_constraintEnd_toEndOf="@+id/price"
@@ -146,6 +146,8 @@
             android:layout_marginBottom="@dimen/_5sdp"
             android:maxLines="2"
             android:ellipsize="end"
+            style="@style/open_sans_regular_small"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView13"
             app:layout_constraintHorizontal_bias="0.0"

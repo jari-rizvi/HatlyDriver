@@ -114,13 +114,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/full_name"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             android:imeOptions="actionNext"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/textView2"
@@ -135,9 +133,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:maxLines="1"
-                android:inputType="text"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -184,13 +180,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/mobile_number"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
@@ -205,9 +199,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:maxLines="1"
-                android:inputType="phone"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:inputType="phone" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -218,13 +210,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/password"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:passwordToggleDrawable="@drawable/show_password_selector"
             app:passwordToggleEnabled="true"
@@ -241,9 +231,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
 
         </com.google.android.material.textfield.TextInputLayout>

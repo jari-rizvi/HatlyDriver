@@ -116,8 +116,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="1 x Spicy Chicken Burger"
+                android:text=""
                 android:textColor="#6D6D6D"
+                android:visibility="gone"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintBottom_toTopOf="@+id/view"
                 app:layout_constraintStart_toStartOf="@+id/textView27"
@@ -128,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="1 x Spicy Chicken Burger"
+                android:text=""
                 android:textColor="#6D6D6D"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView27"
@@ -143,8 +144,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="1 x Spicy Chicken Burger"
+                android:text=""
                 android:textColor="#6D6D6D"
+                android:visibility="gone"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView26"
                 app:layout_constraintEnd_toEndOf="@+id/view"
@@ -157,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/open_sans_regular"
-                android:text="1 x Spicy Chicken Burger"
+                android:text=""
                 android:textColor="#6D6D6D"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintBottom_toTopOf="@+id/textView26"
@@ -251,8 +253,9 @@
                 android:id="@+id/imgChat"
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
+                android:layout_marginVertical="@dimen/_5sdp"
                 android:elevation="@dimen/_3sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView32"
+                app:layout_constraintBottom_toTopOf="@+id/textView33"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.86"
                 app:layout_constraintStart_toStartOf="parent"
@@ -264,7 +267,9 @@
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
                 android:elevation="@dimen/_3sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView32"
+                   android:layout_marginTop="@dimen/_10sdp"
+
+                   app:layout_constraintBottom_toBottomOf="@+id/textView32"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
@@ -272,23 +277,35 @@
                 app:srcCompat="@drawable/call" />
 
 
-
-
             <TextView
                 android:id="@+id/textView33"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/open_sans_regular"
-                android:textColor="#6D6D6D"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
                 android:drawableStart="@drawable/address_location"
+                android:ellipsize="end"
+                android:fontFamily="@font/open_sans_regular"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="#6D6D6D"
+                android:textSize="@dimen/_8ssp"
+                app:layout_constraintBottom_toTopOf="@+id/orderId"
+                app:layout_constraintEnd_toStartOf="@+id/imgChat"
+                app:layout_constraintStart_toStartOf="@+id/textView32"
+                app:layout_constraintTop_toBottomOf="@+id/textView32"
+                app:layout_constraintVertical_bias="0" />
+
+
+            <TextView
+                android:id="@+id/orderId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/open_sans_regular"
+                android:text=""
+                android:textColor="#6D6D6D"
                 android:textSize="@dimen/_8ssp"
                 app:layout_constraintBottom_toTopOf="@+id/view2"
-                app:layout_constraintEnd_toEndOf="@+id/view2"
-                app:layout_constraintStart_toStartOf="@+id/textView32"
-                app:layout_constraintTop_toBottomOf="@+id/textView32" />
+                app:layout_constraintStart_toStartOf="@+id/textView33"
+                app:layout_constraintTop_toBottomOf="@+id/textView33" />
 
 
             <View

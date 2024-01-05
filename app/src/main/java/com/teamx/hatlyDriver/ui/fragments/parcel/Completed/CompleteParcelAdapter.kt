@@ -3,9 +3,7 @@ package com.teamx.hatlyDriver.ui.fragments.parcel.Completed
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.teamx.hatlyDriver.data.dataclasses.pastorder.Doc
 import com.teamx.hatlyDriver.databinding.ItemCompleteOrderBinding
-import com.teamx.hatlyDriver.databinding.ItemPastOrderBinding
 
 
 class CompleteParcelAdapter(val arrayList: ArrayList<com.teamx.hatlyDriver.data.dataclasses.pastParcels.Doc>) : RecyclerView.Adapter<CompleteParcelAdapter.TopProductViewHolder>() {
@@ -59,6 +57,8 @@ class CompleteParcelAdapter(val arrayList: ArrayList<com.teamx.hatlyDriver.data.
                       }*/
 
             holder.binding.ordername.text = list.parcel.details.item
+            holder.binding.orderId.text =  "OrderId "+ list.parcel._id
+
 
 
             holder.binding.price.text = list.parcel.fare.toString()+" AED"

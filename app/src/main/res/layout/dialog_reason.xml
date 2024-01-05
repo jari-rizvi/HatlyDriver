@@ -31,7 +31,6 @@
                 android:layout_height="@dimen/_20sdp"
                 android:elevation="@dimen/_1sdp"
                 android:scaleType="centerCrop"
-                android:tint="@color/green"
                 android:layout_marginTop="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +38,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/cancel" />
+                app:srcCompat="@drawable/cancel"
+                app:tint="@color/green" />
 
             <TextView
                 android:id="@+id/tvLocation"

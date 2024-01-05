@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.teamx.hatlyDriver.data.dataclasses.pastorder.Doc
 import com.teamx.hatlyDriver.databinding.ItemCompleteOrderBinding
-import com.teamx.hatlyDriver.databinding.ItemPastOrderBinding
 
 
 class CompleteOrderAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter<CompleteOrderAdapter.TopProductViewHolder>() {
@@ -50,6 +49,7 @@ class CompleteOrderAdapter(val arrayList: ArrayList<Doc>) : RecyclerView.Adapter
 
 
             holder.binding.price.text = list.charges.toString() + "AED"
+            holder.binding.orderId.text =  "OrderId "+ list.orders.orderId
             holder.binding.ordername.text = list.orders.products[0].productName
         }
         catch (e:Exception){

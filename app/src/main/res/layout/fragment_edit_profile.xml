@@ -31,12 +31,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="@string/account_setting"
-            android:textColor="#0A0001"
+            android:fontFamily="@font/open_sans_bold"
+            style="@style/txtGrayColor"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,13 +87,11 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/full_name"
             android:imeOptions="actionNext"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/imgBack"
             app:layout_constraintTop_toBottomOf="@+id/hatlyIcon"
@@ -107,9 +105,7 @@
                 android:drawablePadding="@dimen/_5sdp"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -121,13 +117,11 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:hint="@string/mobile_number"
-            android:textColorHint="@color/black"
             app:boxCornerRadiusBottomEnd="@dimen/_5sdp"
             app:boxCornerRadiusBottomStart="@dimen/_5sdp"
             app:boxCornerRadiusTopEnd="@dimen/_5sdp"
             app:boxCornerRadiusTopStart="@dimen/_5sdp"
             app:boxStrokeColor="@color/textSecondaryColor"
-            app:hintTextColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
             app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
@@ -143,9 +137,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="phone"
                 android:editable="false"
-                android:maxLines="1"
-                android:textColor="@color/black"
-                android:textColorHint="@color/black" />
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

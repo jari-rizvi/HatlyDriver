@@ -31,7 +31,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:enableOnBackInvokedCallback="true"
-        android:theme="@style/NoAppTheme"
+        android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
 
