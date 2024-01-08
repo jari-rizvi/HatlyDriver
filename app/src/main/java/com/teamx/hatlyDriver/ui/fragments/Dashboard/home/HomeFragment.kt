@@ -76,6 +76,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var id: String
 
+
     var earning: String = "earning"
 
     private lateinit var seekBar1: SeekBar
@@ -1068,6 +1069,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     }
 
     override fun onCanceloflineClick() {
+        Log.d("121212121", "onCanceloflineClick: 121212")
+
+        seekBar1.progress = 100
+
+
+
 
     }
 

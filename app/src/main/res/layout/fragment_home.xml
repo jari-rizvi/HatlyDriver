@@ -668,8 +668,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/_15sdp"
-
-
                         android:max="100"
                         android:paddingVertical="@dimen/_5sdp"
                         android:paddingTop="@dimen/_5sdp"
@@ -692,10 +690,10 @@
                         android:layout_centerHorizontal="true"
                         android:enabled="false"
                         android:gravity="center"
-                        android:paddingTop="16dp"
+                        android:text="dsdsdsd"
                         android:textAlignment="center"
                         android:textColor="#000000"
-                        android:textSize="@dimen/_12ssp"
+                        android:textSize="@dimen/_14ssp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

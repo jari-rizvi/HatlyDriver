@@ -267,6 +267,7 @@ class DialogHelperClass {
             val cancelBtn = dialog.findViewById<ImageView>(R.id.imageView23)
 
             cancelBtn.setOnClickListener {
+                oflinereasonDialog.onCanceloflineClick()
                 dialog.dismiss()
             }
 
