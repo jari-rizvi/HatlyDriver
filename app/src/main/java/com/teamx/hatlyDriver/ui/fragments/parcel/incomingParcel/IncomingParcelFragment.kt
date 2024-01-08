@@ -154,7 +154,7 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
     }
 
     override fun onRejectClick(position: Int) {
-
+        id = incomingOrderArrayList[position]._id
 
         DialogHelperClass.submitReason(
             requireContext(), this, true, "", ""
@@ -164,8 +164,9 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
     override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
-            params.addProperty("status", "rejected")
-            params.addProperty("rejectionReason", rejectionReason)
+//            params.addProperty("status", "rejected")
+//            params.addProperty("rejectionReason", rejectionReason)
+            params.addProperty("reasion", rejectionReason)
         } catch (e: JSONException) {
             e.printStackTrace()
         }

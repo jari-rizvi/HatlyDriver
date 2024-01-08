@@ -160,8 +160,9 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
     override fun onSubmitClick(rejectionReason: String) {
         val params = JsonObject()
         try {
-            params.addProperty("status", "rejected")
-            params.addProperty("rejectionReason", rejectionReason)
+            params.addProperty("reasion", rejectionReason)
+//            params.addProperty("status", "rejected")
+//            params.addProperty("rejectionReason", rejectionReason)
         } catch (e: JSONException) {
             e.printStackTrace()
         }

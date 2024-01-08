@@ -1,5 +1,6 @@
 package com.teamx.hatlyDriver.ui.fragments.wallet
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
@@ -39,6 +40,7 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(),On
   lateinit var withdrawalHistoryAdapter: WithdrawalAdapter
     lateinit var withdrawalHistoryArrayList: ArrayList<Doc>
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,10 +51,6 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(),On
                 popEnter = R.anim.nav_default_pop_enter_anim
                 popExit = R.anim.nav_default_pop_exit_anim
             }
-        }
-
-        mViewDataBinding.btnAddBank.setOnClickListener {
-
         }
 
         if (!MainApplication.localeManager!!.getLanguage()
@@ -91,11 +89,11 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(),On
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.withDrawFragment, arguments, options)
         }
+
         mViewDataBinding.btnAddBank.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.bankDetailsFragment, arguments, options)
         }
-
 
         mViewDataBinding.textView39.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
@@ -108,6 +106,7 @@ class WalletFragment : BaseFragment<FragmentWalletBinding, WalletViewModel>(),On
 
         TransactionRecyclerview()
         WithdrawalRecyclerview()
+
         mViewModel.me()
         if (!mViewModel.meResponse.hasActiveObservers()) {
             mViewModel.meResponse.observe(requireActivity()) {

@@ -69,10 +69,8 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
     var mapFragment: SupportMapFragment? = null
     private lateinit var googleMap: GoogleMap
 
-
     var locationCallback: LocationCallback? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -110,8 +108,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
             }
         }
 
-
-
         handler = Handler()
 
         orderDetailsApiCall()
@@ -123,8 +119,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.chatFragment, bundle, options)
             TrackSocketClass.disconnect()
-
-
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(

@@ -28,15 +28,15 @@
 
         <TextView
             android:id="@+id/textView23"
+            style="@style/txtGrayColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"
+            android:fontFamily="@font/open_sans_bold"
             android:gravity="center"
             android:letterSpacing="0.02"
             android:paddingVertical="@dimen/_7sdp"
             android:text="@string/account_setting"
-            android:fontFamily="@font/open_sans_bold"
-            style="@style/txtGrayColor"
             android:textSize="@dimen/_16ssp"
             app:layout_constraintBottom_toBottomOf="@+id/imgBack"
             app:layout_constraintEnd_toEndOf="parent"
@@ -134,17 +134,17 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/mobile_number"
                 android:drawablePadding="@dimen/_5sdp"
+                android:editable="false"
                 android:imeOptions="actionNext"
                 android:inputType="phone"
-                android:editable="false"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <TextView
-            style="@style/open_sans_secondary_regular_large_red"
             android:id="@+id/btnChangePass"
+            style="@style/open_sans_secondary_regular_large_red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_password"
@@ -177,7 +177,8 @@
             app:layout_constraintStart_toStartOf="@+id/textInputLayout3"
 
             app:layout_constraintTop_toBottomOf="@+id/btnChangePass">
-        <com.google.android.material.textfield.TextInputEditText
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

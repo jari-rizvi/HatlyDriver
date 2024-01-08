@@ -868,6 +868,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onSubmitClick(rejectionReason: String) {
+
         val params = JsonObject()
         try {
             params.addProperty("reasion", rejectionReason)
@@ -904,9 +905,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 //                        showToast(data.message)
                         sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
 
-                        navController =
+                      /*  navController =
                             Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.orderFragment, null, options)
+                        navController.navigate(R.id.orderFragment, null, options)*/
 
 
                     }
