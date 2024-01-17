@@ -3,6 +3,7 @@ package com.teamx.hatlyDriver.ui.fragments.orders.Incoming
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -133,7 +134,11 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        showToast(data.message)
+//                        showToast(data.message)
+                        navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.homeFragment, arguments, options)
+
                         incomingOrderAdapter.notifyDataSetChanged()
                     }
                 }
@@ -199,7 +204,7 @@ class IncomingFragment : BaseFragment<FragmentIncomingBinding, IncomingViewModel
 
 
     override fun onCancelClick() {
-        TODO("Not yet implemented")
+
     }
 
 

@@ -47,12 +47,12 @@
 
             <TextView
                 android:id="@+id/name"
+                style="@style/txtGrayColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_10sdp"
-                android:maxLines="1"
                 android:fontFamily="@font/open_sans_bold"
-                style="@style/txtGrayColor"
+                android:maxLines="1"
                 android:text="Hello"
                 android:textSize="@dimen/_16ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
@@ -87,30 +87,53 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/userProfile"
+            <ImageView
+                android:id="@+id/profilePicture"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:background="@drawable/circle"
-                android:elevation="@dimen/_2sdp"
+                android:clipToOutline="true"
                 app:layout_constraintBottom_toBottomOf="@+id/constraintLayout1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.93"
+                android:background="@drawable/circle"
+                android:elevation="@dimen/_2sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/constraintLayout1">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profilePicture"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/baseline_person"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/constraintLayout1"
+                android:scaleType="fitXY"
+                android:src="@drawable/baseline_person" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/userProfile"-->
+<!--                android:layout_width="@dimen/_30sdp"-->
+<!--                android:layout_height="@dimen/_30sdp"-->
+<!--                android:background="@drawable/circle"-->
+<!--                android:elevation="@dimen/_2sdp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout1"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintHorizontal_bias="0.93"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/constraintLayout1">-->
+
+<!--                <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                    android:id="@+id/profilePicture"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                -->
+<!--                    android:clipToOutline="true"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:src="@drawable/account"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -269,9 +292,9 @@
                     android:id="@+id/spinner1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_2sdp"
                     android:layout_marginHorizontal="@dimen/_1sdp"
-                    android:prompt="@color/light_gray"
+                    app:backgroundTint="@color/redd"
+                    android:padding="@dimen/_2sdp"
                     app:layout_constraintEnd_toEndOf="parent" />
 
             </FrameLayout>
@@ -282,8 +305,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders"
-                android:textSize="@dimen/_9ssp"
                 android:textColor="#6D6D6D"
+                android:textSize="@dimen/_9ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.07"
@@ -296,8 +319,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_orders_earning"
-                android:textSize="@dimen/_9ssp"
                 android:textColor="#6D6D6D"
+                android:textSize="@dimen/_9ssp"
 
                 app:layout_constraintBottom_toBottomOf="@+id/textView16"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -327,7 +350,6 @@
                 android:layout_width="78dp"
                 android:layout_height="wrap_content"
                 android:text="0.0"
-
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/totalorders"
@@ -354,8 +376,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_parcels"
-                android:textSize="@dimen/_9ssp"
                 android:textColor="#6D6D6D"
+                android:textSize="@dimen/_9ssp"
 
                 app:layout_constraintBottom_toTopOf="@+id/totalParcels"
                 app:layout_constraintEnd_toEndOf="@+id/textView16"
@@ -367,9 +389,9 @@
                 android:id="@+id/textView433"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#6D6D6D"
-
                 android:text="@string/total_parcels_earning"
+
+                android:textColor="#6D6D6D"
                 android:textSize="@dimen/_9ssp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView43"
                 app:layout_constraintEnd_toEndOf="@+id/textView161"
@@ -410,8 +432,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/total_earnings"
-                android:textSize="@dimen/_9ssp"
                 android:textColor="#6D6D6D"
+                android:textSize="@dimen/_9ssp"
 
                 app:layout_constraintBottom_toTopOf="@+id/totalParcelsEarning"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -436,10 +458,12 @@
 
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintOrders">
 
@@ -447,18 +471,17 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/_16sdp">
-
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/connnnn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:layout_marginStart="@dimen/_10sdp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -545,7 +568,6 @@
                         tools:listitem="@layout/item_incoming_order" />
 
 
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -571,6 +593,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/view_all"
                     android:textColor="@color/red"
+                    android:visibility="gone"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView200"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -602,7 +625,7 @@
                     android:text="Past Special Orders"
                     android:textSize="@dimen/_13ssp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerViewPastOrders"
+                    app:layout_constraintStart_toStartOf="@+id/textView200"
                     app:layout_constraintTop_toBottomOf="@+id/recyclerViewPastOrders"
                     app:layout_constraintVertical_bias="0.01" />
 
@@ -614,6 +637,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/view_all"
                     android:textColor="@color/red"
+                    android:visibility="gone"
                     android:textSize="@dimen/_10ssp"
                     app:layout_constraintBottom_toBottomOf="@+id/textView2000"
                     app:layout_constraintEnd_toEndOf="@+id/btnPastOrderAll"
@@ -635,76 +659,75 @@
                     tools:listitem="@layout/item_incoming_order" />
 
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginVertical="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/recyclerViewSpecialPastOrders"
-                    app:layout_constraintStart_toStartOf="@+id/recyclerViewSpecialPastOrders"
-                    app:layout_constraintTop_toBottomOf="@+id/recyclerViewSpecialPastOrders">
-
-                    <SeekBar
-                        android:id="@+id/slider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:clickable="false"
-                        android:focusable="false"
-                        android:max="100"
-                        android:progress="0"
-                        android:progressDrawable="@drawable/swipe_button_background"
-                        android:progressTint="@color/green"
-                        android:thumb="@android:color/transparent"
-                        app:layout_constraintBottom_toBottomOf="@+id/slider"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/slider" />
-
-                    <SeekBar
-                        android:id="@+id/slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginHorizontal="@dimen/_15sdp"
-                        android:max="100"
-                        android:paddingVertical="@dimen/_5sdp"
-                        android:paddingTop="@dimen/_5sdp"
-                        android:paddingBottom="@dimen/_5sdp"
-                        android:progress="0"
-                        android:progressDrawable="@android:color/transparent"
-                        android:progressTint="@android:color/transparent"
-                        android:splitTrack="true"
-                        android:thumb="@drawable/custom_thumb"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/statusText"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_below="@+id/slider"
-                        android:layout_centerHorizontal="true"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="dsdsdsd"
-                        android:textAlignment="center"
-                        android:textColor="#000000"
-                        android:textSize="@dimen/_14ssp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
         </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginVertical="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <SeekBar
+                android:id="@+id/slider2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:clickable="false"
+                android:focusable="false"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/swipe_button_background"
+                android:progressTint="@color/green"
+                android:thumb="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/slider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/slider" />
+
+            <SeekBar
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:max="100"
+                android:paddingVertical="@dimen/_5sdp"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:progress="0"
+                android:progressDrawable="@android:color/transparent"
+                android:progressTint="@android:color/transparent"
+                android:splitTrack="true"
+                android:thumb="@drawable/custom_thumb"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/statusText"
+                style="@style/txtGrayColor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_below="@+id/slider"
+                android:layout_centerHorizontal="true"
+                android:enabled="false"
+                android:gravity="center"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

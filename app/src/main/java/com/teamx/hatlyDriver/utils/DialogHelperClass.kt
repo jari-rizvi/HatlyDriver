@@ -115,10 +115,9 @@ class DialogHelperClass {
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.setCancelable(false)
             dialog.show()
-            
+
             return dialog
         }
-
 
 
         fun errorDialog(context: Context, errorMessage: String) {
@@ -209,14 +208,17 @@ class DialogHelperClass {
         ) {
             val dialog = Dialog(context)
             dialog.setContentView(R.layout.dialog_reason)
-            dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+            dialog.window!!.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
+            )
 
             val btnReason = dialog.findViewById<TextView>(R.id.btnSubmit)
             val reason = dialog.findViewById<EditText>(R.id.reason)
 
             btnReason.setOnClickListener {
                 Log.d("reasonDialog", "submitReason: jkhjkhkjh")
-                if (reason.text.toString().isBlank() ||reason.text.toString().isEmpty() ) {
+                if (reason.text.toString().isBlank() || reason.text.toString().isEmpty()) {
                     Toast.makeText(context, "Should not be Empty!", Toast.LENGTH_LONG).show()
                 } else {
                     if (boo) {
@@ -252,10 +254,9 @@ class DialogHelperClass {
 
             AddReviewBtn.setOnClickListener {
                 Log.d("reasonDialog", "submitReason: jkhjkhkjh")
-                if (reason1.text.toString().isBlank() ||reason1.text.toString().isEmpty() ) {
+                if (reason1.text.toString().isBlank() || reason1.text.toString().isEmpty()) {
                     Toast.makeText(context, "Should not be Empty!", Toast.LENGTH_LONG).show()
-                }
-                else {
+                } else {
                     if (boo) {
                         oflinereasonDialog.onSubmitoflineClick(status, reason1.text.toString())
                     } else {
@@ -307,7 +308,7 @@ class DialogHelperClass {
         }
 
         interface DialogExitApp {
-            fun exitAppSystem()
+            fun exitAppSystem(password: String)
         }
 
         fun deleteUserDialog(context: Context, dialogCallBack: DialogExitApp): Dialog {
@@ -317,10 +318,11 @@ class DialogHelperClass {
                 WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT
             )
 
-
+            val pass = dialog.findViewById<EditText>(R.id.et_pass_text)
             val removeBtn = dialog.findViewById<TextView>(R.id.removeBtn)
+
             removeBtn.setOnClickListener {
-                dialogCallBack.exitAppSystem()
+                dialogCallBack.exitAppSystem(pass.text.toString())
                 dialog.dismiss()
             }
 
@@ -336,8 +338,6 @@ class DialogHelperClass {
 
 
     }
-
-
 
 
 }

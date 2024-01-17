@@ -187,7 +187,6 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
                     it.data?.let { data ->
                         showToast(data.message)
 
-
                     }
                 }
 
@@ -201,7 +200,6 @@ class IncomingParcelFragment : BaseFragment<FragmentIncomingBinding, IncomingVie
 
 
     override fun onCancelClick() {
-        TODO("Not yet implemented")
     }
 
 

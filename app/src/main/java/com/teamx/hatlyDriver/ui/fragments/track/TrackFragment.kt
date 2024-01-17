@@ -47,6 +47,7 @@ import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentTrackBinding
 import com.teamx.hatlyDriver.ui.fragments.Dashboard.home.HomeFragment
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.TrackSocketClass
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.buttonvisibleData.ButtonVisibleData
 import com.teamx.hatlyDriver.ui.fragments.topUp.TopUpModel
 import com.teamx.hatlyDriver.utils.DialogHelperClass
 import com.teamx.hatlyDriver.utils.LocationPermission
@@ -57,7 +58,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapReadyCallback,
-    android.location.LocationListener {
+    android.location.LocationListener,TrackSocketClass.TrackCallBack {
 
     override val layoutId: Int
         get() = R.layout.fragment_track
@@ -270,7 +271,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         } else {
             TrackSocketClass.connectRiderTrack(
                 NetworkCallPoints.TOKENER,
-                id
+                id,this
             )
 
         }
@@ -307,7 +308,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
                                 TrackSocketClass.connectRiderTrack(
                                     NetworkCallPoints.TOKENER,
-                                    reqid
+                                    reqid,this
                                 )
 
                                 handler.postDelayed(runnable, 3000)
@@ -420,7 +421,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
                                 TrackSocketClass.connectRiderTrack(
                                     NetworkCallPoints.TOKENER,
-                                    reqid
+                                    reqid,this
                                 )
 
                                 handler.postDelayed(runnable, 3000)
@@ -574,10 +575,10 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
     private fun animateCameraAlongPolyline(polyline: List<LatLng>) {
 
         googleMap.setOnMapLoadedCallback {
-            val startPosition = polyline.first()
+            val startPosition = polyline.last()
 
 
-            val endPosition = polyline.last()
+            val endPosition = polyline.first()
 
 //        val centerPosition = LatLng(
 //            (startPosition.latitude + endPosition.latitude) / 2,
@@ -610,6 +611,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
             val padding = 100 // Adjust this value as needed
 
             googleMap.addMarker(MarkerOptions().position(startPosition).title("Start Marker"))
+
             val marker = googleMap.addMarker(
                 MarkerOptions().position(endPosition)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.delivery_man))
@@ -718,6 +720,14 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
         } catch (e: SecurityException) {
             Timber.tag("Exception: %s").e(e, e.message)
+        }
+    }
+
+    override fun onButtonShow(buttonVisibleData: ButtonVisibleData) {
+        Log.d("TAG", "onButtonShow1212: ${buttonVisibleData.show}")
+
+        if(!buttonVisibleData.show){
+            mViewDataBinding.bottomSheetLayout.btnComplete.visibility = View.GONE
         }
     }
 

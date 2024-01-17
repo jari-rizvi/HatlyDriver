@@ -35,7 +35,6 @@
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_31sdp"
         android:gravity="center"
-
         android:hint="@string/enter_Password"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="@dimen/_13ssp"

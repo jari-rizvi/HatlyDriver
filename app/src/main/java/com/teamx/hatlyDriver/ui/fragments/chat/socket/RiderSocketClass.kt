@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.teamx.hatlyDriver.constants.AppConstants.ApiConfiguration.Companion.BASE_URL_CHAT
 import com.teamx.hatlyDriver.data.models.socket_models.ExceptionData
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.alreadyAccept.AlreadyAcceptedData
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrdersSocketData
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
@@ -29,8 +30,7 @@ object RiderSocketClass {
         val headers: MutableMap<String, List<String>> = HashMap()
 
 
-        headers["Authorization"] =
-            listOf(token)
+        headers["Authorization"] = listOf(token)
 
 
         options.extraHeaders = headers
@@ -55,6 +55,7 @@ object RiderSocketClass {
             goOnline(lat, lng)
 
 
+
             riderSocket?.on("INCOMING_ORDERS") { args ->
                 Timber.tag("MessageSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
 
@@ -68,6 +69,11 @@ object RiderSocketClass {
                 }
             }
 
+
+            riderSocket?.on("UPDATED_LOCATION") { args ->
+                Timber.tag("MessageSocketClass").d("UPDATED_LOCATION: }${args.get(0)}")
+
+            }
 
 
             riderSocket?.on("INCOMING_PARCEL") { args ->
@@ -111,7 +117,17 @@ object RiderSocketClass {
             }
 
             riderSocket?.on("REQUEST_ACCEPTED") { args ->
+                Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED1: }${args}")
                 Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED: }${args.get(0)}")
+                try {
+                    Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED3: ${args.get(0)}")
+                    val exception444 = gson.fromJson(args[0].toString(), AlreadyAcceptedData::class.java)
+                    Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED4: ${args.get(0)}")
+                    incomingOrderCallBack.onAlreadyAccepted(exception444)
+                    Timber.tag("MessageSocketClass").d("REQUEST_ACCEPTED5: ${args.get(0)}")
+                } catch (e: java.lang.Exception) {
+                    Timber.tag("MessageSocketClass").d("INCOMING_ORDERS: ${args[0]}")
+                }
             }
 
 
@@ -125,6 +141,18 @@ object RiderSocketClass {
 
         }
 
+    }
+
+
+    fun updateLocation(lat: String, lng: String) {
+        val data = JSONObject().put("lat", lat).put("lng", lng)
+        Timber.tag("MessageSocketClass").d("UPDATE_LOCATION:$data ")
+        riderSocket?.emit("UPDATE_LOCATION", data, object : Ack {
+            override fun call(vararg args: Any?) {
+
+                Timber.tag("MessageSocketClass").d("UPDATE_LOCATION: ")
+            }
+        })
     }
 
 
@@ -159,9 +187,7 @@ object RiderSocketClass {
 //            sendMessageTo("${args.get(0)}")
 
         }
-        riderSocket?.on("UPDATED_LOCATION") { args ->
-            Timber.tag("MessageSocketClass").d("UPDATED_LOCATION: }${args.get(0)}")
-        }
+
         /*     riderSocket?.on("INCOMING_ORDERS") { args ->
                  val INCOMINGSOCKETORDER = gson.fromJson(args[0].toString(), IncomingOrderSocketData::class.java)
                  activeOrderArrayList.add(INCOMINGSOCKETORDER)
@@ -190,6 +216,9 @@ object RiderSocketClass {
             }
         })
     }
+
+
+
 
 
     fun goOffline(reason: String) {
@@ -232,6 +261,7 @@ object RiderSocketClass {
 
 }
 interface IncomingOrderCallBack {
+    fun onAlreadyAccepted(alreadyAcceptedData: AlreadyAcceptedData)
     fun onIncomingOrderRecieve(incomingOrderSocketData: Doc)
     fun onGetAllOrderRecieve(incomingOrderSocketData: IncomingOrdersSocketData)
     fun onGetAllParcelRecieve(incomingParcelSocketData: IncomingParcelSocketData)

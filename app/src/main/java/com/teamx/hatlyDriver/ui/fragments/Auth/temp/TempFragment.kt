@@ -66,9 +66,13 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
                         registerListener()
                     }
                 } else {
-                    navController =
-                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                    navController.navigate(R.id.homeFragment, arguments, options)
+                    try {
+                        navController =
+                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                        navController.navigate(R.id.homeFragment, arguments, options)
+                    } catch (e: Exception) {
+
+                    }
 
 //                    if (mViewModel.meResponse.isInitialized) {
 //                        Log.d("123123", "onViewCreated2222:true ")
@@ -204,7 +208,6 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 //                    }
 
 
-
                 }
             }
 
@@ -223,39 +226,39 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
     }
 
 
- /*   private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
+    /*   private val requestPermissionLauncher = registerForActivityResult(
+           ActivityResultContracts.RequestPermission()
+       ) { isGranted: Boolean ->
+           if (isGranted) {
 
 
-        } else {
+           } else {
 
-        }
-    }
+           }
+       }
 
-    private fun askNotificationPermission() {
-        // This is only necessary for API level >= 33 (TIRAMISU)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(), Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
+       private fun askNotificationPermission() {
+           // This is only necessary for API level >= 33 (TIRAMISU)
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+               if (ContextCompat.checkSelfPermission(
+                       requireContext(), Manifest.permission.POST_NOTIFICATIONS
+                   ) == PackageManager.PERMISSION_GRANTED
+               ) {
 
 
 
-                // FCM SDK (and your app) can post notifications.
-            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                   // FCM SDK (and your app) can post notifications.
+               } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
 
-            } else {
-                // Directly ask for t
-                //
-                //
-                // he permission
-                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
-        }
-    }*/
+               } else {
+                   // Directly ask for t
+                   //
+                   //
+                   // he permission
+                   requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+               }
+           }
+       }*/
 
 
     private fun loginListener() {
@@ -318,47 +321,47 @@ class TempFragment : BaseFragment<FragmentTempBinding, TempViewModel>() {
 //    }
 
 
-  /*  private fun requestPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    requireActivity(), Manifest.permission.CAMERA
-                )
-            ) {
-                // Show an explanation to the user *asynchronously*
-                // why the permission is needed and why the user should grant it
-            }
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ), PERMISSION_REQUEST_CODE
-            )
-        } else {
-            // Permission has already been granted
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.tempFragment, arguments, options)
-        }
-    }
+    /*  private fun requestPermission() {
+          if (ContextCompat.checkSelfPermission(
+                  requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+              ) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                  requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+              ) != PackageManager.PERMISSION_GRANTED
+          ) {
+              if (ActivityCompat.shouldShowRequestPermissionRationale(
+                      requireActivity(), Manifest.permission.CAMERA
+                  )
+              ) {
+                  // Show an explanation to the user *asynchronously*
+                  // why the permission is needed and why the user should grant it
+              }
+              requestPermissions(
+                  arrayOf(
+                      Manifest.permission.ACCESS_FINE_LOCATION,
+                      Manifest.permission.ACCESS_COARSE_LOCATION
+                  ), PERMISSION_REQUEST_CODE
+              )
+          } else {
+              // Permission has already been granted
+              navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+              navController.navigate(R.id.tempFragment, arguments, options)
+          }
+      }
 
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.tempFragment, arguments, options)
-        } else {
-            val snackbar = Snackbar.make(
-                mViewDataBinding.root, "Permission required to proceed..", Snackbar.LENGTH_SHORT
-            )
-            snackbar.setAction("Settings") {
-                //
-                Timber.tag("TAG").d("ScankonRequestPermissionsResult: ")*//*        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+      override fun onRequestPermissionsResult(
+          requestCode: Int, permissions: Array<String>, grantResults: IntArray
+      ) {
+          if (requestCode == PERMISSION_REQUEST_CODE && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+              navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+              navController.navigate(R.id.tempFragment, arguments, options)
+          } else {
+              val snackbar = Snackbar.make(
+                  mViewDataBinding.root, "Permission required to proceed..", Snackbar.LENGTH_SHORT
+              )
+              snackbar.setAction("Settings") {
+                  //
+                  Timber.tag("TAG").d("ScankonRequestPermissionsResult: ")*//*        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                         val uri = Uri.fromParts("package", requireActivity().packageName, null)
                         intent.data = uri
                         requireActivity().startActivity(intent)*//*

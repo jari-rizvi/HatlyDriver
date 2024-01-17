@@ -65,6 +65,7 @@
             android:background="@drawable/card_background_green"
             android:backgroundTint="@color/white"
             android:elevation="@dimen/_3sdp"
+            app:tabTextColor="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imgNotification"
             app:layout_constraintStart_toStartOf="@+id/imgBack"

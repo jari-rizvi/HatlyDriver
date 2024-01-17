@@ -329,9 +329,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ea1b25" />
-                            <entry key="outputName" value="remove_red" />
-                            <entry key="sourceFile" value="D:\top_up.svg" />
+                            <entry key="outputName" value="delete_account" />
+                            <entry key="sourceFile" value="D:\delete_account.svg" />
                           </map>
                         </option>
                       </PersistentState>

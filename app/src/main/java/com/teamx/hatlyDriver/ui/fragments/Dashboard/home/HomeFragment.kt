@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
@@ -19,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,6 +47,7 @@ import com.teamx.hatlyDriver.data.remote.Resource
 import com.teamx.hatlyDriver.databinding.FragmentHomeBinding
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.IncomingOrderCallBack
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.RiderSocketClass
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.alreadyAccept.AlreadyAcceptedData
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.IncomingOrdersSocketData
 import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingParcelSoocketData.IncomingParcelSocketData
 import com.teamx.hatlyDriver.ui.fragments.orders.Incoming.onAcceptReject
@@ -76,7 +79,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var id: String
 
-
+    lateinit var handler: Handler
+    lateinit var runnable: Runnable
     var earning: String = "earning"
 
     private lateinit var seekBar1: SeekBar
@@ -84,7 +88,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var locationRequest: LocationRequest? = null
-
 
 
     private var originLatitude: String = "0.0"
@@ -96,6 +99,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
     lateinit var pastOrderAdapter: PastOrderAdapter
     lateinit var pastParcelAdapter: PastParcelAdapter
+
+
+    var isTrueOrder: Boolean = false
+    var isTrueParcel: Boolean = false
 
 
     var type: String = ""
@@ -124,6 +131,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             }
         }
 
+        handler = Handler()
 
         val userData = PrefHelper.getInstance(requireActivity()).getUserData()
 
@@ -153,50 +161,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         apiCalls()
 
 
-        mViewDataBinding.userProfile.setOnClickListener {
+        mViewDataBinding.profilePicture.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.editProfileFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.constraintLayout1.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.notificaitonFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
         mViewDataBinding.constraintLayout.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.profileFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastParcelAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView18.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.parcelFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.btnPastOrderAll.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
         mViewDataBinding.textView20.setOnClickListener {
             navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
             navController.navigate(R.id.orderFragment, arguments, options)
-            RiderSocketClass.disconnect()
+//            RiderSocketClass.disconnect()
         }
 
 
         getDeviceLocation()
 
+//        // Runnable ko postDelayed ke zariye schedule karen
+//        handler.postDelayed(runnable, 2000)
 
         Firebase.initialize(requireContext())
         FirebaseApp.initializeApp(requireContext())
@@ -257,6 +267,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 originLongitude,
                 this@HomeFragment
             )
+
+            mViewDataBinding.btnPastOrderAll.visibility = View.VISIBLE
+            mViewDataBinding.btnPastParcelAll.visibility = View.VISIBLE
         }
 
 
@@ -273,6 +286,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
 
+
+
         seekBar1.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -283,6 +298,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     DialogHelperClass.confirmLocation(
                         requireContext(), this@HomeFragment, true
                     )
+                    mViewDataBinding.btnPastOrderAll.visibility = View.VISIBLE
+                    mViewDataBinding.btnPastParcelAll.visibility = View.VISIBLE
 
                     seekBar.thumb = resources.getDrawable(R.drawable.custom_thumb, null)
                     statusText.text = getString(R.string.go_offline)
@@ -296,6 +313,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 //                    RiderSocketClass.disconnect()
                     // Hide "Go Online" text
+                    mViewDataBinding.btnPastOrderAll.visibility = View.GONE
+                    mViewDataBinding.btnPastParcelAll.visibility = View.GONE
                     statusText.text = getString(R.string.go_online)
                     PrefHelper.getInstance(requireContext())
                         .saveSeekbarText(statusText.text.toString())
@@ -316,6 +335,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         .isMax(seekBar.max)
                     PrefHelper.getInstance(requireContext())
                         .saveSeekbarText(statusText.text.toString())
+
                     RiderSocketClass.connectRider(
                         NetworkCallPoints.TOKENER,
                         originLatitude,
@@ -353,8 +373,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
             val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = adapter
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
 
         }
 
@@ -366,7 +385,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 //        )
 
 //        adapter.setDropDownViewResource(R.layout.custom_spinner_item)
-
 
 
 //        spinner1.adapter = adapter
@@ -401,35 +419,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         } catch (e: Exception) {
             e.printStackTrace()
         }
-//        spinner1.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(
-//                parent: AdapterView<*>,
-//                view: View,
-//                position: Int,
-//                id: Long
-//            ) {
-//                val selectedItem = parent.getItemAtPosition(position) as String
-//
-////                earning = "order"
-//
-//                val params = JsonObject()
-//                try {
-//                    params.addProperty("filterBy", selectedItem)
-//                } catch (e: JSONException) {
-//                    e.printStackTrace()
-//                }
-//                mViewModel.getTotalEarnings(params)
-//
-//
-////                mViewModel.getTotalEarnings(selectedItem, earning)
-//
-//
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>) {
-//
-//            }
-//        }
+
+
+
+        Log.d("runnableIs", "Runnable1st: ")
+
+        runnable = Runnable {
+            getDeviceLocation()
+            Log.d("runnableIs", "Runnable2nd: ")
+            RiderSocketClass.updateLocation(originLatitude, originLongitude)
+
+            handler.postDelayed(runnable, 3000)
+        }
 
 
     }
@@ -526,7 +527,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
 
         mViewModel.getPastOrders(1, 5, "delivered")
-
 
         if (!mViewModel.getPastOrdersResponse.hasActiveObservers()) {
             mViewModel.getPastOrdersResponse.observe(requireActivity()) {
@@ -706,6 +706,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 originLongitude,
                 this
             )
+            handler.postDelayed(runnable, 3000)
+
+
+
+
 
             /* Firebase.initialize(requireContext())
              FirebaseApp.initializeApp(requireContext())
@@ -734,6 +739,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                 originLatitude,
                 originLongitude, this
             )
+            handler.postDelayed(runnable, 3000)
 
 
         } else {
@@ -759,10 +765,55 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onAlreadyAccepted(alreadyAcceptedData: AlreadyAcceptedData) {
+        try {
+            mViewModel.viewModelScope.launch(Dispatchers.Main) {
+                Timber.tag("MessageSocketClass")
+                    .d("REQUEST_ACCEPTED5: ${alreadyAcceptedData.requestedId}")
+                val accepted_id = alreadyAcceptedData.requestedId
+
+                sharedViewModel.incomingOrderSocketArrayList.removeIf {
+                    it._id == accepted_id
+                }
+                sharedViewModel.incomingParcelSocketArrayList.removeIf {
+                    it._id == accepted_id
+                }
+
+
+                sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
+                sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
+                mViewDataBinding.recyclerViewIncomingOrders.adapter?.notifyDataSetChanged()
+                mViewDataBinding.recyclerViewSpecialOrders.adapter?.notifyDataSetChanged()
+
+
+                if (isTrueOrder == true) {
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.orderFragment, null, options)
+                }
+
+                if (isTrueParcel == true) {
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.parcelFragment, null, options)
+                }
+
+
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+
     override fun onIncomingOrderRecieve(incomingOrderSocketData: com.teamx.hatlyDriver.ui.fragments.chat.socket.model.incomingOrderSocketData.Doc) {
         /*    sharedViewModel.incomingOrderSocketArrayList.clear()*/
 
         Log.d("TAG", "onIncomingOrderRecieveSinglre:")
+
         GlobalScope.launch(Dispatchers.Main) {
             Log.d("TAG", "onIncomingOrderRecieveSinglre:")
 
@@ -842,10 +893,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                             incomingOrderSocketArrayList1
                         )
 
+                        isTrueOrder = true
+
 //                        showToast(data.message)
-                        navController =
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.orderFragment, null, options)
+
                         sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
                     }
                 }
@@ -905,9 +956,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 //                        showToast(data.message)
                         sharedViewModel.incomingOrderAdapter?.notifyDataSetChanged()
 
-                      /*  navController =
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.orderFragment, null, options)*/
+                        /*  navController =
+                              Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                          navController.navigate(R.id.orderFragment, null, options)*/
 
 
                     }
@@ -954,7 +1005,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun onAcceptParcelClick(position: Int) {
         id = sharedViewModel.incomingParcelSocketArrayList[position]._id
 
-
         mViewModel.acceptOrder(id)
 
         mViewModel.acceptResponse.observe(requireActivity(), Observer {
@@ -979,13 +1029,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                         sharedViewModel.incomingParcelSocketArrayList.addAll(
                             incomingParcelSocketArrayList1
                         )
+                        isTrueParcel = true
 
 //                        showToast(data.message)
                         sharedViewModel.incomingParcelAdapter?.notifyDataSetChanged()
 
-                        navController =
-                            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-                        navController.navigate(R.id.parcelFragment, null, options)
+
                     }
                 }
 
@@ -1023,6 +1072,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         RiderSocketClass.disconnetRider(rejectionReason)
         RiderSocketClass.disconnect()
+        handler.removeCallbacks(runnable)
         sharedViewModel.incomingParcelSocketArrayList.clear()
         sharedViewModel.incomingOrderSocketArrayList.clear()
         mViewDataBinding.connnnn.visibility = View.GONE
@@ -1073,8 +1123,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         Log.d("121212121", "onCanceloflineClick: 121212")
 
         seekBar1.progress = 100
-
-
 
 
     }

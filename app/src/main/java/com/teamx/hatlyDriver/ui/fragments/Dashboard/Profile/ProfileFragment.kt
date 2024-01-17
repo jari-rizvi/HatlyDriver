@@ -278,9 +278,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileViewModel>()
 
     }
 
-    override fun exitAppSystem() {
+    override fun exitAppSystem(password: String) {
+
         val params = JsonObject()
-        params.addProperty("password", "")
+        params.addProperty("password", password)
 
 
         mViewModel.deleteUserApi(params)

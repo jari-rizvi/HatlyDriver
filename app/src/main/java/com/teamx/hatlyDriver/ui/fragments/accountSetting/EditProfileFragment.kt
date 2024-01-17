@@ -207,7 +207,6 @@ class EditProfileFragment :
                         loadingDialog.dismiss()
                         it.data?.let { data ->
                             if (data.isNotEmpty()) {
-                                Log.d("uploadReviewIm", "onViewCreated: ${data[0]}")
                                 if (data.isNotEmpty()) {
                                     imageUrl = data[0]
                                     Picasso.get().load(imageUrl).placeholder(R.drawable.logo).error(R.drawable.logo).resize(500, 500)
@@ -219,7 +218,7 @@ class EditProfileFragment :
 
                     Resource.Status.ERROR -> {
                         loadingDialog.dismiss()
-                        Log.d("uploadReviewIm", "onViewCreated: ${it.message}")
+
                         if (isAdded) {
 
                             mViewDataBinding.root.snackbar(it.message!!)
@@ -295,11 +294,7 @@ class EditProfileFragment :
             uri?.let {
                 val str = "${requireContext().filesDir}/file.jpg"
 
-                Log.d("startForResult", "Profile image: $it")
-
-
 //                uploadWithRetrofit(it)
-
                 val imageUri = uri
 
                 val bitmap = MediaStore.Images.Media.getBitmap(

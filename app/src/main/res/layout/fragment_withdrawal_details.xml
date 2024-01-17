@@ -33,6 +33,7 @@
             android:background="@drawable/input_auth_field"
             android:backgroundTint="@color/white"
             android:elevation="1dp"
+            android:visibility="gone"
             android:padding="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +63,11 @@
 
         <TextView
             android:id="@+id/textView45"
-            style="@style/open_sans_regular_medium"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
             android:text="@string/status"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,12 +79,14 @@
 
         <TextView
             android:id="@+id/textView46"
-            style="@style/open_sans_regular_medium"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/reference_no"
             android:textStyle="bold"
+            android:textSize="@dimen/_14ssp"
             app:layout_constraintBottom_toTopOf="@+id/textView47"
             app:layout_constraintEnd_toEndOf="@+id/textView45"
             app:layout_constraintHorizontal_bias="0"
@@ -90,12 +95,14 @@
 
         <TextView
             android:id="@+id/textView47"
-            style="@style/open_sans_regular_medium"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:visibility="gone"
             android:text="@string/reason"
+            android:textSize="@dimen/_13ssp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/textView46"
@@ -105,7 +112,8 @@
 
         <TextView
             android:id="@+id/textView48"
-            style="@style/open_sans_regular_small"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_25sdp"
             android:background="@drawable/card_background_green"
@@ -121,9 +129,31 @@
             app:layout_constraintTop_toTopOf="@+id/textView45"
             app:layout_constraintVertical_chainStyle="packed" />
 
+
+
+        <TextView
+            android:id="@+id/textView409"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@drawable/card_background_green"
+            android:gravity="center"
+            android:text="Pending"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView45"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toEndOf="@+id/textView45"
+            app:layout_constraintTop_toTopOf="@+id/textView45"
+            app:layout_constraintVertical_chainStyle="packed" />
+
         <TextView
             android:id="@+id/textView488"
-            style="@style/open_sans_regular_small"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_25sdp"
             android:visibility="gone"
@@ -152,7 +182,8 @@
 
         <TextView
             android:id="@+id/reason"
-            style="@style/open_sans_regular_small"
+            android:fontFamily="@font/open_sans_regular"
+            style="@style/txtGrayColor"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxHeight="@dimen/_60sdp"

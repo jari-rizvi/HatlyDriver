@@ -27,7 +27,7 @@ class WithDetailsFragment : BaseFragment<FragmentWithdrawalDetailsBinding, Withd
     override val bindingVariable: Int
         get() = BR.viewModel
 
-    lateinit var id : String
+    lateinit var id: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -78,23 +78,33 @@ class WithDetailsFragment : BaseFragment<FragmentWithdrawalDetailsBinding, Withd
             when (it.status) {
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
-                }  Resource.Status.AUTH -> {
-                loadingDialog.dismiss()
-                onToSignUpPage()
-            }
+                }
+
+                Resource.Status.AUTH -> {
+                    loadingDialog.dismiss()
+                    onToSignUpPage()
+                }
 
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
 
-                        if(data.status == "accepted"){
+                        if (data.status == "accepted") {
                             mViewDataBinding.textView48.visibility = View.VISIBLE
                             mViewDataBinding.textView488.visibility = View.GONE
+                            mViewDataBinding.textView409.visibility = View.GONE
                         }
-                        if(data.status == "rejected"){
+                        if (data.status == "rejected") {
                             mViewDataBinding.textView48.visibility = View.GONE
                             mViewDataBinding.textView488.visibility = View.VISIBLE
+                            mViewDataBinding.textView409.visibility = View.GONE
                         }
+                        if (data.status == "pending") {
+                            mViewDataBinding.textView409.visibility = View.VISIBLE
+                            mViewDataBinding.textView488.visibility = View.GONE
+                            mViewDataBinding.textView48.visibility = View.GONE
+                        }
+
 
                         Picasso.get().load(data.screenShort).into(mViewDataBinding.imageView23)
 
@@ -112,8 +122,6 @@ class WithDetailsFragment : BaseFragment<FragmentWithdrawalDetailsBinding, Withd
                 )
             }
         })
-
-
 
 
     }

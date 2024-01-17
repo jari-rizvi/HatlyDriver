@@ -130,13 +130,14 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
             return false
         }
 
-        if (mViewDataBinding.etName.text.toString().trim().length > 15) {
+        if (mViewDataBinding.etName.text.toString().trim().length > 20) {
             mViewDataBinding.root.snackbar(getString(com.teamx.hatlyDriver.R.string.name_maximum))
             return false
         }
 
         if (mViewDataBinding.etPhone.text.toString().trim().isEmpty()) {
             mViewDataBinding.root.snackbar(getString(com.teamx.hatlyDriver.R.string.enter_your_password))
+
             return false
         }
         if (mViewDataBinding.etPhone.text.toString().trim().startsWith("0")) {
@@ -152,7 +153,13 @@ class   SignupFragment : BaseFragment<FragmentSignupBinding, SignupViewModel>() 
             return false
         }
 
-        signup()
+        if (mViewDataBinding.cbPolicy.isChecked) {
+            signup()
+        } else {
+            mViewDataBinding.root.snackbar("Please Agree to continue")
+        }
+
+//        signup()
         return true
     }
 }

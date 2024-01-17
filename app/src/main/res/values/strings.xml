@@ -123,6 +123,9 @@
     <string name="reference_no">Reference No.</string>
     <string name="account_holder_name">Account Holder Name</string>
     <string name="to_account_iban">To Account/IBAN</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="account_number_iban">Account Number / IBAN</string>
+    <string name="amount">Amount</string>
 
 
 </resources>

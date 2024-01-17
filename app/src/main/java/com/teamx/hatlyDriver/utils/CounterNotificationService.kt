@@ -54,12 +54,12 @@ class CounterNotificationService(
         val notificationId = System.currentTimeMillis().toInt()
 // Step 4: Build and show the Notification
         val notificationBuilder = NotificationCompat.Builder(context, COUNTER_CHANNEL_ID)
-            .setSmallIcon(R.drawable.logo)
+            .setSmallIcon(R.drawable.hatly_logo_svg)
             .setContentTitle(title)
             .setContentText(description)
             .setContentIntent(activityPendingIntent)
             .addAction(
-                R.drawable.logo,
+                R.drawable.hatly_logo_svg,
                 "View",
                 incrementIntent
             )
