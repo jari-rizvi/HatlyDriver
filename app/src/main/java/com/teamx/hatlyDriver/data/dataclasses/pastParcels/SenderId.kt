@@ -1,5 +1,8 @@
 package com.teamx.hatlyDriver.data.dataclasses.pastParcels
+import androidx.annotation.Keep
 
+
+@Keep
 data class SenderId(
     val __v: Int,
     val _id: String,

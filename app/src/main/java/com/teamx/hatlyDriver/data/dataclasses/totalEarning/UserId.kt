@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.totalEarning
+import androidx.annotation.Keep
 
+@Keep
 data class UserId(
     val __v: Int,
     val _id: String,

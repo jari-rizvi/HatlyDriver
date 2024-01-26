@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.getOrderStatus
+import androidx.annotation.Keep
 
+@Keep
 data class GetOrderStatus(
     val docs: List<Doc>,
     val hasNextPage: Boolean,

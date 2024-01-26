@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation
 import androidx.navigation.navOptions
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -53,12 +54,17 @@ import com.teamx.hatlyDriver.utils.DialogHelperClass
 import com.teamx.hatlyDriver.utils.LocationPermission
 import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import timber.log.Timber
 
 @AndroidEntryPoint
 class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapReadyCallback,
-    android.location.LocationListener,TrackSocketClass.TrackCallBack {
+    android.location.LocationListener, TrackSocketClass.TrackCallBack {
 
     override val layoutId: Int
         get() = R.layout.fragment_track
@@ -93,7 +99,7 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
     lateinit var handler: Handler
     lateinit var runnable: Runnable
-    lateinit var reqid: String
+    var reqid: String = ""
     lateinit var id: String
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -117,26 +123,38 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
 
         mViewDataBinding.bottomSheetLayout.imgChat.setOnClickListener {
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.chatFragment, bundle, options)
-            TrackSocketClass.disconnect()
+            GlobalScope.launch(Dispatchers.IO) {
+                TrackSocketClass.disconnect()
+                withContext(Dispatchers.Main) {
+                    delay(1000)
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.chatFragment, bundle, options)
+                }
+            }
+
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    navController =
-                        Navigation.findNavController(
-                            requireActivity(),
-                            R.id.nav_host_fragment
-                        )
-                    navController.navigate(
-                        R.id.homeFragment,
-                        arguments,
-                        options
-                    )
-                    TrackSocketClass.disconnect()
+                    GlobalScope.launch(Dispatchers.IO) {
+                        TrackSocketClass.disconnect()
+                        withContext(Dispatchers.Main) {
+                            navController =
+                                Navigation.findNavController(
+                                    requireActivity(),
+                                    R.id.nav_host_fragment
+                                )
+                            navController.navigate(
+                                R.id.homeFragment,
+                                arguments,
+                                options
+                            )
+                        }
+                    }
+
                 }
             })
 
@@ -147,10 +165,14 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         }
 
         mViewDataBinding.constraintLayout.setOnClickListener {
-            navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
-            navController.navigate(R.id.homeFragment, arguments, options)
-            TrackSocketClass.disconnect()
-
+            GlobalScope.launch(Dispatchers.IO) {
+                TrackSocketClass.disconnect()
+                withContext(Dispatchers.Main) {
+                    navController =
+                        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                    navController.navigate(R.id.homeFragment, arguments, options)
+                }
+            }
         }
 
         mViewDataBinding.bottomSheetLayout.btnComplete.setOnClickListener {
@@ -169,19 +191,26 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 Resource.Status.LOADING -> {
                     loadingDialog.show()
                 }
+
                 Resource.Status.AUTH -> {
                     loadingDialog.dismiss()
                     onToSignUpPage()
                 }
+
                 Resource.Status.SUCCESS -> {
                     loadingDialog.dismiss()
                     it.data?.let { data ->
-                        navController = Navigation.findNavController(
-                            requireActivity(),
-                            R.id.nav_host_fragment
-                        )
-                        navController.navigate(R.id.homeFragment, null, options)
-                        TrackSocketClass.disconnect()
+                        GlobalScope.launch(Dispatchers.IO) {
+                            TrackSocketClass.disconnect()
+                            withContext(Dispatchers.Main) {
+
+                                navController = Navigation.findNavController(
+                                    requireActivity(),
+                                    R.id.nav_host_fragment
+                                )
+                                navController.navigate(R.id.homeFragment, null, options)
+                            }
+                        }
 
                     }
                 }
@@ -240,7 +269,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
         runnable = Runnable {
             getDeviceLocation()
             Log.d("runnableIs", "Runnable: ")
-            TrackSocketClass.updateRide(originLatitude, originLongitude)
+            GlobalScope.launch(Dispatchers.IO) {
+                TrackSocketClass.updateRide(originLatitude, originLongitude)
+            }
             createPollyLine(
                 LatLng(originLatitude, originLongitude),
                 LatLng(destinitionLatitude, destinitionLongitude)
@@ -250,8 +281,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
 
     }
-
-
 
     private val PERMISSION_REQUEST_CODE = 123
 
@@ -269,10 +298,17 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 ), PERMISSION_REQUEST_CODE
             )
         } else {
-            TrackSocketClass.connectRiderTrack(
-                NetworkCallPoints.TOKENER,
-                id,this
-            )
+
+//            GlobalScope.launch (Dispatchers.IO){
+//                TrackSocketClass.connectRiderTrack(
+//                    NetworkCallPoints.TOKENER,
+//                    reqid,this@TrackFragment
+//                )
+//            }
+            /*  TrackSocketClass.connectRiderTrack(
+                  NetworkCallPoints.TOKENER,
+                  id,this
+              )*/
 
         }
     }
@@ -290,7 +326,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    }
+
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
                     }
@@ -306,10 +344,14 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                 reqid = data.docs[0].requestId
                                 id = data.docs[0]._id
 
-                                TrackSocketClass.connectRiderTrack(
-                                    NetworkCallPoints.TOKENER,
-                                    reqid,this
-                                )
+                                GlobalScope.launch(Dispatchers.IO) {
+//                                    delay(100)
+                                    TrackSocketClass.connectRiderTrack(
+                                        NetworkCallPoints.TOKENER,
+                                        reqid, this@TrackFragment
+                                    )
+                                }
+
 
                                 handler.postDelayed(runnable, 3000)
 
@@ -401,7 +443,9 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 when (it.status) {
                     Resource.Status.LOADING -> {
                         loadingDialog.show()
-                    }  Resource.Status.AUTH -> {
+                    }
+
+                    Resource.Status.AUTH -> {
                         loadingDialog.dismiss()
                         onToSignUpPage()
                     }
@@ -414,32 +458,38 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                     data.docs[0].parcel.details.item
 
 
-                              destinitionLatitude = data.docs[0].parcel.senderId.coordinates.lat
+                                destinitionLatitude = data.docs[0].parcel.senderId.coordinates.lat
                                 destinitionLongitude = data.docs[0].parcel.senderId.coordinates.lng
                                 reqid = data.docs[0].requestId
                                 id = data.docs[0]._id
 
-                                TrackSocketClass.connectRiderTrack(
-                                    NetworkCallPoints.TOKENER,
-                                    reqid,this
-                                )
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    TrackSocketClass.connectRiderTrack(
+                                        NetworkCallPoints.TOKENER,
+                                        reqid, this@TrackFragment
+                                    )
+                                }
 
+                                /*  TrackSocketClass.connectRiderTrack(
+                                      NetworkCallPoints.TOKENER,
+                                      reqid,this
+                                  )
+  */
                                 handler.postDelayed(runnable, 3000)
 
                                 bundle.putString("orderId", data.docs[0].requestId)
 
-                               mViewDataBinding.bottomSheetLayout.layout1.visibility = View.GONE
+                                mViewDataBinding.bottomSheetLayout.layout1.visibility = View.GONE
 
 
-                      /*          try {
-                                    Picasso.get().load(data.docs[0].orders.customer.profileImage)
-                                        .into(mViewDataBinding.bottomSheetLayout.imgAvatar)
+                                /*          try {
+                                              Picasso.get().load(data.docs[0].orders.customer.profileImage)
+                                                  .into(mViewDataBinding.bottomSheetLayout.imgAvatar)
 
-                                } catch (e: Exception) {
+                                          } catch (e: Exception) {
 
-                                }
-*/
-
+                                          }
+          */
 
 
                                 val address1 = data.docs[0].parcel.senderLocation.location.address
@@ -455,7 +505,8 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                                 mViewDataBinding.bottomSheetLayout.textView24.text =
                                     trimmedAddress2
 
-                                mViewDataBinding.bottomSheetLayout.textView25.text = "Parcel Summery"
+                                mViewDataBinding.bottomSheetLayout.textView25.text =
+                                    "Parcel Summery"
 
 
                                 mViewDataBinding.bottomSheetLayout.textView27.text =
@@ -498,9 +549,6 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
                 }
             }
         }
-
-
-
 
 
     }
@@ -725,9 +773,10 @@ class TrackFragment : BaseFragment<FragmentTrackBinding, TopUpModel>(), OnMapRea
 
     override fun onButtonShow(buttonVisibleData: ButtonVisibleData) {
         Log.d("TAG", "onButtonShow1212: ${buttonVisibleData.show}")
-
-        if(!buttonVisibleData.show){
-            mViewDataBinding.bottomSheetLayout.btnComplete.visibility = View.GONE
+        mViewModel.viewModelScope.launch(Dispatchers.Main) {
+            if (!buttonVisibleData.show) {
+                mViewDataBinding.bottomSheetLayout.btnComplete.visibility = View.GONE
+            }
         }
     }
 

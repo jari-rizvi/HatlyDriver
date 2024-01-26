@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.withdrawalHistory
+import androidx.annotation.Keep
 
+@Keep
 data class WithDrawalHistory(
     val docs: List<Doc>,
     val hasNextPage: Boolean,

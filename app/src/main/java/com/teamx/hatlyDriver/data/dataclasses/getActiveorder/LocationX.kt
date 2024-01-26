@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.getActiveorder
+import androidx.annotation.Keep
 
+@Keep
 data class LocationX(
     val city: String,
     val coordinates: List<Double>,

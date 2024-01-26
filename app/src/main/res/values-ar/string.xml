@@ -108,7 +108,7 @@
     <string name="bank_name">"اسم البنك "</string>
     <string name="account_number_iban">"رقم الحساب / رقم الحساب بصيغة إيبان "</string>
     <string name="amount">كمية</string>
-    <string name="oops_something_went_wrong"> عفوًا ، حدث خطأ ما! </string>
+    <string name="cancel">إلغاء</string>
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="something_wrong"> حدث خطأ ما </string>
     <string name="active">نشيط</string>
@@ -121,6 +121,10 @@
     <string name="go_offline">انتقل إلى وضع عدم الاتصال</string>
     <string name="deny">ينكر</string>
     <string name="allow">يسمح</string>
+    <string name="past_special_orders">"الطلبات الخاصة الماضية "</string>
+    <string name="weekly">أسبوعي</string>
+    <string name="monthly">شهريا</string>
+    <string name="yearly">"سنوي "</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.teamx.hatlyDriver.ui.fragments.chat.socket
 
+import android.util.Log
 import com.google.gson.Gson
 import com.teamx.hatlyDriver.constants.AppConstants.ApiConfiguration.Companion.BASE_URL_CHAT
 import com.teamx.hatlyDriver.data.models.socket_models.ExceptionData
@@ -15,6 +16,8 @@ object TrackSocketClass {
 
     var trackSocket: Socket? = null
 
+
+
     fun connectRiderTrack(
         token: String,
         orderId: String,
@@ -22,6 +25,8 @@ object TrackSocketClass {
 
     ) {
 
+        Log.d("TrackSocket", "connectRiderTrack: $token")
+        Log.d("TrackSocket", "connectRiderTrack: $orderId")
         val options = IO.Options()
         val headers: MutableMap<String, List<String>> = HashMap()
 
@@ -43,8 +48,12 @@ object TrackSocketClass {
 
         }
 
-        trackSocket?.connect()
-        Timber.tag("MessageSocketClass").d("EVENT_CONNECT: ${trackSocket?.connected()}")
+
+            trackSocket?.connect()
+
+
+
+        Timber.tag("TrackSocketClass").d("EVENT_CONNECT: ${trackSocket?.connected()}")
 
 
         trackSocket?.on(Socket.EVENT_CONNECT) {
@@ -53,7 +62,7 @@ object TrackSocketClass {
 
 
             trackSocket?.on("SHOW_DELIVERED_BUTTON") { args ->
-                Timber.tag("MessageSocketClass").d("SHOW_DELIVERED_BUTTON: }${args.get(0)}")
+                Timber.tag("TrackSocketClass").d("SHOW_DELIVERED_BUTTON: }${args.get(0)}")
 
                 try {
                     Timber.tag("ChatSocketClass").d("SHOW_DELIVERED_BUTTON: ${args.get(0)}")
@@ -71,7 +80,7 @@ object TrackSocketClass {
 
         }
         trackSocket?.on(Socket.EVENT_CONNECT_ERROR) {
-            Timber.tag("MessageSocketClass")
+            Timber.tag("TrackSocketClass")
                 .d("EVENT_CONNECT_ERROR22:${trackSocket?.connected()} ${it[0]}")
 
         }
@@ -85,49 +94,49 @@ object TrackSocketClass {
     private fun onListenerEverything() {
 
         trackSocket?.on("RIDE_STARTED") { args ->
-            Timber.tag("MessageSocketClass").d("RIDE_STARTED: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("RIDE_STARTED: }${args.get(0)}")
         }
 
         trackSocket?.on("exception") { args ->
 
             try {
                 val exception = gson.fromJson(args[0].toString(), ExceptionData::class.java)
-                Timber.tag("MessageSocketClass").d("ExceptionData: ${exception.message}")
+                Timber.tag("TrackSocketClass").d("ExceptionData: ${exception.message}")
             } catch (e: java.lang.Exception) {
-                Timber.tag("MessageSocketClass").d("ExceptionData: ${args[0]}")
+                Timber.tag("TrackSocketClass").d("ExceptionData: ${args[0]}")
 
             }
 
         }
         trackSocket?.on("RIDE_ENDED") { args ->
 
-            Timber.tag("MessageSocketClass").d("RIDE_ENDED: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("RIDE_ENDED: }${args.get(0)}")
 
 
         }
         trackSocket?.on("PICKED_BY") { args ->
-            Timber.tag("MessageSocketClass").d("PICKED_BY: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("PICKED_BY: }${args.get(0)}")
         }
         /*     trackSocket?.on("INCOMING_ORDERS") { args ->
                  val INCOMINGSOCKETORDER = gson.fromJson(args[0].toString(), IncomingOrderSocketData::class.java)
                  activeOrderArrayList.add(INCOMINGSOCKETORDER)
                  incomingOrderAdapter.notifyDataSetChanged()
-                 Timber.tag("MessageSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
+                 Timber.tag("TrackSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
 
              }*/
         trackSocket?.on("CURRENT_STATUS") { args ->
-            Timber.tag("MessageSocketClass").d("CURRENT_STATUS: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("CURRENT_STATUS: }${args.get(0)}")
 
         }
 
 
         trackSocket?.on("REMANING_TIME") { args ->
-            Timber.tag("MessageSocketClass").d("REMANING_TIME: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("REMANING_TIME: }${args.get(0)}")
             val REMANING_TIME =
                 gson.fromJson(args[0].toString(), RemianingTimeSocketData::class.java)
             /* activeOrderArrayList.add(INCOMINGSOCKETORDER)
              incomingOrderAdapter.notifyDataSetChanged()*/
-            Timber.tag("MessageSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
+            Timber.tag("TrackSocketClass").d("INCOMING_ORDERS: }${args.get(0)}")
 
         }
 
@@ -136,22 +145,22 @@ object TrackSocketClass {
 
     fun startRide(orderId: String) {
         val data = JSONObject().put("orderId", orderId)
-        Timber.tag("MessageSocketClass").d("startRide:$data ")
+        Timber.tag("TrackSocketClass").d("startRide:$data ")
         trackSocket?.emit("START_RIDE", data, object : Ack {
             override fun call(vararg args: Any?) {
 
-                Timber.tag("MessageSocketClass").d("START_RIDE: ")
+                Timber.tag("TrackSocketClass").d("START_RIDE: ")
             }
         })
     }
 
     fun updateRide(lat: Double, lng: Double) {
         val data = JSONObject().put("lat", lat).put("lng", lng)
-        Timber.tag("MessageSocketClass").d("UPDATE_LOCATION:$data ")
+        Timber.tag("TrackSocketClass").d("UPDATE_LOCATION:$data ")
         trackSocket?.emit("UPDATE_LOCATION", data, object : Ack {
             override fun call(vararg args: Any?) {
 
-                Timber.tag("MessageSocketClass").d("UPDATE_LOCATION: ")
+                Timber.tag("TrackSocketClass").d("UPDATE_LOCATION: ")
             }
         })
     }
@@ -160,7 +169,7 @@ object TrackSocketClass {
     fun disconnect() {
         trackSocket?.disconnect()
         trackSocket?.on(Socket.EVENT_DISCONNECT) {
-            Timber.tag("MessageSocketClass")
+            Timber.tag("TrackSocketClass")
                 .d("EVENT_DISCONNECT: ${trackSocket?.connected()}")
         }
     }

@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.getActiveorder
+import androidx.annotation.Keep
 
+@Keep
 data class ShopX(
     val _id: String,
     val address: Address,

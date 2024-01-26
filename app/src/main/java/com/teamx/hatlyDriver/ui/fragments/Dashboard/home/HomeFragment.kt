@@ -2,8 +2,12 @@ package com.teamx.hatlyDriver.ui.fragments.Dashboard.home
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context.LOCATION_SERVICE
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -32,9 +36,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
+import com.google.firebase.initialize
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.squareup.picasso.Picasso
@@ -57,6 +61,7 @@ import com.teamx.hatlyDriver.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import timber.log.Timber
@@ -141,6 +146,40 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         }
 
+        mViewModel.viewModelScope.launch(Dispatchers.IO) {
+
+            delay(1100)
+
+            try {
+                val locationManager =
+                    requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
+
+                // get GPS status
+                val checkGPS = locationManager
+                    .isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+                // get network provider status
+                val checkNetwork = locationManager
+                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
+                if (!checkGPS && !checkNetwork) {
+                    /*   Toast.makeText(
+                           requireContext(),
+                           "No Service Provider is available",
+                           Toast.LENGTH_SHORT
+                       )
+                           .show();*/
+                    showLocationEnableDialog()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+
+//            getDeviceLocation()
+
+
+        }
 
         /*   try {
 
@@ -210,7 +249,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         Firebase.initialize(requireContext())
         FirebaseApp.initializeApp(requireContext())
-        if (!mViewModel.fcmResponse.hasActiveObservers()) {
+
+        if (!mViewModel.fcmResponse.isInitialized) {
             getFcmToken()
         }
 
@@ -251,8 +291,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
         seekBar1 = mViewDataBinding.slider
         statusText = mViewDataBinding.statusText
-
-
 
         seekBar1.isClickable = false
 
@@ -369,6 +407,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
 
 
             val items = arrayOf("weekly", "monthly", "yearly")
+//            val items = arrayOf(getString(R.string.weekly),getString(R.string.monthly),getString(R.string.yearly))
+
 
             val adapter = ArrayAdapter(requireContext(), R.layout.custom_spinner_item, items)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -626,13 +666,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
         try {
             if (locationPermissionGranted) {
 
-                fusedLocationClient =
-                    LocationServices.getFusedLocationProviderClient(requireActivity())
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    if (it != null) {
-                        Timber.tag("TAG")
-                            .d("onCreate:latitude${it.latitude}longitude${it.longitude} ")
+                try {
+                    fusedLocationClient =
+                        LocationServices.getFusedLocationProviderClient(requireActivity())
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        if (it != null) {
+                            Timber.tag("TAG")
+                                .d("onCreate:latitude${it.latitude}longitude${it.longitude} ")
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
                 locationRequest = LocationRequest()
                 locationRequest?.interval = 10
@@ -644,27 +688,34 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
                     }, Looper.getMainLooper()
                 )
 
-                val locationResult = fusedLocationClient.lastLocation
-                locationResult.addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        // Set the map's camera position to the current location of the device.
-                        val lastKnownLocation = task.result
-                        if (lastKnownLocation != null) {
-
-                            originLatitude = lastKnownLocation.latitude.toString()
-                            originLongitude = lastKnownLocation.longitude.toString()
-
-                            Timber.tag("lastKnownLocation").d(
-                                "Current location is . Using defaults. ${lastKnownLocation.latitude}  ${lastKnownLocation.longitude}"
-                            )
+                try {
 
 
+                    val locationResult = fusedLocationClient.lastLocation
+                    locationResult.addOnCompleteListener(requireActivity()) { task ->
+                        if (task.isSuccessful) {
+                            // Set the map's camera position to the current location of the device.
+                            val lastKnownLocation = task.result
+                            if (lastKnownLocation != null) {
+
+                                originLatitude = lastKnownLocation.latitude.toString()
+                                originLongitude = lastKnownLocation.longitude.toString()
+
+                                Timber.tag("lastKnownLocation").d(
+                                    "Current location is . Using defaults. ${lastKnownLocation.latitude}  ${lastKnownLocation.longitude}"
+                                )
+
+
+                            }
+                        } else {
+                            Timber.tag("TAG").d("Current location is null. Using defaults.")
+                            Timber.tag("TAG").d("Exception:   ${task.exception}")
+                            mMap?.uiSettings?.isMyLocationButtonEnabled = false
                         }
-                    } else {
-                        Timber.tag("TAG").d("Current location is null. Using defaults.")
-                        Timber.tag("TAG").d("Exception:   ${task.exception}")
-                        mMap?.uiSettings?.isMyLocationButtonEnabled = false
                     }
+                }
+                catch (e:Exception){
+                    e.printStackTrace()
                 }
             }
 
@@ -1134,6 +1185,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(),
     override fun denyLocation() {
 
     }
-
+    private fun showLocationEnableDialog() {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setTitle("Location Services Disabled")
+        dialogBuilder.setMessage("Please enable location services to use this application.")
+        dialogBuilder.setPositiveButton("Enable") { dialogInterface: DialogInterface, _: Int ->
+            // Open location settings
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+            dialogInterface.dismiss()
+        }
+        dialogBuilder.setNegativeButton(requireContext().getString(R.string.cancel)) { dialogInterface: DialogInterface, _: Int ->
+            dialogInterface.dismiss()
+        }
+        val dialog = dialogBuilder.create()
+        dialog.show()
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.getActiveorder
+import androidx.annotation.Keep
 
+@Keep
 data class Rating(
 //    val _id: IdXX,
     val createdAt: String,

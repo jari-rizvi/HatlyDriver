@@ -1,5 +1,7 @@
 package com.teamx.hatlyDriver.data.dataclasses.transactionHistory
+import androidx.annotation.Keep
 
+@Keep
 data class DropOff(
     val _id: String,
     val additionalDirection: String,

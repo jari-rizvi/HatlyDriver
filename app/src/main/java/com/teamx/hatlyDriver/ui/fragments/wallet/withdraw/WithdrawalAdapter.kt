@@ -34,7 +34,7 @@ class WithdrawalAdapter(
             holder.binding.tvNoti.text = list.status
             holder.binding.amount.text = list.amount.toString()+" AED"
 
-            holder.binding.time.text= TimeFormatter.formatTimeDifference(list.createdAt.toString())
+            holder.binding.time.text=  TimeFormatter.formatTimeDifference(list.createdAt.toString())
 
         }
         catch (e:Exception){

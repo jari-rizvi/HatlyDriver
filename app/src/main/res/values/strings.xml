@@ -126,6 +126,11 @@
     <string name="bank_name">Bank Name</string>
     <string name="account_number_iban">Account Number / IBAN</string>
     <string name="amount">Amount</string>
+    <string name="cancel">Cancel</string>
+    <string name="weekly">weekly</string>
+    <string name="monthly">monthly</string>
+    <string name="yearly">yearly</string>
+    <string name="past_special_orders">Past Special Orders</string>
 
 
 </resources>

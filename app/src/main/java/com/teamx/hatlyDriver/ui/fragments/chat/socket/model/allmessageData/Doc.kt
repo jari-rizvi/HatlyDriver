@@ -13,5 +13,6 @@ data class Doc(
     val message: String,
     val orderId: String,
     val socketId: String,
-    val to: String
+    val to: String,
+    var isDriver: Boolean,
 )

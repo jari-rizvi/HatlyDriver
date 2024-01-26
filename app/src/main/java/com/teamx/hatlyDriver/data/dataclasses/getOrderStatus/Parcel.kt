@@ -1,5 +1,8 @@
 package com.teamx.hatlyDriver.data.dataclasses.getOrderStatus
+import androidx.annotation.Keep
 
+
+@Keep
 data class Parcel(
     val _id: Id,
     val createdAt: String,

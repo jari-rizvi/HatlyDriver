@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.teamx.hatlyDriver.R
-import com.teamx.hatlyDriver.data.dataclasses.recievemessage.RecieveMessage
 import com.teamx.hatlyDriver.databinding.ItemChatRiderBinding
 import com.teamx.hatlyDriver.databinding.ItemChatUserBinding
+import com.teamx.hatlyDriver.ui.fragments.chat.socket.model.allmessageData.Doc
 import com.teamx.hatlyDriver.utils.Helper
 import timber.log.Timber
 import java.text.ParseException
@@ -21,7 +21,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class MessageAdapter(
-    private val messageArrayList: ArrayList<RecieveMessage>
+    private val messageArrayList: ArrayList<Doc>
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_USER = 1

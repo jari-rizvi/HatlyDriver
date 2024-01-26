@@ -1,5 +1,8 @@
 package com.teamx.hatlyDriver.data.dataclasses.getOrderStatus
+import androidx.annotation.Keep
 
+
+@Keep
 data class DropOff(
     val _id: String,
     val additionalDirection: String,

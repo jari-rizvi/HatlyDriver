@@ -1,5 +1,8 @@
 package com.teamx.hatlyDriver.data.dataclasses.totalEarning
 
+import androidx.annotation.Keep
+
+@Keep
 data class TotalEarningsData(
     val _id: String,
     val totalEarning: Double,
